@@ -33,6 +33,9 @@ _(Este enlace se actualizará cuando el proyecto esté publicado)_
 ## 🛠️ Estado del proyecto
 
 🚧 En desarrollo – Actualmente en proceso de maquetación inicial.
+
+- Primer paso: Creación de index.html con sus componentes
+
 El enfoque actual está en el diseño visual, estructura HTML semántica y estilos responsive.
 
 ## 📄 Descripción
