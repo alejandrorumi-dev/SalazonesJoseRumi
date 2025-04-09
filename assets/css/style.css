@@ -290,7 +290,8 @@ img {
 	width: 100%;
 	min-height: calc(100vh - var(--header-height));
 	padding: 2rem 0;
-	background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(/assets/img/background-opacity.jpg);
+	background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+                  url("../img/background-opacity.jpg");
 	background-repeat: no-repeat;
 	background-size: cover;
 	background-position: center;
