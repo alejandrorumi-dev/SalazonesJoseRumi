@@ -139,7 +139,7 @@ img {
 /* Contenido principal */
 #main__container {
 	min-height: calc(100vh - var(--header-height));
-	background-image: url("../img/background-opacity.jpg");
+	background-image: url("/assets/img/background-opacity.jpg");
 	background-size: cover;
 	background-position: center;
 	background-attachment: fixed;
