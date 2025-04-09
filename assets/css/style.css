@@ -76,6 +76,7 @@ img {
 
 .header__name {
 	width: 30%;
+	height: 100%;
 	display: flex;
 	align-items: center;
 	justify-content: center;
@@ -90,7 +91,7 @@ img {
 /* Navegación */
 .header__nav {
 	width: 60%;
-	position: relative;
+	height: 100%;
 }
 
 .header__list {
@@ -98,6 +99,13 @@ img {
 	justify-content: space-around;
 	align-items: center;
 	height: 100%;
+}
+
+.header__item {
+	height: 100%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
 }
 
 .header__item a {
@@ -129,6 +137,7 @@ img {
   }
   
   .dropdown__menu {
+	display: none;
 	position: absolute;
 	top: 100%;
 	left: 0;
@@ -148,6 +157,7 @@ img {
 	color: #000;
 	transition: var(--transition-default);
 	text-decoration: none;
+	font-weight: none;
   }
   
   /* Mostrar menú al hacer hover */
@@ -516,7 +526,7 @@ img {
 	.header__nav {
 		position: fixed;
 		top: var(--header-height-mobile);
-		right: -100%;
+		left: -100%;
 		width: 70%;
 		height: calc(100vh - var(--header-height-mobile));
 		background-color: bisque;
@@ -526,8 +536,9 @@ img {
 
 	/* Clase para mostrar el menú cuando está activo */
 	.header__nav.active {
-		right: 0;
-		width: 100%;
+		left: 0;
+		width: 70%;
+		height: 50%;
 	}
 
 	.header__list {
