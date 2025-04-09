@@ -334,7 +334,10 @@ a {
 	font-size: 1.1rem;
 }
 
-/* Código responsive para añadir al final de tu CSS actual */
+/* 
+Código responsive para añadir al final de tu CSS actual 
+Actualmente falta más responsive y arreglar algunos desperfectos
+*/
 
 /* Media Query para Tablets */
 @media screen and (max-width: 1024px) {
