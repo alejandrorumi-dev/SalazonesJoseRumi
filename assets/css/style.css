@@ -132,14 +132,25 @@ a {
 
 	/* animación */
 	opacity: 0;
+	/* El elemento empieza completamente transparente (invisible) */
 	transform: translateY(-30px);
+	/* El elemento está desplazado -30px hacia arriba desde su posición original */
 	animation: fadeDown 1s ease-in-out forwards;
+
+	/* 
+  Aplica la animación llamada "fadeUp"
+  - 1s: duración de la animación
+  - ease-in-out: transición suave al inicio y al final
+  - forwards: conserva el estado final después de la animación 
+*/
 }
 
 @keyframes fadeDown {
 	to {
 		opacity: 1;
+		/* El elemento será completamente visible */
 		transform: translateY(0);
+		/* El elemento volverá a su posición original */
 	}
 }
 
@@ -153,6 +164,7 @@ a {
 	transform: translateY(20px);
 	animation: fadeUp 1s ease-in-out forwards;
 	animation-delay: 0.5s;
+	/* La animación comenzará 1.5 segundos después de que el elemento se cargue */
 }
 
 .description-2 {
@@ -179,6 +191,7 @@ a {
 
 	opacity: 0;
 	transform: scale(0.9);
+	/* Escala (reduce) el tamaño del elemento al 90% de su tamaño original */
 	animation: scaleFadeIn 1s ease-out forwards;
 	animation-delay: 1.2s;
 }
@@ -187,6 +200,7 @@ a {
 	to {
 		opacity: 1;
 		transform: scale(1);
+		/* Vuelve a tamaño normal al pasar el ratón (efecto de zoom suave) */
 	}
 }
 
@@ -211,6 +225,18 @@ a {
 .body__social-media {
 	width: 50%;
 	margin-top: 50px;
+
+	opacity: 0;
+	transform: translateY(20px);
+	animation: fadeUp 1s ease-in-out forwards;
+	animation-delay: 1.5s;
+}
+
+@keyframes fadeUp {
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
 }
 
 .media__list {
