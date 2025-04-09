@@ -1,6 +1,7 @@
 /* Reset y variables globales */
 :root {
 	--header-height: 70px;
+	--header-height-mobile: 60px;
 	--max-width: 1200px;
 	--primary-color: rgba(255, 228, 196, 0.8);
 	--secondary-color: rgba(4, 255, 213, 0.7);
@@ -22,12 +23,16 @@
 }
 
 body {
-	height: 100vh;
+	min-height: 100vh;
 	font-family: sans-serif;
+	overflow-x: hidden;
+	/* Prevenir scroll horizontal */
 }
 
 html {
 	scroll-behavior: smooth;
+	font-size: 16px;
+	/* Base para medidas rem */
 }
 
 li {
@@ -39,17 +44,27 @@ a {
 	color: inherit;
 }
 
+img {
+	max-width: 100%;
+	height: auto;
+	display: block;
+}
+
 /* Layouts comunes */
 .container {
+	width: 100%;
 	max-width: var(--max-width);
 	margin: 0 auto;
-	padding: 0 1rem;
+	padding: 0 1.5rem;
 }
 
 /* Header */
 #header__container {
 	height: var(--header-height);
 	background-color: var(--primary-color);
+	/* Opcional: header fijo al hacer scroll */
+	top: 0;
+	z-index: 100;
 }
 
 .header__content {
@@ -63,11 +78,13 @@ a {
 	width: 30%;
 	display: flex;
 	align-items: center;
-	margin: 0 auto;
+	justify-content: center;
 }
 
 .header__name h1 {
 	font-weight: bold;
+	font-size: clamp(1.5rem, 5vw, 2.5rem);
+	/* Tamaño adaptativo */
 }
 
 /* Navegación */
@@ -83,8 +100,8 @@ a {
 }
 
 .header__item a {
-	font-size: 1.2rem;
-	color: var(--text-dark);
+	font-size: clamp(0.9rem, 2vw, 1.2rem);
+	color: #000;
 	font-weight: 500;
 	text-transform: uppercase;
 	transition: var(--transition-default);
@@ -92,8 +109,7 @@ a {
 
 .header__item a:hover {
 	text-decoration: underline 4px;
-	font-size: 1.4rem;
-	color: var(--text-black);
+	color: #000;
 	font-weight: bold;
 }
 
@@ -103,23 +119,43 @@ a {
 	text-decoration: underline 4px;
 }
 
+/* Hamburger menu (oculto en desktop) */
+.hamburger-menu {
+	display: none;
+	cursor: pointer;
+	flex-direction: column;
+	justify-content: space-around;
+	width: 2rem;
+	height: 2rem;
+}
+
+.hamburger-menu div {
+	width: 2rem;
+	height: 0.25rem;
+	background-color: var(--text-dark);
+	transition: var(--transition-default);
+}
+
 /* Contenido principal */
 #main__container {
-	height: calc(100vh - var(--header-height));
+	min-height: calc(100vh - var(--header-height));
 	background-image: url("../img/background-opacity.jpg");
 	background-size: cover;
 	background-position: center;
 	background-attachment: fixed;
-	overflow: hidden;
+	padding: 2rem 0;
+	display: flex;
+	align-items: center;
 }
 
 .main__content {
-	height: 100%;
+	width: 100%;
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
 	align-items: center;
 	gap: 2.5rem;
+	padding: 2rem 0;
 }
 
 /* Sección de título */
@@ -129,13 +165,13 @@ a {
 }
 
 .main_tittle--name {
-	font-size: 5.5rem;
+	font-size: clamp(2.5rem, 8vw, 5.5rem);
+	/* Tamaño adaptativo */
 	font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
 	font-weight: bold;
 	text-transform: uppercase;
 	color: var(--text-white);
 	margin-bottom: 1rem;
-
 	/* animación */
 	opacity: 0;
 	transform: translateY(-30px);
@@ -150,11 +186,10 @@ a {
 }
 
 .main_tittle--description {
-	font-size: 1.4rem;
+	font-size: clamp(1rem, 3vw, 1.4rem);
 	font-family: Georgia, 'Times New Roman', Times, serif;
 	color: var(--text-light-gray);
 	font-weight: bold;
-
 	opacity: 0;
 	transform: translateY(20px);
 	animation: fadeUp 1s ease-in-out forwards;
@@ -175,14 +210,13 @@ a {
 
 /* Botón CTA */
 .body__button {
-	padding: 20px;
+	padding: clamp(0.8rem, 4vw, 1.25rem) clamp(1rem, 5vw, 1.5rem);
 	border-radius: 20px;
 	background-color: var(--primary-color);
 	text-align: center;
 	border: none;
 	cursor: pointer;
 	transition: var(--transition-default);
-
 	opacity: 0;
 	transform: scale(0.9);
 	animation: scaleFadeIn 1s ease-out forwards;
@@ -201,7 +235,7 @@ a {
 }
 
 .body__button a {
-	font-size: 1.5rem;
+	font-size: clamp(1rem, 3vw, 1.5rem);
 	color: var(--text-dark);
 	font-weight: bold;
 	text-transform: uppercase;
@@ -209,15 +243,14 @@ a {
 }
 
 .body__button:hover a {
-	font-size: 1.8rem;
 	color: var(--text-black);
 }
 
 /* Redes sociales */
 .body__social-media {
-	width: 50%;
+	width: 100%;
+	max-width: 600px;
 	margin-top: 50px;
-
 	opacity: 0;
 	transform: translateY(20px);
 	animation: fadeUp 1s ease-in-out forwards;
@@ -226,14 +259,16 @@ a {
 
 .media__list {
 	display: flex;
-	justify-content: space-around;
-	gap: 2rem;
+	justify-content: center;
+	flex-wrap: wrap;
+	/* Permite que los íconos fluyan en pantallas pequeñas */
+	gap: clamp(1rem, 3vw, 2rem);
 }
 
 .media__item {
 	background-color: bisque;
 	border-radius: 50%;
-	padding: 20px;
+	padding: clamp(0.75rem, 2vw, 1.25rem);
 	display: flex;
 	align-items: center;
 	justify-content: center;
@@ -246,29 +281,29 @@ a {
 }
 
 .media__img {
-	width: 40px;
-	height: 40px;
+	width: clamp(25px, 5vw, 40px);
+	height: clamp(25px, 5vw, 40px);
 }
 
 /*Estilos para la sección Conócenos*/
-
 #about-us__container {
 	width: 100%;
-	height: calc(100vh - 70px);
-	margin: 0 auto;
+	min-height: calc(100vh - var(--header-height));
+	padding: 2rem 0;
 	background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(/assets/img/background-opacity.jpg);
 	background-repeat: no-repeat;
 	background-size: cover;
 	background-position: center;
+	display: flex;
+	align-items: center;
 }
 
 .about-us__content {
-	width: 90%;
-	height: 100%;
-	margin: 0 auto;
+	width: 100%;
 	display: flex;
 	justify-content: space-around;
 	align-items: center;
+	gap: 2rem;
 }
 
 .about-us__img {
@@ -279,7 +314,6 @@ a {
 	animation: fadeInLeft 2s ease-in-out forwards;
 }
 
-/* Animación para el efecto de deslizamiento de Izquierda a Derecha */
 @keyframes fadeInLeft {
 	from {
 		opacity: 0;
@@ -295,12 +329,11 @@ a {
 .img__Salazones-Rumi {
 	max-width: 100%;
 	height: auto;
-	display: block;
 	border-radius: 10px;
 }
 
 .about-me__info {
-	width: 30%;
+	width: 40%;
 	display: flex;
 	flex-direction: column;
 	gap: 20px;
@@ -309,12 +342,12 @@ a {
 	animation: fadeInRight 2s ease-in-out forwards;
 }
 
-/* Animación para el efecto de deslizamiento de Derecha a Izquierda */
 @keyframes fadeInRight {
 	from {
 		opacity: 0;
 		transform: translateX(100px);
 	}
+
 	to {
 		opacity: 1;
 		transform: translateX(0);
@@ -324,221 +357,224 @@ a {
 .about-me__title {
 	color: var(--text-white);
 	text-align: center;
-	font-size: 3rem;
+	font-size: clamp(2rem, 5vw, 3rem);
 	position: relative;
 }
 
 .about-me__info p {
 	color: var(--text-light-gray);
 	text-align: center;
-	font-size: 1.1rem;
+	font-size: clamp(0.9rem, 2.5vw, 1.1rem);
 }
 
-/* 
-Código responsive para añadir al final de tu CSS actual 
-Actualmente falta más responsive y arreglar algunos desperfectos
-*/
+/* Media Queries */
+@media screen and (max-width: 1366px) {
 
-/* Media Query para Tablets */
+	.header__name {
+		justify-content: center;
+	}
+
+	.header__name h1 {
+		font-size: clamp(1.5rem, 3vw, 2rem);
+	}
+
+}
+
 @media screen and (max-width: 1024px) {
-    /* Header */
-    .header__name {
-        width: 40%;
-    }
-    
-    .header__nav {
-        width: 60%;
-    }
-    
-    /* Página principal */
-    .main_tittle--name {
-        font-size: 4rem;
-    }
-    
-    .main_tittle--description {
-        font-size: 1.2rem;
-    }
-    
-    .body__social-media {
-        width: 70%;
-    }
-    
-    /* Sección Conócenos */
-    .about-us__content {
-        width: 95%;
-    }
-    
-    .about-me__info {
-        width: 40%;
-    }
+
+	.header__name {
+		justify-content: center;
+	}
+
+	.header__name h1 {
+		font-size: clamp(1.5rem, 3vw, 1.7rem);
+	}
+
+	.about-me__title {
+		font-size: clamp(1.8rem, 4vw, 2.5rem);
+	}
 }
 
-/* Media Query para dispositivos móviles grandes */
+@media screen and (max-width: 992px) {
+
+	/* Ajustes para tablets */
+	:root {
+		--header-height: 65px;
+	}
+
+	.header__name {
+		width: 40%;
+	}
+
+	.header__nav {
+		width: 50%;
+	}
+}
+
+@media screen and (max-width: 915px) {
+	.header__content {
+		justify-content: space-around;
+	}
+
+	.about-us__content {
+		flex-direction: column;
+	}
+
+	.about-us__img {
+		width: 60%;
+	}
+
+	.about-me__info {
+		width: 80%;
+	}
+
+	.about-me__title h1 {
+		font-size: clamp(1.5rem, 3vw, 1rem);
+	}
+
+	.about-me__info p {
+		font-size: clamp(0.8rem, 2.5vw, 2rem);
+	}
+}
+
+@media screen and (max-width: 855px) {
+	.about-us__content {
+		flex-direction: column;
+	}
+
+	.about-us__img {
+		width: 80%;
+	}
+
+	.about-me__info {
+		width: 80%;
+	}
+
+	.about-me__title {
+		font-size: clamp(1.8rem, 4vw, 2.5rem);
+	}
+}
+
 @media screen and (max-width: 768px) {
-    /* Header */
-    .header__content {
-        flex-direction: column;
-        padding: 10px 0;
-        height: auto;
-    }
-    
-    #header__container {
-        height: auto;
-    }
-    
-    .header__name {
-        width: 100%;
-        margin-bottom: 10px;
-        justify-content: center;
-    }
-    
-    .header__name h1 {
-        font-size: 1.5rem;
-        text-align: center;
-    }
-    
-    .header__nav {
-        width: 100%;
-    }
-    
-    .header__item a {
-        font-size: 1rem;
-    }
-    
-    .header__item a:hover {
-        font-size: 1.1rem;
-    }
-    
-    /* Página principal */
-    #main__container {
-        height: calc(100vh - 110px); /* Ajustar para el nuevo altura del header */
-    }
-    
-    .main_tittle--name {
-        font-size: 3rem;
-    }
-    
-    .body__button a {
-        font-size: 1.2rem;
-    }
-    
-    .body__button:hover a {
-        font-size: 1.4rem;
-    }
-    
-    .body__social-media {
-        width: 90%;
-    }
-    
-    .media__item {
-        padding: 15px;
-    }
-    
-    .media__img {
-        width: 30px;
-        height: 30px;
-    }
-    
-    /* Sección Conócenos */
-    .about-us__content {
-        flex-direction: column;
-        gap: 30px;
-        padding: 20px 0;
-    }
-    
-    #about-us__container {
-        height: auto;
-        min-height: calc(100vh - 110px);
-    }
-    
-    .about-us__img {
-        width: 80%;
-    }
-    
-    .about-me__info {
-        width: 90%;
-    }
-    
-    .about-me__title {
-        font-size: 2.5rem;
-    }
+
+	/* Ajustes para tablets pequeñas y móviles grandes */
+	:root {
+		--header-height: var(--header-height-mobile);
+	}
+
+	.header__content {
+		justify-content: space-around;
+	}
+
+	.header__name {
+		width: 70%;
+	}
+
+	/* Implementación del menú hamburguesa */
+	.hamburger-menu {
+		display: flex;
+	}
+
+	.header__nav {
+		position: fixed;
+		top: var(--header-height-mobile);
+		right: -100%;
+		width: 70%;
+		height: calc(100vh - var(--header-height-mobile));
+		background-color: bisque;
+		transition: var(--transition-default);
+		z-index: 99;
+	}
+
+	/* Clase para mostrar el menú cuando está activo */
+	.header__nav.active {
+		right: 0;
+		width: 100%;
+	}
+
+	.header__list {
+		flex-direction: column;
+		align-items: center;
+		justify-content: flex-start;
+		padding-top: 2rem;
+		gap: 2rem;
+	}
+
+	.header__item {
+		width: 100%;
+		text-align: center;
+	}
+
+	.header__item a {
+		color: #000;
+		font-size: var(--font-size-medium);
+		font-weight: 600;
+	}
+
+	/* Sección About Us - cambiar a columna */
+	.about-us__content {
+		flex-direction: column;
+		gap: 3rem;
+		padding: 2rem 0;
+	}
+
+	.about-us__img,
+	.about-me__info {
+		width: 90%;
+	}
 }
 
-/* Media Query para dispositivos móviles pequeños */
-@media screen and (max-width: 480px) {
-    /* Header */
-    .header__list {
-        flex-wrap: wrap;
-        gap: 10px;
-    }
-    
-    .header__item {
-        margin: 0 5px;
-    }
-    
-    /* Página principal */
-    .main_tittle--name {
-        font-size: 2.5rem;
-    }
-    
-    .main_tittle--description {
-        font-size: 1rem;
-    }
-    
-    .body__button {
-        padding: 15px;
-    }
-    
-    .body__button a {
-        font-size: 1rem;
-    }
-    
-    .body__button:hover a {
-        font-size: 1.1rem;
-    }
-    
-    .media__list {
-        gap: 1rem;
-    }
-    
-    .media__item {
-        padding: 10px;
-    }
-    
-    .media__img {
-        width: 25px;
-        height: 25px;
-    }
-    
-    /* Sección Conócenos */
-    .about-us__img {
-        width: 95%;
-    }
-    
-    .about-me__title {
-        font-size: 2rem;
-    }
-    
-    .about-me__info p {
-        font-size: 0.9rem;
-    }
+@media screen and (max-width: 576px) {
+
+	/* Ajustes para móviles */
+	html {
+		font-size: 14px;
+		/* Ajuste base para pantallas pequeñas */
+	}
+
+	.header__name {
+		width: 80%;
+	}
+
+	.header__nav {
+		width: 85%;
+	}
+
+	/* Reducir tamaños de botones */
+	.body__button {
+		padding: 0.7rem 1.2rem;
+	}
+
+	/* Ajustar íconos de redes sociales */
+	.media__list {
+		gap: 1rem;
+	}
+
+	.media__item {
+		padding: 0.6rem;
+	}
+
+	/* Desactivar algunas animaciones en móvil para mejor rendimiento */
+	@media (prefers-reduced-motion: reduce) {
+
+		.main_tittle--name,
+		.main_tittle--description,
+		.body__button,
+		.body__social-media,
+		.about-us__img,
+		.about-me__info {
+			animation: none;
+			opacity: 1;
+			transform: none;
+		}
+	}
 }
 
-/* Media Query para dispositivos muy pequeños */
-@media screen and (max-width: 320px) {
-    .header__name h1 {
-        font-size: 1.2rem;
-    }
-    
-    .header__item a {
-        font-size: 0.9rem;
-    }
-    
-    .main_tittle--name {
-        font-size: 2rem;
-    }
-    
-    .main_tittle--description {
-        font-size: 0.9rem;
-    }
+/* Soporte para modo oscuro */
+@media (prefers-color-scheme: dark) {
+	:root {
+		--primary-color: rgba(207, 178, 147, 0.8);
+		--text-dark: #e0e0e0;
+		--text-black: #fff;
+	}
 }
