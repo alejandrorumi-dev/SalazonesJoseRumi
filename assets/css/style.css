@@ -90,6 +90,7 @@ img {
 /* Navegación */
 .header__nav {
 	width: 60%;
+	position: relative;
 }
 
 .header__list {
@@ -118,6 +119,42 @@ img {
 	font-weight: bold;
 	text-decoration: underline 4px;
 }
+
+/*Menú desplegable*/
+
+/* Estilo base para el dropdown */
+.dropdown {
+	position: relative;
+	cursor: pointer;
+  }
+  
+  .dropdown__menu {
+	position: absolute;
+	top: 100%;
+	left: 0;
+	background-color: bisque;
+	padding: 10px 0;
+	box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+	z-index: 1000;
+	border-radius: 8px;
+	min-width: 250px;
+  }
+  
+  .dropdown__menu li {
+	padding: 10px 20px;
+  }
+  
+  .dropdown__menu li a {
+	color: #000;
+	transition: var(--transition-default);
+	text-decoration: none;
+  }
+  
+  /* Mostrar menú al hacer hover */
+  .dropdown:hover .dropdown__menu {
+	display: block;
+  }
+  
 
 /* Hamburger menu (oculto en desktop) */
 .hamburger-menu {
