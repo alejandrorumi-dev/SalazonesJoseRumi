@@ -60,11 +60,13 @@ img {
 
 /* Header */
 #header__container {
+	position: relative;
 	height: var(--header-height);
 	background-color: var(--primary-color);
 	/* Opcional: header fijo al hacer scroll */
 	top: 0;
 	z-index: 100;
+	box-shadow: 0 0 15px rgba(0, 0, 0, 0.9);
 }
 
 .header__content {
@@ -133,9 +135,9 @@ img {
 .dropdown {
 	position: relative;
 	cursor: pointer;
-  }
-  
-  .dropdown__menu {
+}
+
+.dropdown__menu {
 	display: none;
 	position: absolute;
 	top: 100%;
@@ -146,24 +148,24 @@ img {
 	z-index: 1000;
 	border-radius: 8px;
 	min-width: 160px;
-  }
-  
-  .dropdown__menu li {
+}
+
+.dropdown__menu li {
 	padding: 10px 20px;
-  }
-  
-  .dropdown__menu li a {
+}
+
+.dropdown__menu li a {
 	color: #000;
 	transition: var(--transition-default);
 	text-decoration: none;
 	font-weight: none;
-  }
-  
-  /* Mostrar menú al hacer hover */
-  .dropdown:hover .dropdown__menu {
+}
+
+/* Mostrar menú al hacer hover */
+.dropdown:hover .dropdown__menu {
 	display: block;
-  }
-  
+}
+
 
 /* Hamburger menu (oculto en desktop) */
 .hamburger-menu {
@@ -337,7 +339,7 @@ img {
 	min-height: calc(100vh - var(--header-height));
 	padding: 2rem 0;
 	background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
-                  url("../img/background-opacity.jpg");
+		url("../img/background-opacity.jpg");
 	background-repeat: no-repeat;
 	background-size: cover;
 	background-position: center;
@@ -412,6 +414,15 @@ img {
 	color: var(--text-light-gray);
 	text-align: center;
 	font-size: clamp(0.9rem, 2.5vw, 1.1rem);
+}
+
+/*Sección de contacto*/
+
+#contact__container {
+	width: 100%;
+	min-height: calc(100vh - var(--header-height));
+	padding: 2rem 0;
+	background-color: bisque;
 }
 
 /* Media Queries */
@@ -561,8 +572,8 @@ img {
 
 	.dropdown__menu {
 		left: 23%;
-	  }
-	  
+	}
+
 	/* Sección About Us - cambiar a columna */
 	.about-us__content {
 		flex-direction: column;
