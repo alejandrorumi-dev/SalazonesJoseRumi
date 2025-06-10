@@ -1,0 +1,81 @@
+/*Estilos fundamentales que afectan a toda la web*/
+
+/*Reset básico*/
+
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+
+:root {
+	/*Color de fondo principal*/
+	--color-bg-main: #ccc;
+
+	/*Color de fondo secundario*/
+	--color-bg-secundary: #0c0310;
+	
+	/*Color del texto*/
+	--color-text: #fce5c4;
+
+	/*Color del texto en botones*/
+	--color-text-buttons: #ffff;
+
+	/*Color de botones, detalles...*/
+	--color-accent: #b88c5c;
+
+	/*Color del botón principal*/
+	--color-btn-dark: #a07040;
+
+	/*Color de botones secundarios*/
+	--color-btn-light: #f3d6ae;
+
+	/*Fuente principal*/
+	--font-main: 'Montserrat', serif;
+
+	/*Fuente secundaria*/
+	--font-secondary: 'Times New Roman', sans-serif;
+}
+
+/* === ESTILOS GENERAL DEL BODY === */
+/*
+   Aplica el fondo principal, el color del texto y la fuente base a toda la página.
+   También desactiva el scroll horizontal no deseado.
+*/
+
+body {
+	background-color: var(--color-bg-main); /*Color del fondo*/
+	color: var(--color-text); /*Color de los textos*/
+	font-family: var(--font-main); /*Tipografía principal*/
+	line-height: 1.5; /*Espaciado vertical entre líneas*/
+	overflow-x: hidden;
+}
+
+body.home {
+	background-image: url('../assets/images/fondoSalazones.png');
+	background-size: cover;
+	background-position: center;
+	background-repeat: no-repeat;
+}
+
+/* === ENLACES === */
+
+a {
+	color: inherit;
+	text-decoration: none;
+}
+
+/* === LISTAS === */
+
+ul, li {
+	list-style: none;
+}
+
+/* === BOTONES === */
+
+button {
+	font-family: inherit;
+	border: none;
+	cursor: pointer;
+	background: none;
+}
