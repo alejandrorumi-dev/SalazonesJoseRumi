@@ -1,0 +1,376 @@
+/* Estilos para pantallas con un máximo de 1024px */
+
+@media (max-width: 1024px) {
+
+	/* Mostrar menú hamburguesa solo en pantallas de 1024px máximo */
+	.hamburger-menu {
+		display: block;
+		position: relative;
+		left: 90%;
+	}
+
+	/* Activar menú si tiene clase open */
+	.mobile-nav.open {
+		display: block;
+		animation: fadeIn 0.3s ease;
+	}
+
+	/*Menú desplegable*/
+	.mobile-nav ul li a {
+		font-size: 2rem;
+	}
+
+	.header-left {
+		display: none;
+	}
+
+	.header-right {
+		display: none;
+	}
+
+	/* Header */
+	.main-header {
+		height: 7rem;
+	}
+
+	/* Main */
+	.main {
+		min-height: calc(100vh - 12rem);
+	}
+
+	/* Textos */
+	.welcome {
+		font-size: 2rem;
+	}
+
+	.main-title {
+		font-size: 2.7rem;
+		margin-bottom: 0.5rem;
+	}
+
+	.phrase {
+		font-size: 1.5rem;
+	}
+
+	/* Botones */
+	.main-buttons {
+		margin-top: 2rem;
+		margin-bottom: 1rem;
+	}
+
+	.btn {
+		font-size: 1.3rem;
+	}
+
+	/* Footer */
+	.site-footer {
+		height: 5rem;
+		font-size: 1rem;
+	}
+}
+
+@media (min-width: 769px) and (max-width: 1023px) {
+
+	/* Mostrar menú hamburguesa solo en pantallas de 1024px máximo */
+	.hamburger-menu {
+		display: block;
+		position: relative;
+		left: 90%;
+	}
+
+	/* Activar menú si tiene clase open */
+	.mobile-nav.open {
+		display: block;
+		animation: fadeIn 0.3s ease;
+	}
+
+	/*Menú desplegable*/
+	.mobile-nav {
+		display: none;
+		position: absolute;
+		top: 8rem;
+		right: 5rem;
+		width: 40%;
+		padding: 2rem;
+		z-index: 20;
+	}
+
+	.mobile-nav ul li a {
+		font-size: 1.7rem;
+	}
+
+	.header-left {
+		display: none;
+	}
+
+	.header-right {
+		display: none;
+	}
+
+	/* Header */
+	.main-header {
+		height: 6rem;
+	}
+
+	/* Main */
+	.main {
+		min-height: calc(100vh - 12rem);
+	}
+
+	/* Textos */
+	.welcome {
+		font-size: 2rem;
+	}
+
+	.main-title {
+		font-size: 2.5rem;
+	}
+
+	.phrase {
+		font-size: 1.8rem;
+	}
+
+	/* Botones */
+	.main-buttons {
+		margin-top: 2.5rem;
+	}
+
+	.btn {
+		font-size: 1.5rem;
+	}
+
+	/* Footer */
+	.site-footer {
+		height: 6rem;
+		font-size: 1.6rem;
+	}
+}
+
+@media (max-width: 922px) {
+	.btn {
+		font-size: 1.4rem;
+	}
+}
+
+@media (max-width: 884px) {
+	.btn {
+		font-size: 1.3rem;
+	}
+}
+
+@media (max-width: 846px) {
+	.btn {
+		font-size: 1.2rem;
+	}
+
+	.site-footer {
+		font-size: 1.4rem;
+	}
+}
+
+@media (max-width: 806px) {
+	.btn {
+		font-size: 1.1rem;
+	}
+}
+
+@media (min-width: 412px) and (max-width: 768px) {
+	.mobile-nav {
+		right: 4rem;
+		width: 40%;
+	}
+
+	/* Textos */
+	.welcome {
+		font-size: 2.2rem;
+	}
+
+	.main-title {
+		font-size: 2.8rem;
+	}
+
+	.phrase {
+		font-size: 2rem;
+	}
+
+	/*Botones*/
+	.main-buttons {
+		flex-direction: column;
+	}
+
+	.btn {
+		font-size: 2rem;
+	}
+
+	/*Footer*/
+	.site-footer {
+		font-size: 1.2rem;
+	}
+}
+
+@media (max-width: 674px) {
+	.mobile-nav {
+		right: 3rem;
+		width: 40%;
+	}
+
+	/* Textos */
+	.welcome {
+		font-size: 2rem;
+	}
+
+	.main-title {
+		font-size: 2.5rem;
+	}
+
+	.phrase {
+		font-size: 1.7rem;
+	}
+
+	/*Botones*/
+	.btn {
+		font-size: 1.7rem;
+	}
+
+	.site-footer {
+		font-size: 1rem;
+	}
+}
+
+@media (max-width: 658px) {
+	.mobile-nav ul li a {
+		font-size: 1.4rem;
+	}
+}
+
+@media (max-width: 610px) {
+
+	/* Textos */
+	.welcome {
+		font-size: 1.8rem;
+	}
+
+	.main-title {
+		font-size: 2.3rem;
+	}
+
+	.phrase {
+		font-size: 1.5rem;
+	}
+
+	/*Botones*/
+	.btn {
+		font-size: 1.5rem;
+	}
+
+	.site-footer {
+		font-size: 1rem;
+	}
+}
+
+@media (max-width: 567px) {
+
+	/* Textos */
+	.welcome {
+		font-size: 1.6rem;
+	}
+
+	.main-title {
+		font-size: 2rem;
+	}
+
+	.phrase {
+		font-size: 1.3rem;
+	}
+
+	/*Botones*/
+	.btn {
+		font-size: 1.5rem;
+	}
+
+	.site-footer {
+		font-size: 0.8rem;
+	}
+}
+
+@media (max-width: 525px) {
+	.mobile-nav {
+		display: none;
+		position: absolute;
+		top: 8rem;
+		right: 2rem;
+		width: 40%;
+		padding: 2rem;
+		z-index: 20;
+	}
+
+	.mobile-nav ul li a {
+		font-size: 1rem;
+	}
+
+	/* Textos */
+	.welcome {
+		font-size: 1.3rem;
+	}
+
+	.main-title {
+		font-size: 1.7rem;
+	}
+
+	.phrase {
+		font-size: 1rem;
+	}
+
+	/*Botones*/
+	.btn {
+		font-size: 1.4rem;
+	}
+
+	.site-footer {
+		font-size: 0.7rem;
+	}
+}
+
+@media (max-width: 436px) {
+	.mobile-nav ul li a {
+		font-size: 0.8rem;
+	}
+
+	.welcome {
+		font-size: 1.1rem;
+	}
+
+	.main-title {
+		font-size: 1.4rem;
+	}
+
+	.phrase {
+		font-size: 0.8rem;
+	}
+
+	.btn {
+		font-size: 1.2rem;
+	}
+
+	.site-footer {
+		font-size: 0.6rem;
+	}
+}
+
+@media (max-width: 345px) {
+	.mobile-nav ul li a {
+		font-size: 0.5rem;
+	}
+
+	.main-title {
+		font-size: 1.2rem;
+	}
+
+	.btn {
+		font-size: 1rem;
+	}
+
+	.site-footer {
+		font-size: 0.5rem;
+	}
+}
