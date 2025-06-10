@@ -90,7 +90,7 @@
 		position: absolute;
 		top: 8rem;
 		right: 5rem;
-		width: 40%;
+		width: 80%;
 		padding: 2rem;
 		z-index: 20;
 	}
@@ -177,7 +177,7 @@
 @media (min-width: 412px) and (max-width: 768px) {
 	.mobile-nav {
 		right: 4rem;
-		width: 40%;
+		width: 70%;
 	}
 
 	/* Textos */
@@ -211,7 +211,7 @@
 @media (max-width: 674px) {
 	.mobile-nav {
 		right: 3rem;
-		width: 40%;
+		width: 70%;
 	}
 
 	/* Textos */
@@ -299,7 +299,7 @@
 		position: absolute;
 		top: 8rem;
 		right: 2rem;
-		width: 40%;
+		width: 60%;
 		padding: 2rem;
 		z-index: 20;
 	}
@@ -357,7 +357,7 @@
 	}
 }
 
-@media (max-width: 360px) {
+@media (max-width: 385px) {
 	.mobile-nav {
 		right: 0.5rem;
 		width: 60%;
