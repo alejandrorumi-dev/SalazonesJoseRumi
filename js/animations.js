@@ -1,3 +1,5 @@
+// Función para activar animación de borrado en texto
+
 export function animateTitle() {
   const titleElement = document.querySelector('.main-title');
   const originalText = 'Mercado Central de Almería';
