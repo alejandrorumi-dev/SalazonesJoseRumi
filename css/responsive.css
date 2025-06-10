@@ -358,8 +358,17 @@
 }
 
 @media (max-width: 360px) {
+	.mobile-nav {
+		right: 0.5rem;
+		width: 60%;
+		/* Menú más ancho */
+		
+		padding: 1rem;
+	}
+
 	.mobile-nav ul li a {
-		font-size: 0.6rem;
+		font-size: 0.8rem;
+		white-space: nowrap;
 	}
 
 	.main-title {
