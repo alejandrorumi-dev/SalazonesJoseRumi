@@ -1,0 +1,97 @@
+/*Estilos para los componentes de las diferentes páginas*/
+
+/* === BOTÓN EXPANSIBLE DEL HEADER (Sobre Nosotros / Contacto) === */
+
+.expand-button {
+	display: flex;
+	align-items: center;
+	background-color: var(--color-accent);
+	color: var(--color-text-buttons);
+	width: 4.5rem;
+	height: 4.5rem;
+	border-radius: 50%;
+	overflow: hidden;
+	white-space: nowrap;
+	transition: all 0.3s ease;
+	gap: 0.5rem;
+	font-family: var(--font-secondary);
+	font-size: 1.3rem;
+	padding: 0 1rem;
+}
+
+.expand-button:hover {
+	width: 14rem;
+	border-radius: 2rem;
+	justify-content: flex-start;
+}
+
+.contact:hover {
+	width: 11rem;
+}
+
+.expand-button svg {
+	width: 2.5rem;
+	height: 2.5rem;
+	fill: var(--color-text);
+	flex-shrink: 0;
+	transition: transform 0.3s ease;
+}
+
+.expand-button .text {
+	opacity: 0;
+	width: 0;
+	margin-left: 0.5rem;
+	transition: opacity 0.3s ease;
+}
+
+.expand-button:hover .text {
+	opacity: 1;
+}
+
+/* === ICONOS DE REDES SOCIALES === */
+/* 
+   Iconos del lado derecho del header.
+   Ajustamos tamaño, color y efecto al pasar el mouse.
+*/
+
+.btn-rrss {
+	display: flex;
+	align-items: center;
+	background-color: var(--color-accent);
+	width: 4.5rem;
+	height: 4.5rem;
+	border-radius: 50%;
+	gap: 0.5rem;
+	padding: 0 1rem;
+}
+
+/* === TEXTOS DE LA PORTADA === */
+
+/*Subtítulo (h2): Bienvenidos a...*/
+.welcome {
+	font-size: 3rem;
+	font-family: var(--font-secondary);
+	color: var(--color-text);
+	margin-bottom: 1rem;
+}
+
+/*Título principal (h1): Mercado Central...*/
+.main-title {
+	font-size: 4rem;
+	font-family: var(--font-main);
+	font-style: oblique;
+	color: var(--color-text);
+	margin-bottom: 1rem;
+	position: relative;
+	z-index: 1;
+}
+
+/*Frase debajo del título*/
+.phrase {
+	font-size: 2.5rem;
+	font-family: var(--font-secondary);
+	font-style: italic;
+	color: var(--color-text-buttons);
+	margin-top: 1rem;
+}
+
