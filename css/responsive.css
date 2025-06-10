@@ -15,7 +15,7 @@
 		animation: fadeIn 0.3s ease;
 	}
 
-	/*Menú desplegable*/
+	/* Menú desplegable */
 	.mobile-nav ul li a {
 		font-size: 2rem;
 	}
@@ -84,7 +84,7 @@
 		animation: fadeIn 0.3s ease;
 	}
 
-	/*Menú desplegable*/
+	/* Menú desplegable */
 	.mobile-nav {
 		display: none;
 		position: absolute;
@@ -193,7 +193,7 @@
 		font-size: 2rem;
 	}
 
-	/*Botones*/
+	/* Botones */
 	.main-buttons {
 		flex-direction: column;
 	}
@@ -202,7 +202,7 @@
 		font-size: 2rem;
 	}
 
-	/*Footer*/
+	/* Footer */
 	.site-footer {
 		font-size: 1.2rem;
 	}
@@ -227,7 +227,7 @@
 		font-size: 1.7rem;
 	}
 
-	/*Botones*/
+	/* Botones */
 	.btn {
 		font-size: 1.7rem;
 	}
@@ -258,7 +258,7 @@
 		font-size: 1.5rem;
 	}
 
-	/*Botones*/
+	/* Botones */
 	.btn {
 		font-size: 1.5rem;
 	}
@@ -283,7 +283,7 @@
 		font-size: 1.3rem;
 	}
 
-	/*Botones*/
+	/* Botones */
 	.btn {
 		font-size: 1.5rem;
 	}
@@ -321,7 +321,7 @@
 		font-size: 1rem;
 	}
 
-	/*Botones*/
+	/* Botones */
 	.btn {
 		font-size: 1.4rem;
 	}
