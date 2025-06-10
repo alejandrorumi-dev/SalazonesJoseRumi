@@ -95,3 +95,49 @@
 	margin-top: 1rem;
 }
 
+/* === BOTÓN BASE === */
+
+.main-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1.5rem;
+  margin-top: 4rem;
+  margin-bottom: 2rem;
+}
+
+.btn {
+  padding: 0.9rem 2rem;
+  border-radius: 2rem;                       /* Forma de píldora */
+  background-color: var(--color-btn-light);  /* Color base */
+  font-family: var(--font-main);
+  font-size: 2.2rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);   /* Sombra suave */
+}
+
+/* Hover para todos los botones */
+.btn:hover {
+  background-color: var(--color-btn-dark);   /* Color más intenso */
+  color: #fff;                                /* Texto blanco */
+  transform: translateY(-2px);                /* Efecto flotante */
+}
+
+/* === BOTÓN DESTACADO: Hacer Pedido === */
+.btn.cta {
+  background-color: var(--color-btn-dark);   /* Color más fuerte */
+  color: #fff;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+}
+
+/* Hover específico del CTA */
+.btn.cta:hover {
+  color: #fff;
+}
+
+.black {
+	color: var(--color-bg-secundary);
+}
