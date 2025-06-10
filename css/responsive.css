@@ -357,9 +357,9 @@
 	}
 }
 
-@media (max-width: 345px) {
+@media (max-width: 360px) {
 	.mobile-nav ul li a {
-		font-size: 0.5rem;
+		font-size: 0.6rem;
 	}
 
 	.main-title {
