@@ -1,0 +1,84 @@
+/*Estructura general de la página*/
+
+/* === HEADER === */
+
+/* = Estilo general del encabezado = */
+
+/*Contenedor del header*/
+.main-header {
+	display: flex; /*Elementos colocados en fila horizontalmente*/
+	justify-content: space-between; /*Espacio entre izquierda y derecha*/
+	align-items: center; /*Centrar los elementos verticalmente*/
+	padding: 2rem; /*Espaciado interior*/
+	height: 8rem; /*Altura fija del header*/
+	position: relative; /*Permite posicionar elementos como el menú móvil*/
+	z-index: 10;
+}
+
+/*Contenedor de elementos de la parte izquierda*/
+.header-left {
+	display: flex;
+	gap: 2rem /*Espacio entre elementos*/;
+	align-items: center;
+}
+
+/*Contenedor de elementos de la parte derecha*/
+.header-right {
+	display: flex;
+	gap: 1.5rem;
+	align-items: center;
+}
+
+/*Menú de hamburguesa*/
+.hamburger-menu {
+	display: none; /*Oculta por defecto*/
+}
+
+/*Menú desplegable*/
+.mobile-nav {
+	display: none;
+	position: absolute;
+	top: 8rem;
+	right: 0;
+	background-color: var(--color-bg-secundary);
+	width: 100%;
+	padding: 2rem;
+}
+
+/* === MAIN === */
+
+/* = Estilos generales del main = */
+
+/*Contenedor del main*/
+.main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  min-height: calc(100vh - 16rem);
+  padding: 2rem;
+  gap: 2rem;
+}
+
+.main-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* === FOOTER === */
+
+/* = Estilos general del footer = */
+
+/*Contenedor del footer*/
+.site-footer {
+	height: 8rem;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	color: var(--color-text-buttons);
+	text-align: center;
+	padding: 2rem;
+	font-size: 1.75rem;
+}
