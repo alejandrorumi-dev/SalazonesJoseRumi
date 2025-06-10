@@ -29,22 +29,6 @@
 	align-items: center;
 }
 
-/*Menú de hamburguesa*/
-.hamburger-menu {
-	display: none; /*Oculta por defecto*/
-}
-
-/*Menú desplegable*/
-.mobile-nav {
-	display: none;
-	position: absolute;
-	top: 8rem;
-	right: 0;
-	background-color: var(--color-bg-secundary);
-	width: 100%;
-	padding: 2rem;
-}
-
 /* === MAIN === */
 
 /* = Estilos generales del main = */
