@@ -1,5 +1,29 @@
 /*Estilos para los componentes de las diferentes páginas*/
 
+/* === FONDO ATENUADO === */
+/* Fondo atenuado oculto por defecto */
+.overlay {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(12, 3, 16, 0.6);
+	/* Un poco más oscuro */
+	backdrop-filter: blur(3px);
+	/* Más difuminado */
+	z-index: 15;
+	display: none;
+	opacity: 0;
+	transition: opacity 0.3s ease;
+}
+
+/* Cuando el menú se abre */
+.overlay.active {
+	display: block;
+	opacity: 1;
+}
+
 /* === BOTÓN EXPANSIBLE DEL HEADER (Sobre Nosotros / Contacto) === */
 
 .expand-button {
@@ -65,6 +89,107 @@
 	padding: 0 1rem;
 }
 
+/* === BOTÓN HAMBURGUESA === */
+.hamburger-menu {
+	display: none;
+}
+
+#hamburger-toggle {
+	width: 2.5rem;
+	height: 2rem;
+	position: relative;
+	background: none;
+	border: none;
+	cursor: pointer;
+	z-index: 30;
+	/* encima del menú */
+}
+
+/* Las tres líneas */
+.hamburger-icon,
+.hamburger-icon::before,
+.hamburger-icon::after {
+	content: '';
+	display: block;
+	height: 4px;
+	background-color: var(--color-text);
+	border-radius: 2px;
+	transition: all 0.3s ease;
+	position: absolute;
+	width: 100%;
+}
+
+.hamburger-icon {
+	top: 50%;
+	transform: translateY(-50%);
+}
+
+.hamburger-icon::before {
+	top: -8px;
+}
+
+.hamburger-icon::after {
+	top: 8px;
+}
+
+/* Cuando el menú está abierto: transformar en X */
+#hamburger-toggle.open .hamburger-icon {
+	background: transparent;
+}
+
+#hamburger-toggle.open .hamburger-icon::before {
+	transform: rotate(45deg);
+	top: 0;
+}
+
+#hamburger-toggle.open .hamburger-icon::after {
+	transform: rotate(-45deg);
+	top: 0;
+}
+
+/* Menú desplegable */
+.mobile-nav {
+	display: none;
+	position: absolute;
+	top: 8rem;
+	right: 5.5rem;
+	background-color: var(--color-bg-secundary);
+	width: 50%;
+	padding: 2rem;
+	border-radius: 1rem;
+	box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+	z-index: 20;
+	/* Por encima del overlay */
+	opacity: 0;
+	transform: translateY(-10px);
+	transition: all 0.3s ease;
+}
+
+/* Cuando el menú móvil se abre */
+.mobile-nav.open {
+	display: block;
+	opacity: 1;
+	transform: translateY(0);
+}
+
+.mobile-nav ul {
+	display: flex;
+	flex-direction: column;
+	gap: 1.5rem;
+	align-items: center;
+}
+
+.mobile-nav ul li a {
+	color: var(--color-text);
+	font-size: 1.6rem;
+	font-family: var(--font-secondary);
+	transition: color 0.3s ease;
+}
+
+.mobile-nav ul li a:hover {
+	color: var(--color-accent);
+}
+
 /* === TEXTOS DE LA PORTADA === */
 
 /*Subtítulo (h2): Bienvenidos a...*/
@@ -98,44 +223,51 @@
 /* === BOTÓN BASE === */
 
 .main-buttons {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 1.5rem;
-  margin-top: 4rem;
-  margin-bottom: 2rem;
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+	gap: 1.5rem;
+	margin-top: 4rem;
+	margin-bottom: 2rem;
 }
 
 .btn {
-  padding: 0.9rem 2rem;
-  border-radius: 2rem;                       /* Forma de píldora */
-  background-color: var(--color-btn-light);  /* Color base */
-  font-family: var(--font-main);
-  font-size: 2.2rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  transition: background-color 0.3s ease, transform 0.2s ease;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);   /* Sombra suave */
+	padding: 0.9rem 2rem;
+	border-radius: 2rem;
+	/* Forma de píldora */
+	background-color: var(--color-btn-light);
+	/* Color base */
+	font-family: var(--font-main);
+	font-size: 2.2rem;
+	font-weight: 600;
+	text-transform: uppercase;
+	letter-spacing: 1px;
+	transition: background-color 0.3s ease, transform 0.2s ease;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+	/* Sombra suave */
 }
 
 /* Hover para todos los botones */
 .btn:hover {
-  background-color: var(--color-btn-dark);   /* Color más intenso */
-  color: #fff;                                /* Texto blanco */
-  transform: translateY(-2px);                /* Efecto flotante */
+	background-color: var(--color-btn-dark);
+	/* Color más intenso */
+	color: #fff;
+	/* Texto blanco */
+	transform: translateY(-2px);
+	/* Efecto flotante */
 }
 
 /* === BOTÓN DESTACADO: Hacer Pedido === */
 .btn.cta {
-  background-color: var(--color-btn-dark);   /* Color más fuerte */
-  color: #fff;
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+	background-color: var(--color-btn-dark);
+	/* Color más fuerte */
+	color: #fff;
+	box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
 }
 
 /* Hover específico del CTA */
 .btn.cta:hover {
-  color: #fff;
+	color: #fff;
 }
 
 .black {
