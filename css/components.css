@@ -10,8 +10,10 @@
 	height: 100%;
 	background-color: rgba(12, 3, 16, 0.6);
 	/* Un poco más oscuro */
+
 	backdrop-filter: blur(3px);
 	/* Más difuminado */
+
 	z-index: 15;
 	display: none;
 	opacity: 0;
@@ -160,6 +162,7 @@
 	box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
 	z-index: 20;
 	/* Por encima del overlay */
+
 	opacity: 0;
 	transform: translateY(-10px);
 	transition: all 0.3s ease;
@@ -192,7 +195,7 @@
 
 /* === TEXTOS DE LA PORTADA === */
 
-/*Subtítulo (h2): Bienvenidos a...*/
+/* Subtítulo (h2): Bienvenidos a... */
 .welcome {
 	font-size: 3rem;
 	font-family: var(--font-secondary);
@@ -200,7 +203,7 @@
 	margin-bottom: 1rem;
 }
 
-/*Título principal (h1): Mercado Central...*/
+/* Título principal (h1): Mercado Central... */
 .main-title {
 	font-size: 4rem;
 	font-family: var(--font-main);
@@ -211,7 +214,7 @@
 	z-index: 1;
 }
 
-/*Frase debajo del título*/
+/* Frase debajo del título */
 .phrase {
 	font-size: 2.5rem;
 	font-family: var(--font-secondary);
@@ -235,8 +238,10 @@
 	padding: 0.9rem 2rem;
 	border-radius: 2rem;
 	/* Forma de píldora */
+
 	background-color: var(--color-btn-light);
 	/* Color base */
+
 	font-family: var(--font-main);
 	font-size: 2.2rem;
 	font-weight: 600;
@@ -251,8 +256,10 @@
 .btn:hover {
 	background-color: var(--color-btn-dark);
 	/* Color más intenso */
+
 	color: #fff;
 	/* Texto blanco */
+
 	transform: translateY(-2px);
 	/* Efecto flotante */
 }
@@ -261,6 +268,7 @@
 .btn.cta {
 	background-color: var(--color-btn-dark);
 	/* Color más fuerte */
+	
 	color: #fff;
 	box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
 }
