@@ -1,5 +1,100 @@
 /*Estilos generales de la página 'Hacer Pedido'*/
 
+/* === HEADER HACER PEDIDO === */
+
+.order-header {
+  background-color: #fff;
+  padding: 1rem 3rem;
+  border-bottom: 2px solid #e0e0e0;
+}
+
+/* Estructura principal con grid */
+.header-wrapper {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+}
+
+/* Logo centrado horizontalmente dentro de su celda */
+.logo-header {
+  justify-self: center;
+}
+
+.logo-header img {
+  max-width: 500px;
+  height: auto;
+}
+
+/* Iconos a la derecha en columna */
+.header-icons {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 1rem;
+}
+
+.social-buttons {
+  display: flex;
+  gap: 1rem;
+}
+
+.btn-rrss {
+	width: 3.5rem;
+	height: 3.5rem;
+}
+
+.cart-button {
+  margin-top: 0.5rem;
+}
+
+/* Menú debajo */
+.dropdown-menu {
+  display: flex;
+  justify-content: center;
+  background-color: var(--color-btn-dark);
+  padding: 1.5rem 0;
+  border-radius: 0.5rem;
+}
+
+.dropdown-menu ul {
+  display: flex;
+  gap: 2rem;
+}
+
+.dropdown-menu ul li a {
+  font-family: var(--font-secondary);
+  font-size: 1.6rem;
+  font-weight: bold;
+  color: var(--color-text-buttons);
+  transition: color 0.3s;
+}
+
+.dropdown-menu ul li a:hover,
+.dropdown-menu ul li a.btn-active {
+  color: var(--color-text);
+  border-bottom: 2px solid var(--color-bg-secundary);
+}
+
+/*Número de productos*/
+/* === ESTILO DEL NÚMERO SOBRE EL CARRITO === */
+
+.number-product {
+  position: absolute;
+  top: -14px;    /* un poco más arriba */
+  right: -15px; /* un poco más a la derecha */
+  background-color: white;
+  color: black;
+  font-weight: bold;
+  font-size: 1.5rem;
+  padding: 0.2rem 0.6rem;
+  border-radius: 50%;
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.3);
+  z-index: 2;
+  pointer-events: none;
+}
+
 /* === FOOTER === */
 
 .order-footer {
