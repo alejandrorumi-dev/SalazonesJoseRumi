@@ -28,6 +28,10 @@
 		display: none;
 	}
 
+	.dropdown-menu {
+		display: none;
+	}
+
 	/* Header */
 	.main-header {
 		height: 7rem;
