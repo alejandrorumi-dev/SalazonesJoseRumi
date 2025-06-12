@@ -92,14 +92,12 @@
 }
 
 .btn-cart {
-	display: flex;
-	flex-direction: column;
+	position: relative;
 }
 
 .btn-cart svg {
 	align-items: center;
 	justify-content: center;
-	margin-top: -0.5rem;
 }
 
 /* === BOTÓN HAMBURGUESA === */
@@ -337,36 +335,6 @@
 	}
 }
 
-/* === TEXTOS DE LA PORTADA === */
-
-/* Subtítulo (h2): Bienvenidos a... */
-.welcome {
-	font-size: 3rem;
-	font-family: var(--font-secondary);
-	color: var(--color-text);
-	margin-bottom: 1rem;
-}
-
-/* Título principal (h1): Mercado Central... */
-.main-title {
-	font-size: 4rem;
-	font-family: var(--font-main);
-	font-style: oblique;
-	color: var(--color-text);
-	margin-bottom: 1rem;
-	position: relative;
-	z-index: 1;
-}
-
-/* Frase debajo del título */
-.phrase {
-	font-size: 2.5rem;
-	font-family: var(--font-secondary);
-	font-style: italic;
-	color: var(--color-text-buttons);
-	margin-top: 1rem;
-}
-
 /* === BOTÓN BASE === */
 
 .main-buttons {
@@ -424,4 +392,34 @@
 
 .black {
 	color: var(--color-bg-secundary);
+}
+
+/* === TEXTOS DE LA PORTADA === */
+
+/* Subtítulo (h2): Bienvenidos a... */
+.welcome {
+	font-size: 3rem;
+	font-family: var(--font-secondary);
+	color: var(--color-text);
+	margin-bottom: 1rem;
+}
+
+/* Título principal (h1): Mercado Central... */
+.main-title {
+	font-size: 4rem;
+	font-family: var(--font-main);
+	font-style: oblique;
+	color: var(--color-text);
+	margin-bottom: 1rem;
+	position: relative;
+	z-index: 1;
+}
+
+/* Frase debajo del título */
+.phrase {
+	font-size: 2.5rem;
+	font-family: var(--font-secondary);
+	font-style: italic;
+	color: var(--color-text-buttons);
+	margin-top: 1rem;
 }
