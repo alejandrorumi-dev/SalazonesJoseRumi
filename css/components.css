@@ -91,12 +91,12 @@
 	padding: 0 1rem;
 }
 
-.btn-card {
+.btn-cart {
 	display: flex;
 	flex-direction: column;
 }
 
-.btn-card svg {
+.btn-cart svg {
 	align-items: center;
 	justify-content: center;
 	margin-top: -0.5rem;
@@ -204,6 +204,139 @@
 	color: var(--color-accent);
 }
 
+/*Menú desplegable - Redes Sociales*/
+
+.rrss-dropdown {
+	cursor: pointer;
+	position: relative;
+}
+
+.mobile-nav ul li {
+	position: relative;
+}
+
+.mobile-nav ul li>ul {
+	display: none;
+	margin-top: 0.5rem;
+	background-color: var(--color-bg-secundary);
+	border-radius: 0.5rem;
+	padding: 1rem;
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+	transition: all 0.3s ease;
+	opacity: 0;
+	transform: translateY(-10px);
+}
+
+.mobile-nav ul li:hover>ul {
+	display: block;
+	opacity: 1;
+	transform: translateY(0);
+}
+
+.mobile-nav ul li>ul li {
+	margin: 0;
+	padding: 0.5rem 0;
+}
+
+/* Estilos para los enlaces de redes sociales con iconos */
+.rrss-link {
+	display: flex !important;
+	align-items: center;
+	gap: 0.8rem;
+	font-size: 1.4rem !important;
+	color: var(--color-text) !important;
+	transition: all 0.3s ease !important;
+	padding: 0.8rem 1rem !important;
+	border-radius: 0.5rem !important;
+}
+
+.rrss-link:hover {
+	color: var(--color-accent) !important;
+	background-color: rgba(255, 255, 255, 0.1) !important;
+	transform: translateX(5px);
+}
+
+/* Iconos de redes sociales en el dropdown */
+.rrss-icon {
+	width: 1.8rem !important;
+	height: 1.8rem !important;
+	flex-shrink: 0;
+	transition: all 0.3s ease;
+}
+
+/* Colores específicos para cada red social */
+.rrss-link:hover .rrss-icon {
+	transform: scale(1.1);
+}
+
+/* Twitter - Azul claro */
+.rrss-link:nth-child(1):hover {
+	color: #1DA1F2 !important;
+}
+
+.rrss-link:nth-child(1):hover .rrss-icon {
+	color: #1DA1F2;
+}
+
+/* Instagram - Gradiente rosado/naranja */
+.rrss-link:nth-child(1):has(.rrss-icon)+.rrss-link:hover,
+.rrss-link:nth-of-type(1):hover+.rrss-link:hover {
+	color: #E4405F !important;
+}
+
+/* Selector más específico para Instagram */
+.mobile-nav ul li>ul li:nth-child(2) .rrss-link:hover {
+	color: #E4405F !important;
+}
+
+.mobile-nav ul li>ul li:nth-child(2) .rrss-link:hover .rrss-icon {
+	color: #E4405F;
+}
+
+/* TikTok - Negro/Rosa */
+.mobile-nav ul li>ul li:nth-child(3) .rrss-link:hover {
+	color: #ff0050 !important;
+}
+
+.mobile-nav ul li>ul li:nth-child(3) .rrss-link:hover .rrss-icon {
+	color: #ff0050;
+}
+
+/* Indicador visual para mostrar que RRSS es clickeable */
+.rrss-dropdown::after {
+	content: ' ▼';
+	font-size: 0.8em;
+	transition: transform 0.3s ease;
+	margin-left: 0.5rem;
+}
+
+.mobile-nav ul li.touch-open .rrss-dropdown::after {
+	transform: rotate(180deg);
+}
+
+/* Estilos adicionales para dispositivos táctiles */
+.mobile-nav ul li.touch-open>ul {
+	display: block !important;
+	opacity: 1 !important;
+	transform: translateY(0) !important;
+}
+
+/* Mejorar la experiencia hover en escritorio */
+@media (hover: hover) {
+	.mobile-nav ul li:hover>ul {
+		display: block;
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+/* Para dispositivos táctiles, usar solo la funcionalidad de clic */
+@media (hover: none) {
+	.mobile-nav ul li:hover>ul {
+		display: none;
+	}
+}
+
 /* === TEXTOS DE LA PORTADA === */
 
 /* Subtítulo (h2): Bienvenidos a... */
@@ -279,7 +412,7 @@
 .btn.cta {
 	background-color: var(--color-btn-dark);
 	/* Color más fuerte */
-	
+
 	color: #fff;
 	box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
 }
