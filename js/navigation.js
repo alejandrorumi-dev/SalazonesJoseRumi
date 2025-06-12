@@ -42,4 +42,32 @@ export function setupHamburgerMenu() {
 			overlay.classList.remove('active');
 		}
 	});
+
+	// Funcionalidad adicional para dropdown de RRSS (opcional - para dispositivos táctiles)
+	const rrssDropdown = document.querySelector('.rrss-dropdown');
+	if (rrssDropdown) {
+		rrssDropdown.addEventListener('click', (e) => {
+			e.preventDefault();
+			const parentLi = rrssDropdown.closest('li');
+			const submenu = parentLi.querySelector('ul');
+			
+			if (submenu) {
+				// Toggle clase para mostrar/ocultar en dispositivos táctiles
+				parentLi.classList.toggle('touch-open');
+				
+				// Aplicar estilos dinámicos para dispositivos táctiles
+				if (parentLi.classList.contains('touch-open')) {
+					submenu.style.display = 'block';
+					submenu.style.opacity = '1';
+					submenu.style.transform = 'translateY(0)';
+				} else {
+					submenu.style.opacity = '0';
+					submenu.style.transform = 'translateY(-10px)';
+					setTimeout(() => {
+						submenu.style.display = 'none';
+					}, 300);
+				}
+			}
+		});
+	}
 }
