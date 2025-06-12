@@ -2,6 +2,7 @@
 
 export function animateTitle() {
   const titleElement = document.querySelector('.main-title');
+  if (!titleElement) return;
   const originalText = 'Mercado Central de Almería';
   const newText = '¡ SALAZONES JOSÉ RUMÍ !';
   let i = originalText.length;
