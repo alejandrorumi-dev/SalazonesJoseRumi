@@ -14,6 +14,7 @@ Este proyecto web tiene como objetivo ofrecer una experiencia moderna, visual y 
 
 ## 📁 Estructura del proyecto
 
+```
 SalazonesJoseRumi/
 ├── index.html
 ├── README.md
@@ -31,6 +32,7 @@ SalazonesJoseRumi/
 │ ├── favicon/ # Favicon y manifest
 │ ├── icons/ # Iconos SVG o PNG
 │ └── images/ # Fotografías de productos y otras imágenes
+```
 
 
 > El proyecto está estructurado para mantener una separación clara entre estilos, scripts y contenido multimedia, facilitando la escalabilidad y el mantenimiento.
