@@ -91,6 +91,17 @@
 	padding: 0 1rem;
 }
 
+.btn-card {
+	display: flex;
+	flex-direction: column;
+}
+
+.btn-card svg {
+	align-items: center;
+	justify-content: center;
+	margin-top: -0.5rem;
+}
+
 /* === BOTÓN HAMBURGUESA === */
 .hamburger-menu {
 	display: none;
