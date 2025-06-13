@@ -85,7 +85,6 @@
   border-bottom: 2px solid var(--color-text-buttons);;
 }
 
-/*Número de productos*/
 /* === ESTILO DEL NÚMERO SOBRE EL CARRITO === */
 
 .number-product {
@@ -103,8 +102,35 @@
   pointer-events: none;
 }
 
+/* === MAIN === */
+.main-content {
+  width: 100%;
+  margin: 0 auto;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+}
+
+.main-order {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  padding: 2rem;
+}
+
+/* Grid de tarjetas */
+.product-cards {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr); /* o auto-fit con minmax si lo prefieres */
+  gap: 3rem;
+  padding: 0 2.5rem;            /* ← Espacio lateral para respirar */
+  box-sizing: border-box;    /* ← Asegura que el padding no rompa el ancho */
+}
+
 /* === FOOTER === */
 
 .order-footer {
 	color: var(--color-bg-secundary);
+  font-size: 1.5rem;
 }
