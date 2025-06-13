@@ -394,6 +394,166 @@
 	color: var(--color-bg-secundary);
 }
 
+/* === BOTONES PRINCIPALES === 
+=== HACER PEDIDO, VER PRODUCTOS === */
+
+/* Estilos para la sección de búsqueda y filtros */
+.product-actions {
+	padding: 2rem 1rem;
+	max-width: 1200px;
+	margin: 0 auto;
+}
+
+/* Fila del buscador - centrado y 60% de ancho */
+.search-row {
+	display: flex;
+	justify-content: center;
+	margin-bottom: 1.5rem;
+}
+
+.search-row input[type="search"] {
+	width: 80%;
+	max-width: auto;
+	padding: 0.75rem 1rem;
+	border: none;
+	border-bottom: 1px solid #ccc;
+	font-size: 1.5rem;
+	outline: none;
+	transition: border-color 0.3s ease;
+}
+
+.search-row input[type="search"]:focus {
+	border-color: var(--color-bg-secundary);
+	border-bottom: 1px solid var(--color-bg-secundary);
+}
+
+.search-row input[type="search"]::placeholder {
+	border: none;
+	color: #ccc;
+}
+
+.search-row input[type="search"]:focus::placeholder {
+	color: black;
+}
+
+/* Fila de filtros - elementos en línea */
+.filters-row {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	gap: 1.5rem;
+	flex-wrap: wrap;
+}
+
+/* Estilos para los dropdowns */
+.dropdown {
+	position: relative;
+	display: inline-block;
+}
+
+.dropdown label {
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+	padding: 0.75rem 1rem;
+	background-color: #f8f9fa;
+	border: 2px solid #ddd;
+	border-radius: 8px;
+	cursor: pointer;
+	font-size: 1rem;
+	color: #333;
+	transition: all 0.3s ease;
+	min-width: 260px;
+	justify-content: space-between;
+}
+
+.dropdown label:hover {
+	background-color: #e9ecef;
+}
+
+.dropdown.active label {
+	border-bottom-left-radius: 0;
+	border-bottom-right-radius: 0;
+}
+
+/* Lista personalizada de opciones */
+.dropdown-options {
+	position: absolute;
+	top: 100%;
+	left: 0;
+	right: 0;
+	background-color: var(--color-btn-light);
+	border-top: none;
+	border-radius: 0 0 8px 8px;
+	min-width: 250px;
+	max-height: 200px;
+	overflow-y: auto;
+	z-index: 1000;
+	opacity: 0;
+	transform: translateY(-10px);
+	visibility: hidden;
+	transition: all 0.3s ease;
+}
+
+.dropdown.active .dropdown-options {
+	opacity: 1;
+	transform: translateY(0);
+	visibility: visible;
+}
+
+.dropdown-option {
+	padding: 0.75rem 1rem;
+	cursor: pointer;
+	transition: background-color 0.2s ease;
+	border-bottom: 1px solid #f0f0f0;
+	color: var(--color-bg-secundary);
+}
+
+.dropdown-option:last-child {
+	border-bottom: none;
+}
+
+.dropdown-option:hover {
+	background-color: var(--color-btn-dark);
+	color: var(--color-text-buttons);
+	border: 1px solid var(--color-bg-secundary);
+}
+
+/* Ocultar el select nativo */
+.dropdown select {
+	display: none;
+}
+
+/* SVG dentro de los labels */
+.dropdown-arrow {
+	width: 16px;
+	height: 16px;
+	transition: transform 0.3s ease;
+}
+
+.dropdown.active .dropdown-arrow {
+	transform: rotate(180deg);
+}
+
+/* Botón de productos destacados */
+.btn-destacados {
+	padding: 0.75rem 1.5rem;
+	background-color: var(--color-btn-light);
+	color: var(--color-bg-secundary);
+	border: 1px solid var(--color-bg-secundary);
+	border-radius: 8px;
+	font-size: 1.5rem;
+	cursor: pointer;
+	transition: background-color 0.3s ease;
+	white-space: nowrap;
+}
+
+.btn-destacados:hover {
+	background-color: var(--color-btn-dark);
+	color: var(--color-text-buttons);
+	border: 2px solid var(--color-bg-secundary);
+}
+
 /* === TEXTOS DE LA PORTADA === */
 
 /* Subtítulo (h2): Bienvenidos a... */
