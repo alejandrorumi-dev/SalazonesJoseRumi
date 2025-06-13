@@ -293,11 +293,91 @@
 			</div>
 		</section>
 
-		<aside class="cart-summary">
-			<!-- Resumen del carrito con productos añadidos -->
-		</aside>
-	</main>
+		<div class="order-content">
+			<section class="product-cards">
+				<!-- PRODUCTO DISPONIBLE -->
+				<div class="product-card">
+					<div class="product-content">
+						<div class="product-image">
+							<img src="/assets/images/fondoSalazones.png" alt="Foto del producto" />
+						</div>
+						<p class="stock">DISPONIBLE</p>
+						<h3 class="product-name">Nombre del producto</h3>
+						<p class="price">Precio: X,XX€/Kg</p>
 
+						<div class="dropdown" id="amount-dropdown-X">
+							<label class="select-label">
+								Cantidad:
+								<svg class="dropdown-arrow" fill="#000000" viewBox="0 0 32 32"
+									xmlns="http://www.w3.org/2000/svg">
+									<path
+										d="M11.125 16.313l7.688-7.688 3.594 3.719-11.094 11.063-11.313-11.313 3.5-3.531z" />
+								</svg>
+							</label>
+
+							<!-- Opciones predefinidas -->
+							<div class="dropdown-options">
+								<button type="button" class="dropdown-option" data-value="100">100g</button>
+								<button type="button" class="dropdown-option" data-value="250">250g</button>
+								<button type="button" class="dropdown-option" data-value="500">500g</button>
+								<button type="button" class="dropdown-option" data-value="1000">1kg</button>
+								<button type="button" class="dropdown-option" data-value="2000">2kg</button>
+								<button type="button" class="dropdown-option custom-trigger">Otra cantidad</button>
+
+								<!-- Input oculto que aparece al seleccionar "Otra cantidad" -->
+								<div class="custom-amount-container" style="display: none;">
+									<input type="number" value="250" step="50" min="50" max="10000" />
+									<span>g</span>
+								</div>
+							</div>
+						</div>
+						<p class="total-price">Total: X,XX €</p>
+						<button class="add-to-cart">AÑADIR PRODUCTO</button>
+					</div>
+				</div>
+
+				<!-- PRODUCTO AGOTADO -->
+				<div class="product-card unavailable">
+					<div class="product-badge agotado">AGOTADO</div>
+					<div class="product-content">
+						<div class="product-image">
+							<img src="/assets/images/logoSalazones.png" alt="Foto del producto" />
+						</div>
+						<p class="no-stock">NO DISPONIBLE</p>
+						<h3 class="product-name">Nombre del producto</h3>
+						<p class="price">Precio: X,XX€/Kg</p>
+						<div class="dropdown" id="amount-dropdown-X">
+							<label class="select-label">
+								Cantidad:
+								<svg class="dropdown-arrow" fill="#000000" viewBox="0 0 32 32"
+									xmlns="http://www.w3.org/2000/svg">
+									<path
+										d="M11.125 16.313l7.688-7.688 3.594 3.719-11.094 11.063-11.313-11.313 3.5-3.531z" />
+								</svg>
+							</label>
+
+							<!-- Opciones predefinidas -->
+							<div class="dropdown-options">
+								<button type="button" class="dropdown-option" data-value="100">100g</button>
+								<button type="button" class="dropdown-option" data-value="250">250g</button>
+								<button type="button" class="dropdown-option" data-value="500">500g</button>
+								<button type="button" class="dropdown-option" data-value="1000">1kg</button>
+								<button type="button" class="dropdown-option" data-value="2000">2kg</button>
+								<button type="button" class="dropdown-option custom-trigger">Otra cantidad</button>
+
+								<!-- Input oculto que aparece al seleccionar "Otra cantidad" -->
+								<div class="custom-amount-container" style="display: none;">
+									<input type="number" value="250" step="50" min="50" max="10000" />
+									<span>g</span>
+								</div>
+							</div>
+						</div>
+						<p class="total-price">Total: X,XX €</p>
+						<button class="add-to-cart">AÑADIR PRODUCTO</button>
+					</div>
+				</div>
+		</div>
+	</main>
 
 	<!--Footer-->
 	<footer class="site-footer order-footer">
