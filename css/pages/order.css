@@ -71,10 +71,18 @@
   transition: color 0.3s;
 }
 
-.dropdown-menu ul li a:hover,
 .dropdown-menu ul li a.btn-active {
-  color: var(--color-text);
+  color: var(--color-text-buttons);
   border-bottom: 2px solid var(--color-bg-secundary);
+}
+
+.dropdown-menu ul li a:hover {
+  color: var(--color-bg-secundary);
+  border-bottom: 2px solid var(--color-text-buttons);
+}
+
+.dropdown-menu ul li a.btn-active:hover {
+  border-bottom: 2px solid var(--color-text-buttons);;
 }
 
 /*Número de productos*/
