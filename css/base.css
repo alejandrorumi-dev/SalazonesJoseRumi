@@ -30,6 +30,12 @@
 	/*Color de botones secundarios*/
 	--color-btn-light: #f3d6ae;
 
+	/*Color de producto disponible*/
+	--color-product-available: #099227;
+
+	/*Color de producto agotado*/
+	--color-product-unavailable: #d20303;
+
 	/*Fuente principal*/
 	--font-main: 'Montserrat', serif;
 
