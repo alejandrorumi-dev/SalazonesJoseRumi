@@ -3,28 +3,34 @@
 /* === HEADER HACER PEDIDO === */
 
 .order-header {
-  background-color: #fff;
-  padding: 1rem 3rem;
-  border-bottom: 2px solid #e0e0e0;
+  background-color: var(--color-btn-dark);
+  border-bottom: none;
 }
 
 /* Estructura principal con grid */
 .header-wrapper {
-  display: grid;
-  grid-template-columns: 1fr auto;
-  align-items: center;
-  justify-content: space-between;
-  gap: 2rem;
+	display: grid;
+	grid-template-columns: 1fr 3fr 1fr; /* ← 3 columnas */
+	align-items: center;
+	gap: 2rem;
+  height: 6rem;
+  width: 100%;
+  margin: auto;
+  padding: 0 3rem;
 }
 
 /* Logo centrado horizontalmente dentro de su celda */
 .logo-header {
-  justify-self: center;
+  display: flex;
+  align-items: center;
+  justify-self: flex-start;
+  height: 4rem;
 }
 
 .logo-header img {
-  max-width: 500px;
-  height: auto;
+  width: auto;
+  height: 9rem; /* 🔹 Limita su altura para que no empuje */
+  display: block;
 }
 
 /* Iconos a la derecha en columna */
@@ -40,44 +46,28 @@
   gap: 1rem;
 }
 
-.btn-rrss {
-	width: 3.5rem;
-	height: 3.5rem;
-}
-
-.cart-button {
-  margin-top: 0.5rem;
-}
-
 /* Menú debajo */
 .dropdown-menu {
   display: flex;
   justify-content: center;
-  background-color: var(--color-btn-dark);
   padding: 1.5rem 0;
   border-radius: 0.5rem;
 }
 
 .dropdown-menu ul {
   display: flex;
-  gap: 2rem;
+  gap: 4rem;
 }
 
 .dropdown-menu ul li a {
   font-family: var(--font-secondary);
-  font-size: 1.6rem;
+  font-size: 1.5rem;
   font-weight: bold;
   color: var(--color-text-buttons);
   transition: color 0.3s;
 }
 
-.dropdown-menu ul li a.btn-active {
-  color: var(--color-text-buttons);
-  border-bottom: 2px solid var(--color-bg-secundary);
-}
-
 .dropdown-menu ul li a:hover {
-  color: var(--color-bg-secundary);
   border-bottom: 2px solid var(--color-text-buttons);
 }
 
@@ -89,16 +79,13 @@
 
 .number-product {
   position: absolute;
-  top: -14px;    /* un poco más arriba */
-  right: -15px; /* un poco más a la derecha */
-  background-color: white;
-  color: black;
-  font-weight: bold;
-  font-size: 1.5rem;
-  padding: 0.2rem 0.6rem;
+  top: -5px;    /* un poco más arriba */
+  right: -5px; /* un poco más a la derecha */
   border-radius: 50%;
-  box-shadow: 0 0 4px rgba(0, 0, 0, 0.3);
-  z-index: 2;
+  color: var(--color-text-buttons);
+  background-color: var(--color-bg-secundary);
+  padding: 0.1rem 0.5rem;
+  font-weight: bold;
   pointer-events: none;
 }
 
