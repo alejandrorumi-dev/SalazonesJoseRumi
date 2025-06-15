@@ -286,18 +286,78 @@
 						<option value="available">Disponibles</option>
 					</select>
 				</div>
-
-				<!-- Botón de productos destacados -->
-				<button class="btn-destacados">Ver Productos Destacados</button>
 			</div>
 		</section>
 
 	</header>
 
+	<!-- === SECCIÓN DE RECOMENDACIONES === -->
+	<!-- Agregar después de </header> y antes de <main> -->
+
+	<section class="recommendations-section">
+		<div class="recommendations-container">
+			<div class="recommendations-header">
+				<h2>Recomendaciones</h2>
+				<div class="carousel-controls">
+					<button class="carousel-btn prev" aria-label="Anterior">❮</button>
+					<button class="carousel-btn next" aria-label="Siguiente">❯</button>
+				</div>
+			</div>
+
+			<div class="recommendations-carousel" id="recommendations-carousel">
+				<!-- Producto 1 -->
+				<div class="recommendation-item" data-product="jamon-iberico">
+					<img src="../assets/images/fondoSalazones.png" alt="Jamón Ibérico" />
+					<h3>Jamón Ibérico</h3>
+					<p>€24,50/kg</p>
+					<span class="status available">Disponible</span>
+				</div>
+
+				<!-- Producto 2 -->
+				<div class="recommendation-item" data-product="queso-manchego">
+					<img src="../assets/images/fondoSalazones.png" alt="Queso Manchego" />
+					<h3>Queso Manchego</h3>
+					<p>€18,75/kg</p>
+					<span class="status available">Disponible</span>
+				</div>
+
+				<!-- Producto 3 -->
+				<div class="recommendation-item" data-product="aceitunas">
+					<img src="../assets/images/fondoSalazones.png" alt="Aceitunas Aliñadas" />
+					<h3>Aceitunas Aliñadas</h3>
+					<p>€8,90/kg</p>
+					<span class="status limited">Últimas unidades</span>
+				</div>
+
+				<!-- Producto 4 -->
+				<div class="recommendation-item" data-product="chorizo">
+					<img src="../assets/images/fondoSalazones.png" alt="Chorizo Artesano" />
+					<h3>Chorizo Artesano</h3>
+					<p>€16,20/kg</p>
+					<span class="status available">Disponible</span>
+				</div>
+
+				<!-- Producto 5 -->
+				<div class="recommendation-item" data-product="morcilla">
+					<img src="../assets/images/fondoSalazones.png" alt="Morcilla de León" />
+					<h3>Morcilla de León</h3>
+					<p>€12,80/kg</p>
+					<span class="status available">Disponible</span>
+				</div>
+
+				<!-- Producto 6 - Puedes agregar más -->
+				<div class="recommendation-item" data-product="lomo">
+					<img src="../assets/images/fondoSalazones.png" alt="Lomo Embuchado" />
+					<h3>Lomo Embuchado</h3>
+					<p>€22,90/kg</p>
+					<span class="status available">Disponible</span>
+				</div>
+			</div>
+		</div>
+	</section>
+
 	<!--Contenedor principal: Main-->
 	<main class="main-content">
-		
-		<div id="add__line"><!--LÍNEA DIVISORIA--></div>
 
 		<div class="order-content">
 			<section class="product-cards">
@@ -341,7 +401,7 @@
 						<button class="add-to-cart">AÑADIR PRODUCTO</button>
 					</div>
 				</div>
-				
+
 				<!-- PRODUCTO AGOTADO -->
 				<div class="product-card unavailable">
 					<div class="product-badge agotado">AGOTADO</div>
@@ -383,9 +443,41 @@
 					</div>
 				</div>
 			</section>
-			
+
 			<aside class="cart-summary">
-				<!--Resumen de los productos añadidos-->
+				<h3>Tu Pedido</h3>
+
+				<!-- Estado vacío (se mostrará cuando no hay productos) -->
+				<div class="cart-empty">
+					<p>Tu carrito está vacío</p>
+					<p>Añade productos para comenzar tu pedido</p>
+				</div>
+
+				<!-- Lista de productos (se llenará dinámicamente con JavaScript) -->
+				<div class="cart-items" style="display: none;">
+					<!-- Ejemplo de producto en el carrito -->
+					<div class="cart-item">
+						<div class="cart-item-info">
+							<div class="cart-item-name">Jamón Ibérico</div>
+							<div class="cart-item-details">250g</div>
+						</div>
+						<div class="cart-item-price">12,50 €</div>
+					</div>
+
+					<div class="cart-item">
+						<div class="cart-item-info">
+							<div class="cart-item-name">Queso Manchego</div>
+							<div class="cart-item-details">500g</div>
+						</div>
+						<div class="cart-item-price">18,75 €</div>
+					</div>
+				</div>
+
+				<!-- Resumen del total -->
+				<div class="cart-total" style="display: none;">
+					<div class="cart-total-price">Total: 31,25 €</div>
+					<button class="checkout-btn">Finalizar Pedido</button>
+				</div>
 			</aside>
 		</div>
 	</main>
