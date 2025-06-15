@@ -555,6 +555,28 @@
 	border: 2px solid var(--color-bg-secundary);
 }
 
+/* Línea divisoria */
+#add__line {
+  width: 80%;
+  align-items: center;
+  height: 2px;
+  background: linear-gradient(to right, rgba(0, 0, 0, 0), var(--color-btn-dark), rgba(0, 0, 0, 0));
+  margin: 1rem auto;
+  animation: fadeInLine 1.5s ease-in-out;
+}
+
+@keyframes fadeInLine {
+  from {
+    opacity: 0;
+    transform: scaleX(0);
+  }
+
+  to {
+    opacity: 1;
+    transform: scaleX(1);
+  }
+}
+
 /* Tarjetas de los productos */
 .product-card {
 	width: 400px;
