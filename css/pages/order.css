@@ -5,9 +5,10 @@
 .order-header {
   background-color: var(--color-btn-dark);
   border-bottom: none;
+  width: 100%; /* Header ocupa todo el ancho */
 }
 
-/* Estructura principal con grid */
+/* Estructura principal con grid - CONTENIDO LIMITADO */
 .header-wrapper {
 	display: grid;
 	grid-template-columns: 1fr 3fr 1fr; /* ← 3 columnas */
@@ -15,7 +16,8 @@
 	gap: 2rem;
   height: 6rem;
   width: 100%;
-  margin: auto;
+  max-width: 1400px; /* 🔹 LÍMITE DE ANCHO MÁXIMO */
+  margin: 0 auto; /* 🔹 CENTRADO HORIZONTAL */
   padding: 0 3rem;
 }
 
@@ -46,17 +48,21 @@
   gap: 1rem;
 }
 
-/* Menú debajo */
+/* Menú debajo - CONTENIDO LIMITADO */
 .dropdown-menu {
   display: flex;
   justify-content: center;
   padding: 1.5rem 0;
   border-radius: 0.5rem;
+  width: 100%; /* Ocupa todo el ancho del header */
 }
 
 .dropdown-menu ul {
   display: flex;
   gap: 4rem;
+  max-width: 1400px; /* 🔹 LÍMITE DE ANCHO MÁXIMO */
+  width: 100%;
+  justify-content: center;
 }
 
 .dropdown-menu ul li a {
@@ -89,35 +95,445 @@
   pointer-events: none;
 }
 
-/* === MAIN === */
+/* === SECCIÓN DE FILTROS - CONTENIDO LIMITADO === */
+.product-actions {
+  width: 100%; /* Ocupa todo el ancho */
+  background-color: var(--color-btn-light);
+}
+
+.filters-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 2rem;
+  max-width: 1400px; /* 🔹 LÍMITE DE ANCHO MÁXIMO */
+  width: 50%;
+  margin: 0 auto; /* 🔹 CENTRADO HORIZONTAL */
+  padding: 0 3rem;
+  height: 4rem;
+}
+
+/* === SECCIÓN DE RECOMENDACIONES === */
+/* Agregar al final de css/pages/order.css */
+
+.recommendations-section {
+  width: 100%;
+  background-color: #f8f9fa;
+  border-bottom: 1px solid #e9ecef;
+  padding: 2rem 0;
+}
+
+.recommendations-container {
+  max-width: 1400px; /* 🔹 Mismo ancho que el resto del contenido */
+  margin: 0 auto;
+  padding: 0 3rem;
+}
+
+/* Header de recomendaciones */
+.recommendations-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.recommendations-header h2 {
+  font-size: 1.8rem;
+  font-family: var(--font-secondary);
+  color: var(--color-bg-secundary);
+  margin: 0;
+  font-weight: 600;
+}
+
+/* Controles del carrusel */
+.carousel-controls {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.carousel-btn {
+  width: 40px;
+  height: 40px;
+  border: 2px solid var(--color-btn-dark);
+  background-color: #fff;
+  color: var(--color-btn-dark);
+  border-radius: 50%;
+  font-size: 1.2rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.carousel-btn:hover {
+  background-color: var(--color-btn-dark);
+  color: var(--color-text-buttons);
+  transform: scale(1.1);
+}
+
+.carousel-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Carrusel principal */
+.recommendations-carousel {
+  display: flex;
+  gap: 1.5rem;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  padding: 1rem 0;
+  
+  /* Ocultar scrollbar pero mantener funcionalidad */
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE/Edge */
+}
+
+.recommendations-carousel::-webkit-scrollbar {
+  display: none; /* Chrome/Safari */
+}
+
+/* Items individuales del carrusel */
+.recommendation-item {
+  flex: 0 0 auto; /* No se encoge ni crece */
+  width: 250px; /* 🔹 Ancho fijo más pequeño */
+  background-color: #fff;
+  border-radius: 12px;
+  padding: 1.2rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  cursor: pointer;
+  border: 2px solid transparent;
+}
+
+.recommendation-item:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+  border-color: var(--color-accent);
+}
+
+/* Imagen del producto recomendado */
+.recommendation-item img {
+  width: 180px; /* 🔹 Tamaño más pequeño que el logo gigante */
+  height: 130px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+  background-color: #f8f9fa; /* Fondo por si la imagen no carga */
+}
+
+/* Nombre del producto */
+.recommendation-item h3 {
+  font-size: 1.1rem;
+  font-family: var(--font-secondary);
+  color: var(--color-bg-secundary);
+  margin: 0 0 0.5rem 0;
+  font-weight: 600;
+  line-height: 1.3;
+  
+  /* Truncar texto si es muy largo */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Precio del producto */
+.recommendation-item p {
+  font-size: 1rem;
+  font-weight: bold;
+  color: var(--color-btn-dark);
+  margin: 0;
+}
+
+/* Indicador de disponibilidad (opcional) */
+.recommendation-item .status {
+  display: inline-block;
+  padding: 0.2rem 0.8rem;
+  border-radius: 12px;
+  font-size: 0.8rem;
+  font-weight: bold;
+  margin-top: 0.5rem;
+}
+
+.recommendation-item .status.available {
+  background-color: #d4edda;
+  color: #155724;
+}
+
+.recommendation-item .status.limited {
+  background-color: #fff3cd;
+  color: #856404;
+}
+
+/* === MAIN - CONTENIDO LIMITADO === */
 .main-content {
   width: 100%;
-  margin: 0 auto;
-  padding: 2rem;
+  max-width: 1400px; /* 🔹 LÍMITE DE ANCHO MÁXIMO */
+  margin: 0 auto; /* 🔹 CENTRADO HORIZONTAL */
+  padding: 2rem 3rem; /* 🔹 PADDING LATERAL CONSISTENTE */
   display: flex;
   flex-direction: column;
   gap: 3rem;
 }
 
-.main-order {
-  display: flex;
-  flex-direction: column;
-  gap: 2rem;
-  padding: 2rem;
+/* Contenedor principal que incluye las tarjetas y el aside */
+.order-content {
+  display: grid;
+  grid-template-columns: 1fr 320px; /* 🔹 Aside más pequeño */
+  gap: 3rem;
+  width: 100%;
 }
 
-/* Grid de tarjetas */
+/* Grid de tarjetas - ahora 4 columnas más pequeñas */
 .product-cards {
   display: grid;
-  grid-template-columns: repeat(4, 1fr); /* o auto-fit con minmax si lo prefieres */
-  gap: 3rem;
-  padding: 0 2.5rem;            /* ← Espacio lateral para respirar */
-  box-sizing: border-box;    /* ← Asegura que el padding no rompa el ancho */
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); /* 🔹 Cards responsivas más pequeñas */
+  gap: 1.5rem; /* 🔹 Gap más pequeño */
+  padding: 0;
+}
+
+/* === TARJETAS DE PRODUCTOS MÁS PEQUEÑAS === */
+.product-card {
+	width: 100%; /* 🔹 Ocupa todo el espacio disponible del grid */
+	max-width: 320px; /* 🔹 Ancho máximo más pequeño */
+	background-color: #fff;
+	border-radius: 12px;
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+	padding: 1rem; /* 🔹 Padding más pequeño */
+	transition: transform 0.2s ease;
+	justify-self: center; /* 🔹 Centrado en su celda del grid */
+}
+
+.product-content {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 0.6rem; /* 🔹 Gap más pequeño */
+}
+
+.product-image {
+  width: 100%;
+  height: 180px; /* 🔹 Altura fija más pequeña */
+  overflow: hidden;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.product-image img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	border-radius: 8px;
+}
+
+.product-name {
+	font-size: 1.2rem; /* 🔹 Texto más pequeño */
+	text-align: center;
+	color: var(--color-bg-secundary);
+	line-height: 1.3;
+}
+
+.price {
+	font-weight: 500;
+	color: #333;
+	font-size: 1rem; /* 🔹 Texto más pequeño */
+}
+
+.stock {
+	font-size: 1.2rem; /* 🔹 Texto más pequeño */
+	font-weight: bold;
+	color: var(--color-product-available);
+}
+
+.no-stock {
+	font-size: 1.2rem; /* 🔹 Texto más pequeño */
+	font-weight: bold;
+	color: var(--color-product-unavailable);
+}
+
+/* Dropdown de cantidad más compacto */
+.dropdown label {
+	font-size: 0.9rem; /* 🔹 Texto más pequeño */
+	padding: 0.5rem 0.8rem; /* 🔹 Padding más pequeño */
+	min-width: auto; /* 🔹 Sin ancho mínimo */
+}
+
+.total-price {
+	font-weight: bold;
+	color: #333;
+	margin-top: 0.5rem;
+	font-size: 1rem; /* 🔹 Texto más pequeño */
+}
+
+.add-to-cart {
+	margin-top: 0.5rem;
+	padding: 0.4rem 0.8rem; /* 🔹 Botón más pequeño */
+	background-color: #007b5e;
+	color: white;
+	border: none;
+	border-radius: 6px;
+	cursor: pointer;
+	transition: background-color 0.2s ease;
+	font-size: 0.9rem; /* 🔹 Texto más pequeño */
+	width: 100%;
+}
+
+.add-to-cart:hover {
+	background-color: #005c46;
+}
+
+/* Productos agotados */
+.product-card.unavailable {
+	position: relative;
+	pointer-events: none;
+	overflow: hidden;
+}
+
+.product-card.unavailable .product-content {
+	filter: grayscale(100%) brightness(1.05);
+	opacity: 0.35;
+}
+
+/* Cinta AGOTADO */
+.product-badge.agotado {
+	position: absolute;
+	top: 1.2rem; /* 🔹 Ajustado para cards más pequeñas */
+	left: -1.2rem; /* 🔹 Ajustado para cards más pequeñas */
+	font-size: 1.6rem; /* 🔹 Texto más pequeño */
+	font-weight: 800;
+	color: var(--color-product-unavailable);
+	transform: rotate(-25deg);
+	background-color: rgba(255, 255, 255, 0.85);
+	padding: 0.1rem 2rem; /* 🔹 Padding más pequeño */
+	box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+	z-index: 5;
+	pointer-events: none;
+}
+
+/* === ASIDE DEL CARRITO MÁS COMPACTO === */
+.cart-summary {
+  background-color: #f8f9fa;
+  border-radius: 12px;
+  padding: 1.5rem; /* 🔹 Padding más pequeño */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  position: sticky;
+  top: 2rem;
+  max-height: calc(100vh - 4rem);
+  overflow-y: auto;
+}
+
+/* Título del aside */
+.cart-summary h3 {
+  font-size: 1.6rem; /* 🔹 Título más pequeño */
+  color: var(--color-bg-secundary);
+  margin-bottom: 1.2rem; /* 🔹 Margen más pequeño */
+  text-align: center;
+  border-bottom: 2px solid var(--color-btn-light);
+  padding-bottom: 0.8rem; /* 🔹 Padding más pequeño */
+}
+
+/* Lista de productos en el carrito */
+.cart-items {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem; /* 🔹 Gap más pequeño */
+  margin-bottom: 1.5rem; /* 🔹 Margen más pequeño */
+}
+
+.cart-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.8rem; /* 🔹 Padding más pequeño */
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.cart-item-info {
+  flex: 1;
+}
+
+.cart-item-name {
+  font-weight: bold;
+  color: var(--color-bg-secundary);
+  margin-bottom: 0.3rem; /* 🔹 Margen más pequeño */
+  font-size: 0.95rem; /* 🔹 Texto más pequeño */
+}
+
+.cart-item-details {
+  font-size: 0.8rem; /* 🔹 Texto más pequeño */
+  color: #666;
+}
+
+.cart-item-price {
+  font-weight: bold;
+  color: var(--color-btn-dark);
+  font-size: 0.95rem; /* 🔹 Texto más pequeño */
+}
+
+/* Resumen del total */
+.cart-total {
+  border-top: 2px solid var(--color-btn-light);
+  padding-top: 1.2rem; /* 🔹 Padding más pequeño */
+  text-align: center;
+}
+
+.cart-total-price {
+  font-size: 1.6rem; /* 🔹 Texto más pequeño */
+  font-weight: bold;
+  color: var(--color-bg-secundary);
+  margin-bottom: 1.2rem; /* 🔹 Margen más pequeño */
+}
+
+/* Botón de finalizar pedido */
+.checkout-btn {
+  width: 100%;
+  padding: 0.8rem; /* 🔹 Padding más pequeño */
+  background-color: var(--color-btn-dark);
+  color: var(--color-text-buttons);
+  border: none;
+  border-radius: 8px;
+  font-size: 1.1rem; /* 🔹 Texto más pequeño */
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.checkout-btn:hover {
+  background-color: var(--color-bg-secundary);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.checkout-btn:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+/* Estado vacío del carrito */
+.cart-empty {
+  text-align: center;
+  color: #666;
+  font-style: italic;
+  padding: 1.5rem; /* 🔹 Padding más pequeño */
+  font-size: 0.95rem; /* 🔹 Texto más pequeño */
 }
 
 /* === FOOTER === */
-
 .order-footer {
 	color: var(--color-bg-secundary);
-  font-size: 1.5rem;
+  font-size: 1.3rem; /* 🔹 Texto más pequeño */
+  text-align: center;
+  padding: 2rem 0;
+  background-color: var(--color-bg);
+  margin-top: 3rem;
 }
