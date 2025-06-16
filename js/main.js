@@ -13,6 +13,9 @@ import { setupCarousel } from '../js/carousel.js';
 // Importar el sistema de paginación
 import { initPagination } from '../js/pagination.js';
 
+// Importar el sistema de búsqueda
+import { initSearchSystem } from '../js/search.js';
+
 document.addEventListener('DOMContentLoaded', () => {
   // Configurar menú hamburguesa
   setupHamburgerMenu();
@@ -54,7 +57,16 @@ document.addEventListener('DOMContentLoaded', () => {
     console.log('🎠 Carrusel de recomendaciones activado');
   }
 
-  // === NUEVO: Configurar sistema de paginación ===
+  // === Configurar sistema de búsqueda ===
+  if (document.querySelector('#search-products')) {
+    const searchSystem = initSearchSystem();
+    console.log('🔍 Sistema de búsqueda con sugerencias activado');
+    
+    // Hacer disponible globalmente para debug (opcional)
+    window.searchSystem = searchSystem;
+  }
+
+  // === Configurar sistema de paginación ===
   if (document.querySelector('.product-cards')) {
     const pagination = initPagination();
     console.log('📄 Sistema de paginación activado');
