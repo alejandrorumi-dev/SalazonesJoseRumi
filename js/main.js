@@ -10,6 +10,9 @@ import { setupFilters, resetFilters } from '../js/filters.js';
 // Importar el archivo del carrusel
 import { setupCarousel } from '../js/carousel.js';
 
+// Importar el sistema de paginación
+import { initPagination } from '../js/pagination.js';
+
 document.addEventListener('DOMContentLoaded', () => {
   // Configurar menú hamburguesa
   setupHamburgerMenu();
@@ -26,12 +29,12 @@ document.addEventListener('DOMContentLoaded', () => {
     // Event listeners para los eventos personalizados de filtros
     document.addEventListener('searchProducts', (e) => {
       console.log('Evento de búsqueda:', e.detail.searchTerm);
-      // Aquí puedes agregar la lógica para filtrar productos por búsqueda
+      // La paginación se encarga automáticamente de esto
     });
 
     document.addEventListener('filterChange', (e) => {
       console.log('Filtro cambiado:', e.detail);
-      // Aquí puedes agregar la lógica para filtrar productos por categoría u ordenar
+      // La paginación se encarga automáticamente de esto
     });
 
     document.addEventListener('showHighlighted', () => {
@@ -41,14 +44,23 @@ document.addEventListener('DOMContentLoaded', () => {
 
     document.addEventListener('filtersReset', () => {
       console.log('Filtros reseteados');
-      // Aquí puedes agregar la lógica para mostrar todos los productos
+      // La paginación se encarga automáticamente de esto
     });
   }
 
-  // === NUEVO: Configurar carrusel de recomendaciones ===
+  // === Configurar carrusel de recomendaciones ===
   if (document.querySelector('.recommendations-carousel')) {
     setupCarousel();
     console.log('🎠 Carrusel de recomendaciones activado');
+  }
+
+  // === NUEVO: Configurar sistema de paginación ===
+  if (document.querySelector('.product-cards')) {
+    const pagination = initPagination();
+    console.log('📄 Sistema de paginación activado');
+
+    // Hacer disponible globalmente para debug (opcional)
+    window.pagination = pagination;
   }
 });
 
