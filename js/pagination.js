@@ -226,7 +226,7 @@ export function setupPagination() {
 
 	// === FUNCIÓN: Aplicar filtros ===
 	function applyFilters(filters = {}) {
-		const { category = '', search = '', sortBy = '', showOnlyAvailable = true } = filters;
+		const { category = '', search = '', sortBy = '', showOnlyAvailable = false } = filters;
 
 		// Empezar con todos los productos
 		let filtered = [...allProducts];
