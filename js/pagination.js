@@ -16,8 +16,6 @@ export function setupPagination() {
 		return;
 	}
 
-	console.log('Sistema de paginación iniciado');
-
 	// === FUNCIÓN: Crear contenedor de paginación ===
 	function createPaginationContainer() {
 		// Buscar si ya existe
@@ -200,8 +198,6 @@ export function setupPagination() {
 
 		currentPage = pageNumber;
 		showCurrentPage();
-
-		console.log(`Navegando a página ${pageNumber}`);
 	}
 
 	// === FUNCIÓN: Página anterior ===
