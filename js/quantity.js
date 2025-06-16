@@ -65,7 +65,7 @@ export class QuantitySystem {
     this.setupDropdownOptions(dropdown, productType);
 
     // Establecer cantidad inicial según el tipo
-    const initialAmount = productType.isUnit ? 1 : 250;
+    const initialAmount = productType.isUnit ? 1 : 1000;
     const initialUnit = productType.isUnit ? 'unidad' : 'g';
     
     this.quantities.set(productId, { 
@@ -227,7 +227,7 @@ export class QuantitySystem {
       isUnit: false,
       unitName: 'g',
       unitNamePlural: 'g',
-      defaultAmount: 250,
+      defaultAmount: 1000,
       options: [100, 250, 500, 1000, 2000]
     };
   }
@@ -285,7 +285,7 @@ export class QuantitySystem {
         customInput.setAttribute('min', '50');
         customInput.setAttribute('max', '10000');
         customInput.setAttribute('step', '50');
-        customInput.value = '250';
+        customInput.value = '1000';
       }
     }
     
@@ -617,28 +617,6 @@ export class QuantitySystem {
     }, 3000);
   }
 
-  // ✅ MÉTODOS PARA MANEJAR EL CARRITO
-
-  updateCartCounter() {
-    const cartCount = document.querySelector('.number-product');
-    if (cartCount) {
-      let totalItems = 0;
-      
-      this.cart.forEach(item => {
-        if (item.quantity.productType && item.quantity.productType.isUnit) {
-          // Para productos por unidad, contar las unidades
-          totalItems += item.quantity.amount;
-        } else {
-          // Para productos por peso, contar cada 250g como 1 item
-          totalItems += Math.ceil(item.quantity.amount / 250);
-        }
-      });
-      
-      cartCount.textContent = totalItems.toString();
-      console.log(`🛒 Contador actualizado: ${totalItems} items`);
-    }
-  }
-
   updateCartDisplay() {
     const cartEmpty = document.querySelector('.cart-empty');
     const cartItems = document.querySelector('.cart-items');
@@ -775,7 +753,7 @@ export class QuantitySystem {
       const productId = this.extractProductId(dropdown.id);
       const productCard = dropdown.closest('.product-card');
       const productType = this.detectProductType(productCard);
-      const defaultAmount = productType.isUnit ? 1 : 250;
+      const defaultAmount = productType.isUnit ? 1 : 1000;
       
       this.quantities.set(productId, { 
         amount: defaultAmount, 
