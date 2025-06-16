@@ -406,7 +406,8 @@
 
 .search-header input[type="search"] {
 	width: 100%;
-	max-width: 500px; /* 🔹 LÍMITE DE ANCHO PARA EL BUSCADOR */
+	max-width: 500px;
+	/* 🔹 LÍMITE DE ANCHO PARA EL BUSCADOR */
 	padding: 0.75rem 1rem;
 	border: none;
 	border-radius: 20px;
@@ -448,7 +449,8 @@
 	font-size: 1.2rem !important;
 	color: #333;
 	transition: all 0.3s ease;
-	min-width: 200px; /* 🔹 Ancho mínimo más pequeño para el diseño compacto */
+	min-width: 200px;
+	/* 🔹 Ancho mínimo más pequeño para el diseño compacto */
 	justify-content: space-between;
 }
 
@@ -470,7 +472,8 @@
 	background-color: var(--color-btn-light);
 	border-top: none;
 	border-radius: 0 0 8px 8px;
-	min-width: 240px; /* 🔹 Ancho mínimo más pequeño */
+	min-width: 240px;
+	/* 🔹 Ancho mínimo más pequeño */
 	max-height: 200px;
 	overflow-y: auto;
 	z-index: 1000;
