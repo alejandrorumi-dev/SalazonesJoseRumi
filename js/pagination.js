@@ -10,8 +10,7 @@ export function setupPagination() {
 
 	// === ELEMENTOS DEL DOM ===
 	const productCardsContainer = document.querySelector('.product-cards');
-	const paginationContainer = createPaginationContainer();
-
+	
 	if (!productCardsContainer) {
 		console.log('Contenedor de productos no encontrado');
 		return;
@@ -32,7 +31,7 @@ export function setupPagination() {
 		container.className = 'pagination-container';
 		container.innerHTML = `
       <div class="pagination-info">
-        <span class="products-count">Mostrando 1-12 de 0 productos</span>
+        <span class="products-count">Cargando productos...</span>
       </div>
       <div class="pagination-controls">
         <button class="pagination-btn prev-btn" disabled>❮ Anterior</button>
@@ -50,6 +49,9 @@ export function setupPagination() {
 		return container;
 	}
 
+	// ✅ CREAR EL CONTENEDOR INMEDIATAMENTE
+	const paginationContainer = createPaginationContainer();
+
 	// === FUNCIÓN: Obtener todos los productos ===
 	function getAllProducts() {
 		const productCards = Array.from(document.querySelectorAll('.product-card'));
@@ -63,11 +65,11 @@ export function setupPagination() {
 			originalIndex: index
 		}));
 
-		// Por defecto, mostrar solo productos disponibles
+		// ✅ Por defecto mostrar solo productos disponibles
 		filteredProducts = allProducts.filter(product => product.available);
 		totalProducts = filteredProducts.length;
 
-		console.log(`Productos cargados: ${allProducts.length} total, ${totalProducts} disponibles`);
+		console.log(`Productos cargados: ${allProducts.length} total, ${totalProducts} disponibles mostrados inicialmente`);
 		return filteredProducts;
 	}
 
@@ -87,15 +89,9 @@ export function setupPagination() {
 			product.element.style.display = 'block';
 		});
 
-		// Actualizar controles
+		// ✅ ACTUALIZAR CONTROLES DESPUÉS DE MOSTRAR PRODUCTOS
 		updatePaginationControls();
 		updateProductsInfo();
-
-		// Scroll suave al inicio de los productos
-		productCardsContainer.scrollIntoView({
-			behavior: 'smooth',
-			block: 'start'
-		});
 
 		console.log(`Página ${currentPage}: mostrando productos ${startIndex + 1}-${Math.min(endIndex, totalProducts)}`);
 	}
@@ -104,9 +100,8 @@ export function setupPagination() {
 	function updateProductsInfo() {
 		const startIndex = (currentPage - 1) * PRODUCTS_PER_PAGE + 1;
 		const endIndex = Math.min(currentPage * PRODUCTS_PER_PAGE, totalProducts);
-		const totalPages = Math.ceil(totalProducts / PRODUCTS_PER_PAGE);
 
-		const infoElement = paginationContainer.querySelector('.products-count');
+		const infoElement = paginationContainer?.querySelector('.products-count');
 		if (infoElement) {
 			if (totalProducts === 0) {
 				infoElement.textContent = 'No se encontraron productos';
@@ -121,8 +116,8 @@ export function setupPagination() {
 		const totalPages = Math.ceil(totalProducts / PRODUCTS_PER_PAGE);
 
 		// Actualizar botones anterior/siguiente
-		const prevBtn = paginationContainer.querySelector('.prev-btn');
-		const nextBtn = paginationContainer.querySelector('.next-btn');
+		const prevBtn = paginationContainer?.querySelector('.prev-btn');
+		const nextBtn = paginationContainer?.querySelector('.next-btn');
 
 		if (prevBtn) {
 			prevBtn.disabled = currentPage <= 1;
@@ -138,7 +133,7 @@ export function setupPagination() {
 
 	// === FUNCIÓN: Actualizar números de página ===
 	function updatePageNumbers(totalPages) {
-		const numbersContainer = paginationContainer.querySelector('.pagination-numbers');
+		const numbersContainer = paginationContainer?.querySelector('.pagination-numbers');
 		if (!numbersContainer) return;
 
 		numbersContainer.innerHTML = '';
@@ -226,13 +221,28 @@ export function setupPagination() {
 
 	// === FUNCIÓN: Aplicar filtros ===
 	function applyFilters(filters = {}) {
-		const { category = '', search = '', sortBy = '', showOnlyAvailable = true } = filters;
+		// ✅ LÓGICA INTELIGENTE: Mostrar agotados solo si hay categoría seleccionada
+		const { category = '', search = '', sortBy = '', showOnlyAvailable = null } = filters;
 
 		// Empezar con todos los productos
 		let filtered = [...allProducts];
 
+		// ✅ NUEVA LÓGICA: Mostrar agotados solo si hay categoría seleccionada o si se especifica explícitamente
+		let shouldShowOnlyAvailable;
+		
+		if (showOnlyAvailable !== null) {
+			// Si se especifica explícitamente, usar ese valor
+			shouldShowOnlyAvailable = showOnlyAvailable;
+		} else if (category && category !== '') {
+			// Si hay categoría seleccionada, mostrar todos (disponibles + agotados)
+			shouldShowOnlyAvailable = false;
+		} else {
+			// Por defecto, mostrar solo disponibles
+			shouldShowOnlyAvailable = true;
+		}
+
 		// Filtrar por disponibilidad
-		if (showOnlyAvailable) {
+		if (shouldShowOnlyAvailable) {
 			filtered = filtered.filter(product => product.available);
 		}
 
@@ -265,6 +275,7 @@ export function setupPagination() {
 		showCurrentPage();
 
 		console.log(`Filtros aplicados: ${totalProducts} productos encontrados`);
+		console.log(`Categoría: "${category}", Solo disponibles: ${shouldShowOnlyAvailable}`);
 	}
 
 	// === FUNCIÓN: Ordenar productos ===
@@ -290,13 +301,13 @@ export function setupPagination() {
 	// === EVENT LISTENERS ===
 	function setupEventListeners() {
 		// Botón anterior
-		const prevBtn = paginationContainer.querySelector('.prev-btn');
+		const prevBtn = paginationContainer?.querySelector('.prev-btn');
 		if (prevBtn) {
 			prevBtn.addEventListener('click', goToPreviousPage);
 		}
 
 		// Botón siguiente  
-		const nextBtn = paginationContainer.querySelector('.next-btn');
+		const nextBtn = paginationContainer?.querySelector('.next-btn');
 		if (nextBtn) {
 			nextBtn.addEventListener('click', goToNextPage);
 		}
@@ -317,18 +328,23 @@ export function setupPagination() {
 		});
 
 		document.addEventListener('filtersReset', () => {
-			applyFilters(); // Aplicar filtros por defecto
+			applyFilters(); // Aplicar filtros por defecto (solo disponibles)
 		});
 	}
 
 	// === FUNCIÓN DE INICIALIZACIÓN ===
 	function init() {
+		// ✅ ORDEN CORRECTO DE INICIALIZACIÓN
 		getAllProducts();
 		setupEventListeners();
-		showCurrentPage();
+		showCurrentPage(); // ✅ EJECUTAR INMEDIATAMENTE
 
 		console.log('✅ Sistema de paginación configurado correctamente');
+		console.log(`📊 Estado inicial: ${totalProducts} productos visibles de ${allProducts.length} totales`);
 	}
+
+	// ✅ LLAMAR INIT INMEDIATAMENTE
+	init();
 
 	// === FUNCIONES PÚBLICAS ===
 	return {
