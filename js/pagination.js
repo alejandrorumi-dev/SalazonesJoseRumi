@@ -10,7 +10,7 @@ export function setupPagination() {
 
 	// === ELEMENTOS DEL DOM ===
 	const productCardsContainer = document.querySelector('.product-cards');
-	
+
 	if (!productCardsContainer) {
 		console.log('Contenedor de productos no encontrado');
 		return;
@@ -47,7 +47,7 @@ export function setupPagination() {
 		return container;
 	}
 
-	// ✅ CREAR EL CONTENEDOR INMEDIATAMENTE
+	// CREAR EL CONTENEDOR INMEDIATAMENTE
 	const paginationContainer = createPaginationContainer();
 
 	// === FUNCIÓN: Obtener todos los productos ===
@@ -63,7 +63,7 @@ export function setupPagination() {
 			originalIndex: index
 		}));
 
-		// ✅ Por defecto mostrar solo productos disponibles
+		// Por defecto mostrar solo productos disponibles
 		filteredProducts = allProducts.filter(product => product.available);
 		totalProducts = filteredProducts.length;
 
@@ -87,7 +87,7 @@ export function setupPagination() {
 			product.element.style.display = 'block';
 		});
 
-		// ✅ ACTUALIZAR CONTROLES DESPUÉS DE MOSTRAR PRODUCTOS
+		// ACTUALIZAR CONTROLES DESPUÉS DE MOSTRAR PRODUCTOS
 		updatePaginationControls();
 		updateProductsInfo();
 
@@ -217,23 +217,25 @@ export function setupPagination() {
 
 	// === FUNCIÓN: Aplicar filtros ===
 	function applyFilters(filters = {}) {
-		// ✅ LÓGICA INTELIGENTE: Mostrar agotados solo si hay categoría seleccionada
 		const { category = '', search = '', sortBy = '', showOnlyAvailable = null } = filters;
 
 		// Empezar con todos los productos
 		let filtered = [...allProducts];
 
-		// ✅ NUEVA LÓGICA: Mostrar agotados solo si hay categoría seleccionada o si se especifica explícitamente
+		// Mostrar productos agotados
 		let shouldShowOnlyAvailable;
-		
+
 		if (showOnlyAvailable !== null) {
 			// Si se especifica explícitamente, usar ese valor
 			shouldShowOnlyAvailable = showOnlyAvailable;
+		} else if (search && search !== '') {
+			// Si hay búsqueda activa, mostrar todos (disponibles + agotados)
+			shouldShowOnlyAvailable = false;
 		} else if (category && category !== '') {
 			// Si hay categoría seleccionada, mostrar todos (disponibles + agotados)
 			shouldShowOnlyAvailable = false;
 		} else {
-			// Por defecto, mostrar solo disponibles
+			// Estado inicial: mostrar solo disponibles
 			shouldShowOnlyAvailable = true;
 		}
 
@@ -252,9 +254,16 @@ export function setupPagination() {
 		// Filtrar por búsqueda
 		if (search && search !== '') {
 			const searchTerm = search.toLowerCase();
-			filtered = filtered.filter(product =>
-				product.name.toLowerCase().includes(searchTerm)
-			);
+			filtered = filtered.filter(product => {
+				const normalizedName = product.name.toLowerCase()
+					.normalize('NFD')
+					.replace(/[\u0300-\u036f]/g, '') // Remover acentos
+					.replace(/[^a-z0-9\s]/g, '') // Remover caracteres especiales
+					.trim();
+
+				
+				return normalizedName.startsWith(searchTerm);
+			});
 		}
 
 		// Ordenar
@@ -271,7 +280,7 @@ export function setupPagination() {
 		showCurrentPage();
 
 		console.log(`Filtros aplicados: ${totalProducts} productos encontrados`);
-		console.log(`Categoría: "${category}", Solo disponibles: ${shouldShowOnlyAvailable}`);
+		console.log(`Categoría: "${category}", Búsqueda: "${search}", Solo disponibles: ${shouldShowOnlyAvailable}`);
 	}
 
 	// === FUNCIÓN: Ordenar productos ===
@@ -330,16 +339,16 @@ export function setupPagination() {
 
 	// === FUNCIÓN DE INICIALIZACIÓN ===
 	function init() {
-		// ✅ ORDEN CORRECTO DE INICIALIZACIÓN
+		
 		getAllProducts();
 		setupEventListeners();
-		showCurrentPage(); // ✅ EJECUTAR INMEDIATAMENTE
+		showCurrentPage(); 
 
 		console.log('✅ Sistema de paginación configurado correctamente');
 		console.log(`📊 Estado inicial: ${totalProducts} productos visibles de ${allProducts.length} totales`);
 	}
 
-	// ✅ LLAMAR INIT INMEDIATAMENTE
+	// LLAMAR INIT INMEDIATAMENTE
 	init();
 
 	// === FUNCIONES PÚBLICAS ===
