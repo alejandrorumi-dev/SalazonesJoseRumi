@@ -498,21 +498,17 @@
 
 .product-card .dropdown-option.selected {
   background-color: var(--color-accent);
-  color: white;
-  font-weight: 600;
+  font-weight: 500;
 }
 
 /* Opción "Otra cantidad" */
 .product-card .dropdown-option.custom-trigger {
-  background-color: #f8f9fa;
-  border-top: 2px solid #e9ecef;
-  font-weight: 600;
-  color: var(--color-accent);
+  background-color: white;
+  font-weight: 500;
 }
 
 .product-card .dropdown-option.custom-trigger:hover {
-  background-color: var(--color-accent);
-  color: white;
+  background-color: var(--color-btn-light);
 }
 
 /* Contenedor de cantidad personalizada */
