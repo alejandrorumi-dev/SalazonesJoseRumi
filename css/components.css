@@ -90,6 +90,18 @@
 	padding: 1rem;
 }
 
+.twitter,
+.instagram,
+.tiktok {
+	display: flex;
+	align-items: center;
+	background-color: var(--color-accent);
+	color: var(--color-text-buttons);
+	width: 4.5rem;
+	height: 4.5rem;
+	border-radius: 50%;
+}
+
 .rrss-icon,
 .cart-icon {
 	transform: scale(1);
