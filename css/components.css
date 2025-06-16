@@ -32,7 +32,6 @@
 	display: flex;
 	align-items: center;
 	background-color: var(--color-accent);
-	color: var(--color-text-buttons);
 	width: 4.5rem;
 	height: 4.5rem;
 	border-radius: 50%;
@@ -51,14 +50,21 @@
 	justify-content: flex-start;
 }
 
+.about-us:hover {
+	width: 15rem;
+}
+
 .contact:hover {
 	width: 11rem;
+}
+
+.faq:hover {
+	width: 18.5rem;
 }
 
 .expand-button svg {
 	width: 2.5rem;
 	height: 2.5rem;
-	fill: var(--color-text);
 	flex-shrink: 0;
 	transition: transform 0.3s ease;
 }
@@ -68,6 +74,7 @@
 	width: 0;
 	margin-left: 0.5rem;
 	transition: opacity 0.3s ease;
+	color: var(--color-text-buttons);
 }
 
 .expand-button:hover .text {
