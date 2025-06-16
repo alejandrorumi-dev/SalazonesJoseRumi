@@ -16,6 +16,9 @@ import { initPagination } from '../js/pagination.js';
 // Importar el sistema de búsqueda
 import { initSearchSystem } from '../js/search.js';
 
+// Importar el sistema de cantidades
+import { initQuantitySystem } from '../js/quantity.js';
+
 document.addEventListener('DOMContentLoaded', () => {
   // Configurar menú hamburguesa
   setupHamburgerMenu();
@@ -57,7 +60,7 @@ document.addEventListener('DOMContentLoaded', () => {
     console.log('🎠 Carrusel de recomendaciones activado');
   }
 
-  // === Configurar sistema de búsqueda ===
+  // === NUEVO: Configurar sistema de búsqueda ===
   if (document.querySelector('#search-products')) {
     const searchSystem = initSearchSystem();
     console.log('🔍 Sistema de búsqueda con sugerencias activado');
@@ -66,7 +69,16 @@ document.addEventListener('DOMContentLoaded', () => {
     window.searchSystem = searchSystem;
   }
 
-  // === Configurar sistema de paginación ===
+  // === NUEVO: Configurar sistema de cantidades ===
+  if (document.querySelector('.product-card')) {
+    const quantitySystem = initQuantitySystem();
+    console.log('📦 Sistema de cantidades activado');
+    
+    // Hacer disponible globalmente para debug (opcional)
+    window.quantitySystem = quantitySystem;
+  }
+
+  // === NUEVO: Configurar sistema de paginación ===
   if (document.querySelector('.product-cards')) {
     const pagination = initPagination();
     console.log('📄 Sistema de paginación activado');
