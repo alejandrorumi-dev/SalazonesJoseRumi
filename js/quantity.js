@@ -279,11 +279,13 @@ export class QuantitySystem {
         border: 2px solid #dee2e6 !important;
         margin-top: 5px !important;
         box-shadow: 0 2px 8px rgba(0,0,0,0.1) !important;
+        text-align: center !important;
       }
 
       .quantity-input-wrapper {
         display: flex !important;
         align-items: center !important;
+        justify-content: center !important;
         gap: 8px !important;
         margin-bottom: 10px !important;
         background: white !important;
@@ -355,8 +357,9 @@ export class QuantitySystem {
         font-size: 14px !important;
         color: #6c757d !important;
         font-weight: 600 !important;
-        min-width: 20px !important;
-        padding-right: 4px !important;
+        min-width: 0 !important;
+        padding-right: 0 !important;
+        display: none !important;  
       }
 
       .quantity-actions {
