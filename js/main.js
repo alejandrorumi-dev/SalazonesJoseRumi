@@ -19,7 +19,16 @@ import { initSearchSystem } from '../js/search.js';
 // Importar el sistema de cantidades
 import { initQuantitySystem } from '../js/quantity.js';
 
+// NUEVO: Importar el sistema de carga
+import { initLoader } from '../js/loader.js';
+
 document.addEventListener('DOMContentLoaded', () => {
+  // NUEVO: Configurar sistema de carga de páginas
+  const pageLoader = initLoader({
+    duration: 3000 // 3 segundos - puedes cambiar este valor
+  });
+  console.log('🔄 Sistema de pantalla de carga activado');
+
   // Configurar menú hamburguesa
   setupHamburgerMenu();
 
@@ -86,6 +95,9 @@ document.addEventListener('DOMContentLoaded', () => {
     // Hacer disponible globalmente para debug (opcional)
     window.pagination = pagination;
   }
+
+  // Hacer disponible el pageLoader globalmente para debug (opcional)
+  window.pageLoader = pageLoader;
 });
 
 // Hacer disponible la función resetFilters globalmente si es necesario
