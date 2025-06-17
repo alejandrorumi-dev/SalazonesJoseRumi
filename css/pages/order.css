@@ -126,6 +126,193 @@
   height: 4rem;
 }
 
+/* === SECCIÓN DEL BANNER === */
+.banner-container {
+  background: linear-gradient(135deg, #1e3a5f 0%, #2d5a87 50%, #1e3a5f 100%);
+  border-radius: 20px;
+  padding: 3rem 2rem;
+  text-align: center;
+  box-shadow: 0 15px 35px rgba(30, 58, 95, 0.3);
+  position: relative;
+  overflow: hidden;
+  max-width: 1200px;
+  margin: 1rem auto;
+}
+
+.banner-container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(circle at 30% 20%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 70% 80%, rgba(255, 255, 255, 0.08) 0%, transparent 50%);
+  pointer-events: none;
+}
+
+.banner-content {
+  position: relative;
+  z-index: 2;
+}
+
+.title-banner {
+  font-size: clamp(2.5rem, 5vw, 4rem);
+  font-weight: 800;
+  color: #ffffff;
+  margin-bottom: 0.5rem;
+  letter-spacing: 2px;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+  line-height: 1.1;
+}
+
+.subtitle-banner {
+  font-size: clamp(1.1rem, 2.5vw, 1.4rem);
+  color: #e8f4fd;
+  margin-bottom: 2rem;
+  font-style: italic;
+  font-weight: 300;
+  letter-spacing: 1px;
+}
+
+.features-container {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  flex-wrap: wrap;
+  margin-bottom: 2rem;
+}
+
+.feature-badge {
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(10px);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-radius: 50px;
+  padding: 1rem 2rem;
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  transition: all 0.3s ease;
+  min-width: 200px;
+  justify-content: center;
+}
+
+.feature-badge:hover {
+  transform: translateY(-3px);
+  background: rgba(255, 255, 255, 0.25);
+  border-color: rgba(255, 255, 255, 0.4);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+}
+
+.feature-icon {
+  width: 24px;
+  height: 24px;
+  background: #4CAF50;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.feature-icon.clock {
+  background: #2196F3;
+}
+
+.feature-icon.fresh {
+  background: #FF9800;
+}
+
+.feature-text {
+  color: #ffffff;
+  font-weight: 600;
+  font-size: 1rem;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.company-info {
+  color: var(--color-text-buttons);
+  font-size: 1.1rem;
+  font-weight: 500;
+  margin-top: 1.5rem;
+  letter-spacing: 0.5px;
+}
+
+/* Elementos decorativos */
+.decorative-element {
+  position: absolute;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.decorative-element.circle-1 {
+  width: 100px;
+  height: 100px;
+  top: -50px;
+  left: -50px;
+}
+
+.decorative-element.circle-2 {
+  width: 150px;
+  height: 150px;
+  bottom: -75px;
+  right: -75px;
+}
+
+.decorative-element.circle-3 {
+  width: 80px;
+  height: 80px;
+  top: 20%;
+  right: 10%;
+}
+
+/* Iconos SVG */
+.check-icon {
+  fill: white;
+}
+
+.clock-icon {
+  fill: white;
+}
+
+.fresh-icon {
+  fill: white;
+}
+
+/* Animación de entrada */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.banner-container {
+  animation: fadeInUp 0.8s ease-out;
+}
+
+.feature-badge {
+  animation: fadeInUp 0.8s ease-out;
+}
+
+.feature-badge:nth-child(1) {
+  animation-delay: 0.2s;
+}
+
+.feature-badge:nth-child(2) {
+  animation-delay: 0.4s;
+}
+
+.feature-badge:nth-child(3) {
+  animation-delay: 0.6s;
+}
+
 /* === SECCIÓN DE RECOMENDACIONES === */
 
 .recommendations-section {
@@ -418,7 +605,8 @@
 .product-card .dropdown {
   margin: 1rem 0;
   position: relative;
-  z-index: 100; /* ✅ Z-index alto para asegurar visibilidad */
+  z-index: 100;
+  /* ✅ Z-index alto para asegurar visibilidad */
 }
 
 .product-card .dropdown .select-label {
@@ -465,11 +653,13 @@
   z-index: 1000;
   max-height: 400px;
   overflow-y: auto;
-  display: none; /* ✅ Inicialmente oculto */
+  display: none;
+  /* ✅ Inicialmente oculto */
 }
 
 .product-card .dropdown.active .dropdown-options {
-  display: block; /* ✅ Visible cuando está activo */
+  display: block;
+  /* ✅ Visible cuando está activo */
 }
 
 .product-card .dropdown-option {
