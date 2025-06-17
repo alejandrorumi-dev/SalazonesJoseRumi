@@ -1,118 +1,132 @@
-// js/quantity.js - Sistema de gestión de cantidades para productos
+// js/quantity.js - Sistema simplificado que SÍ funciona
 
 export class QuantitySystem {
   constructor() {
-    this.quantities = new Map(); // Almacena las cantidades seleccionadas por producto
-    this.cart = new Map(); // ✅ NUEVO: Almacena los productos del carrito
-    this.globalClickListenerAdded = false; // ✅ NUEVO: Control de listener global
+    this.quantities = new Map();
+    this.cart = new Map();
+    this.debug = true;
     this.init();
   }
 
   init() {
-    this.setupQuantityDropdowns();
-    this.setupAddToCartButtons();
-    this.setupCartInterface();
-    console.log('📦 Sistema de cantidades inicializado');
+    this.log('🚀 Iniciando QuantitySystem simplificado...');
+
+    // Esperar a que el DOM esté completamente cargado
+    setTimeout(() => {
+      this.setupAddToCartButtons();
+      this.setupQuantityDropdowns();
+      this.setupCartInterface();
+      this.updateCartCounter();
+      this.setupGlobalClickListener(); // NUEVO: Configurar listener global una sola vez
+      this.log('✅ Sistema inicializado correctamente');
+    }, 500);
   }
 
-  // ✅ NUEVO MÉTODO: Configurar interfaz del carrito
-  setupCartInterface() {
-    // Configurar botón de finalizar pedido
-    const checkoutBtn = document.querySelector('.checkout-btn');
-    if (checkoutBtn) {
-      checkoutBtn.addEventListener('click', () => {
-        this.handleCheckout();
-      });
-    }
+  // === NUEVO: CONFIGURAR LISTENER GLOBAL UNA SOLA VEZ ===
+  setupGlobalClickListener() {
+    document.addEventListener('click', (e) => {
+      // Solo cerrar dropdowns si el click es completamente fuera de cualquier dropdown
+      const clickedDropdown = e.target.closest('[id^="amount-dropdown-"]');
+      const clickedCustomContainer = e.target.closest('.custom-amount-container');
 
-    // Configurar estado inicial del carrito
-    this.updateCartDisplay();
-  }
-
-  handleCheckout() {
-    if (this.cart.size === 0) {
-      this.showMessage('El carrito está vacío', 'warning');
-      return;
-    }
-
-    // Aquí puedes agregar la lógica de checkout
-    this.showMessage('Funcionalidad de checkout en desarrollo', 'info');
-    console.log('🛒 Procesando pedido:', Array.from(this.cart.values()));
-  }
-
-  setupQuantityDropdowns() {
-    // Configurar todos los dropdowns de cantidad
-    const quantityDropdowns = document.querySelectorAll('[id^="amount-dropdown-"]');
-    
-    quantityDropdowns.forEach(dropdown => {
-      this.initializeDropdown(dropdown);
+      if (!clickedDropdown && !clickedCustomContainer) {
+        // Cerrar todos los dropdowns abiertos
+        document.querySelectorAll('[id^="amount-dropdown-"]').forEach(dropdown => {
+          dropdown.classList.remove('active');
+          const options = dropdown.querySelector('.dropdown-options');
+          if (options) options.style.display = 'none';
+        });
+      }
     });
+
+    this.log('🎯 Listener global configurado');
   }
 
-  initializeDropdown(dropdown) {
-    const productId = this.extractProductId(dropdown.id);
-    const productCard = dropdown.closest('.product-card');
-    const label = dropdown.querySelector('.select-label');
-    const customTrigger = dropdown.querySelector('.custom-trigger');
-    const customContainer = dropdown.querySelector('.custom-amount-container');
-    const customInput = dropdown.querySelector('input[type="number"]');
-    const hiddenSelect = dropdown.querySelector('select');
+  // === CONFIGURAR BOTONES AÑADIR AL CARRITO ===
+  setupAddToCartButtons() {
+    const buttons = document.querySelectorAll('.add-to-cart');
+    this.log(`🔍 Encontrados ${buttons.length} botones`);
 
-    // ✅ Detectar tipo de producto para determinar unidades
-    const productType = this.detectProductType(productCard);
+    buttons.forEach((button, index) => {
+      this.log(`⚙️ Configurando botón ${index + 1}: "${button.textContent?.trim()}"`);
 
-    // ✅ Configurar opciones según el tipo de producto
-    this.setupDropdownOptions(dropdown, productType);
+      // Remover listeners previos
+      const newButton = button.cloneNode(true);
+      button.parentNode.replaceChild(newButton, button);
 
-    // Establecer cantidad inicial según el tipo
-    const initialAmount = productType.isUnit ? 1 : 1000;
-    const initialUnit = productType.isUnit ? 'unidad' : 'g';
-    
-    this.quantities.set(productId, { 
-      amount: initialAmount, 
-      unit: initialUnit,
-      productType: productType
-    });
-    this.updateTotalPrice(productId);
-
-    // ✅ Configurar event listeners DESPUÉS de crear las opciones
-    this.setupDropdownEventListeners(dropdown, productId, productType);
-  }
-
-  extractProductId(dropdownId) {
-    // Extraer ID del producto desde "amount-dropdown-X"
-    return dropdownId.replace('amount-dropdown-', '');
-  }
-
-  // ✅ NUEVO: Configurar event listeners DESPUÉS de crear las opciones dinámicamente
-  setupDropdownEventListeners(dropdown, productId, productType) {
-    const label = dropdown.querySelector('.select-label');
-    const options = dropdown.querySelectorAll('.dropdown-option:not(.custom-trigger)');
-    const customTrigger = dropdown.querySelector('.custom-trigger');
-    const customInput = dropdown.querySelector('input[type="number"]');
-
-    // ✅ Event listener para el label (toggle dropdown)
-    if (label) {
-      // Remover cualquier listener previo
-      label.replaceWith(label.cloneNode(true));
-      const newLabel = dropdown.querySelector('.select-label');
-      
-      newLabel.addEventListener('click', (e) => {
+      newButton.addEventListener('click', (e) => {
         e.preventDefault();
         e.stopPropagation();
-        
-        const isActive = dropdown.classList.contains('active');
-        
-        // Cerrar todos los otros dropdowns primero
-        document.querySelectorAll('[id^="amount-dropdown-"]').forEach(otherDropdown => {
-          if (otherDropdown !== dropdown) {
-            otherDropdown.classList.remove('active');
-            const otherOptions = otherDropdown.querySelector('.dropdown-options');
-            if (otherOptions) otherOptions.style.display = 'none';
+
+        this.log('🖱️ Click en AÑADIR PRODUCTO');
+
+        const productCard = newButton.closest('.product-card');
+        if (productCard) {
+          this.addToCart(productCard);
+        } else {
+          this.log('❌ No se encontró product-card');
+        }
+      });
+    });
+
+    this.log(`✅ ${buttons.length} botones configurados`);
+  }
+
+  // === CONFIGURAR DROPDOWNS DE CANTIDAD ===
+  setupQuantityDropdowns() {
+    const dropdowns = document.querySelectorAll('[id^="amount-dropdown-"]');
+    this.log(`🔍 Encontrados ${dropdowns.length} dropdowns`);
+
+    dropdowns.forEach(dropdown => {
+      const productId = this.extractProductId(dropdown.id);
+      const productCard = dropdown.closest('.product-card');
+
+      // Detectar si es por unidad basándose en el precio
+      const isUnit = this.isUnitProduct(productCard);
+      this.log(`📦 Producto ${productId}: ${isUnit ? 'POR UNIDAD' : 'POR PESO'}`);
+
+      // Establecer cantidad inicial
+      const defaultAmount = isUnit ? 1 : 250;
+      this.quantities.set(productId, {
+        amount: defaultAmount,
+        isUnit: isUnit
+      });
+
+      // Configurar dropdown
+      this.setupDropdown(dropdown, productId, isUnit);
+      this.updateTotalPrice(productId);
+    });
+  }
+
+  // === DETECTAR SI ES PRODUCTO POR UNIDAD ===
+  isUnitProduct(productCard) {
+    const priceText = productCard.querySelector('.price')?.textContent?.toLowerCase() || '';
+    return priceText.includes('/unidad') || priceText.includes('/u');
+  }
+
+  // === CONFIGURAR UN DROPDOWN ESPECÍFICO ===
+  setupDropdown(dropdown, productId, isUnit) {
+    // NUEVO: Reemplazar opciones según el tipo de producto
+    this.replaceDropdownOptions(dropdown, isUnit);
+
+    const label = dropdown.querySelector('.select-label');
+
+    if (label) {
+      label.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+
+        // Cerrar otros dropdowns
+        document.querySelectorAll('[id^="amount-dropdown-"]').forEach(other => {
+          if (other !== dropdown) {
+            other.classList.remove('active');
+            const options = other.querySelector('.dropdown-options');
+            if (options) options.style.display = 'none';
           }
         });
-        
+
         // Toggle este dropdown
+        const isActive = dropdown.classList.contains('active');
         if (isActive) {
           dropdown.classList.remove('active');
           dropdown.querySelector('.dropdown-options').style.display = 'none';
@@ -123,439 +137,802 @@ export class QuantitySystem {
       });
     }
 
-    // ✅ Event listeners para opciones predefinidas
+    // Configurar opciones predefinidas (después de reemplazarlas)
+    const options = dropdown.querySelectorAll('.dropdown-option:not(.custom-trigger)');
     options.forEach(option => {
       option.addEventListener('click', (e) => {
-        e.stopPropagation();
         e.preventDefault();
+        e.stopPropagation();
+
         const amount = parseInt(option.dataset.value);
-        console.log('✅ Opción seleccionada:', amount, productType.isUnit ? 'unidades' : 'gramos');
-        this.selectQuantity(productId, amount, dropdown);
+        this.log(`✅ Seleccionada cantidad: ${amount}`);
+
+        this.selectQuantity(productId, amount, dropdown, isUnit);
       });
     });
 
-    // ✅ Event listener para "Otra cantidad"
+    // Configurar "Otra cantidad"
+    const customTrigger = dropdown.querySelector('.custom-trigger');
     if (customTrigger) {
       customTrigger.addEventListener('click', (e) => {
-        e.stopPropagation();
         e.preventDefault();
-        this.showCustomInput(dropdown);
+        e.stopPropagation();
+        this.showCustomInput(dropdown, productId, isUnit);
       });
     }
 
-    // ✅ Event listener para input personalizado
-    if (customInput) {
-      customInput.addEventListener('input', (e) => {
-        const amount = parseInt(e.target.value) || (productType.isUnit ? 1 : 250);
-        this.updateQuantity(productId, amount);
-        this.updateTotalPrice(productId);
-        
-        // Actualizar el label en tiempo real
-        this.updateDropdownLabel(dropdown, amount);
-      });
-
-      customInput.addEventListener('blur', () => {
-        setTimeout(() => {
-          this.hideCustomInput(dropdown);
-        }, 300);
-      });
-
-      customInput.addEventListener('keydown', (e) => {
-        // Permitir teclas de navegación y números
-        const allowedKeys = ['Backspace', 'Delete', 'Tab', 'Enter', 'Escape', 'ArrowLeft', 'ArrowRight'];
-        const isNumber = (e.key >= '0' && e.key <= '9');
-        
-        if (!allowedKeys.includes(e.key) && !isNumber) {
-          e.preventDefault();
-          return;
-        }
-        
-        if (e.key === 'Enter') {
-          const amount = parseInt(e.target.value) || (productType.isUnit ? 1 : 250);
-          this.selectQuantity(productId, amount, dropdown);
-        }
-        if (e.key === 'Escape') {
-          this.hideCustomInput(dropdown);
-        }
-      });
-    }
-
-    // ✅ Event listener global para cerrar dropdown al hacer clic fuera
-    if (!this.globalClickListenerAdded) {
-      document.addEventListener('click', (e) => {
-        const clickedDropdown = e.target.closest('[id^="amount-dropdown-"]');
-        
-        if (!clickedDropdown) {
-          // Click fuera de cualquier dropdown - cerrar todos
-          document.querySelectorAll('[id^="amount-dropdown-"]').forEach(dropdown => {
-            dropdown.classList.remove('active');
-            const options = dropdown.querySelector('.dropdown-options');
-            if (options) options.style.display = 'none';
-          });
-        }
-      });
-      this.globalClickListenerAdded = true;
-    }
-
-    console.log(`✅ Event listeners configurados para ${options.length} opciones`);
-  }
-
-  // ✅ NUEVO: Detectar tipo de producto basado en categoría y nombre
-  detectProductType(productCard) {
-    const category = productCard.getAttribute('data-category');
-    const productName = productCard.querySelector('.product-name')?.textContent.toLowerCase() || '';
-    
-    // Productos que se venden por unidades
-    const unitCategories = ['vinos', 'reposteria'];
-    const unitKeywords = ['vino', 'botella', 'tarta', 'pastel', 'rosquilla', 'galleta', 'pan'];
-    
-    const isUnitCategory = unitCategories.includes(category);
-    const hasUnitKeyword = unitKeywords.some(keyword => productName.includes(keyword));
-    
-    if (isUnitCategory || hasUnitKeyword) {
-      return {
-        isUnit: true,
-        unitName: 'unidad',
-        unitNamePlural: 'unidades',
-        defaultAmount: 1,
-        options: [1, 2, 3, 6, 12]
-      };
-    }
-    
-    // Productos que se venden por peso (por defecto)
-    return {
-      isUnit: false,
-      unitName: 'g',
-      unitNamePlural: 'g',
-      defaultAmount: 1000,
-      options: [100, 250, 500, 1000, 2000]
-    };
-  }
-
-  // ✅ NUEVO: Configurar opciones del dropdown según el tipo
-  setupDropdownOptions(dropdown, productType) {
-    const optionsContainer = dropdown.querySelector('.dropdown-options');
-    const customContainer = dropdown.querySelector('.custom-amount-container');
+    // SIMPLIFICADO: Solo configurar input básico aquí
     const customInput = dropdown.querySelector('input[type="number"]');
-    const customSpan = customContainer?.querySelector('span');
-    
+    if (customInput) {
+      customInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+          const amount = parseInt(e.target.value) || (isUnit ? 1 : 250);
+          this.selectQuantity(productId, amount, dropdown, isUnit);
+        }
+      });
+    }
+  }
+
+  // === NUEVO: REEMPLAZAR OPCIONES DEL DROPDOWN ===
+  replaceDropdownOptions(dropdown, isUnit) {
+    const optionsContainer = dropdown.querySelector('.dropdown-options');
     if (!optionsContainer) return;
-    
-    // Limpiar opciones existentes (excepto "Otra cantidad" y el input personalizado)
+
+    // Remover opciones existentes (pero conservar custom-trigger y custom-amount-container)
     const existingOptions = optionsContainer.querySelectorAll('.dropdown-option:not(.custom-trigger)');
     existingOptions.forEach(option => option.remove());
-    
-    // Crear nuevas opciones según el tipo de producto
-    productType.options.forEach((value, index) => {
-      const option = document.createElement('button');
-      option.type = 'button';
-      option.className = 'dropdown-option';
-      option.dataset.value = value.toString();
-      
-      if (productType.isUnit) {
-        option.textContent = value === 1 ? `${value} unidad` : `${value} unidades`;
-      } else {
-        option.textContent = value >= 1000 ? `${value/1000}kg` : `${value}g`;
-      }
-      
-      // Insertar antes del trigger "Otra cantidad"
-      const customTrigger = optionsContainer.querySelector('.custom-trigger');
+
+    // Definir opciones según el tipo
+    let newOptions;
+    if (isUnit) {
+      newOptions = [
+        { value: 1, text: '1 unidad' },
+        { value: 2, text: '2 unidades' },
+        { value: 3, text: '3 unidades' },
+        { value: 6, text: '6 unidades' },
+        { value: 12, text: '12 unidades' }
+      ];
+    } else {
+      newOptions = [
+        { value: 100, text: '100g' },
+        { value: 250, text: '250g' },
+        { value: 500, text: '500g' },
+        { value: 1000, text: '1kg' },
+        { value: 2000, text: '2kg' }
+      ];
+    }
+
+    // Crear nuevas opciones
+    const customTrigger = optionsContainer.querySelector('.custom-trigger');
+
+    newOptions.forEach(optionData => {
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'dropdown-option';
+      button.dataset.value = optionData.value.toString();
+      button.textContent = optionData.text;
+
+      // Insertar antes del custom-trigger
       if (customTrigger) {
-        optionsContainer.insertBefore(option, customTrigger);
+        optionsContainer.insertBefore(button, customTrigger);
       } else {
-        optionsContainer.appendChild(option);
+        optionsContainer.appendChild(button);
       }
-      
-      console.log(`✅ Opción creada: ${option.textContent} (valor: ${value})`);
     });
-    
-    // Actualizar el span del input personalizado
-    if (customSpan) {
-      customSpan.textContent = productType.isUnit ? 'unidades' : 'g';
-    }
-    
-    // Actualizar placeholder y configuración del input
-    if (customInput) {
-      if (productType.isUnit) {
-        customInput.setAttribute('min', '1');
-        customInput.setAttribute('max', '100');
-        customInput.setAttribute('step', '1');
-        customInput.value = '1';
-      } else {
-        customInput.setAttribute('min', '50');
-        customInput.setAttribute('max', '10000');
-        customInput.setAttribute('step', '50');
-        customInput.value = '1000';
-      }
-    }
-    
-    console.log(`✅ Opciones configuradas para ${productType.isUnit ? 'unidades' : 'peso'}`);
+
+    // NUEVO: Actualizar el contenedor personalizado con botones +/-
+    this.updateCustomAmountContainer(optionsContainer, isUnit);
+
+    this.log(`🔄 Opciones reemplazadas para ${isUnit ? 'UNIDADES' : 'PESO'}: ${newOptions.map(o => o.text).join(', ')}`);
   }
 
+  // === NUEVO: ACTUALIZAR CONTENEDOR DE CANTIDAD PERSONALIZADA ===
+  updateCustomAmountContainer(optionsContainer, isUnit) {
+    const customContainer = optionsContainer.querySelector('.custom-amount-container');
+    if (!customContainer) return;
+
+    // Crear nuevo HTML con botones +/-
+    const inputId = customContainer.querySelector('input')?.id || 'custom-input';
+    const stepValue = isUnit ? 1 : 50;
+    const minValue = isUnit ? 1 : 50;
+    const maxValue = isUnit ? 100 : 10000;
+    const defaultValue = isUnit ? 1 : 250;
+    const unit = isUnit ? 'u' : ''; // Para peso, no mostrar unidad inicial (se mostrará dinámicamente)
+
+    customContainer.innerHTML = `
+      <div class="quantity-input-wrapper">
+        <button type="button" class="quantity-btn minus" data-action="decrease">−</button>
+        <input type="text" 
+               id="${inputId}" 
+               value="${defaultValue}${isUnit ? '' : 'g'}" 
+               data-min="${minValue}" 
+               data-max="${maxValue}" 
+               data-step="${stepValue}" />
+        <button type="button" class="quantity-btn plus" data-action="increase">+</button>
+        <span class="unit-label">${unit}</span>
+      </div>
+      <div class="quantity-actions">
+        <button type="button" class="confirm-quantity">✓</button>
+        <button type="button" class="cancel-quantity">✕</button>
+      </div>
+    `;
+
+    // Añadir estilos inline para que funcione inmediatamente
+    this.addCustomQuantityStyles();
+
+    // Configurar event listeners
+    this.setupCustomQuantityListeners(customContainer, isUnit, stepValue, minValue, maxValue);
+  }
+
+  // === NUEVO: AÑADIR ESTILOS PARA CANTIDAD PERSONALIZADA ===
+  addCustomQuantityStyles() {
+    // Solo añadir una vez
+    if (document.getElementById('custom-quantity-styles')) return;
+
+    const styles = document.createElement('style');
+    styles.id = 'custom-quantity-styles';
+    styles.textContent = `
+      .custom-amount-container {
+        padding: 12px !important;
+        background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%) !important;
+        border-radius: 8px !important;
+        border: 2px solid #dee2e6 !important;
+        margin-top: 5px !important;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1) !important;
+      }
+
+      .quantity-input-wrapper {
+        display: flex !important;
+        align-items: center !important;
+        gap: 8px !important;
+        margin-bottom: 10px !important;
+        background: white !important;
+        border-radius: 6px !important;
+        padding: 4px !important;
+        border: 1px solid #ced4da !important;
+      }
+
+      .quantity-btn {
+        width: 32px !important;
+        height: 32px !important;
+        border: 1px solid #adb5bd !important;
+        background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%) !important;
+        border-radius: 6px !important;
+        cursor: pointer !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        font-size: 18px !important;
+        font-weight: bold !important;
+        user-select: none !important;
+        transition: all 0.15s ease !important;
+        color: #495057 !important;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.1) !important;
+      }
+
+      .quantity-btn:hover {
+        background: linear-gradient(135deg, #e9ecef 0%, #dee2e6 100%) !important;
+        border-color: #6c757d !important;
+        transform: translateY(-1px) !important;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.15) !important;
+      }
+
+      .quantity-btn:active {
+        background: linear-gradient(135deg, #dee2e6 0%, #ced4da 100%) !important;
+        transform: translateY(0) !important;
+        box-shadow: 0 1px 2px rgba(0,0,0,0.1) !important;
+      }
+
+      .quantity-input-wrapper input {
+        flex: 1 !important;
+        text-align: center !important;
+        border: none !important;
+        border-radius: 4px !important;
+        padding: 8px 12px !important;
+        font-size: 16px !important;
+        font-weight: 600 !important;
+        min-width: 70px !important;
+        background: transparent !important;
+        color: #212529 !important;
+        outline: none !important;
+        /* Ocultar flechas del input number */
+        -moz-appearance: textfield !important;
+      }
+
+      /* Ocultar flechas en WebKit (Chrome, Safari, Edge) */
+      .quantity-input-wrapper input::-webkit-outer-spin-button,
+      .quantity-input-wrapper input::-webkit-inner-spin-button {
+        -webkit-appearance: none !important;
+        margin: 0 !important;
+      }
+
+      .quantity-input-wrapper input:focus {
+        background: rgba(0,123,255,0.05) !important;
+        color: #0d6efd !important;
+      }
+
+      .unit-label {
+        font-size: 14px !important;
+        color: #6c757d !important;
+        font-weight: 600 !important;
+        min-width: 20px !important;
+        padding-right: 4px !important;
+      }
+
+      .quantity-actions {
+        display: flex !important;
+        gap: 10px !important;
+        justify-content: center !important;
+      }
+
+      .confirm-quantity, .cancel-quantity {
+        width: 36px !important;
+        height: 32px !important;
+        border: none !important;
+        border-radius: 6px !important;
+        cursor: pointer !important;
+        font-size: 16px !important;
+        font-weight: bold !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        transition: all 0.15s ease !important;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1) !important;
+      }
+
+      .confirm-quantity {
+        background: linear-gradient(135deg, #28a745 0%, #20c997 100%) !important;
+        color: white !important;
+      }
+
+      .confirm-quantity:hover {
+        background: linear-gradient(135deg, #218838 0%, #1fa187 100%) !important;
+        transform: translateY(-1px) !important;
+        box-shadow: 0 3px 6px rgba(40,167,69,0.3) !important;
+      }
+
+      .cancel-quantity {
+        background: linear-gradient(135deg, #dc3545 0%, #e74c3c 100%) !important;
+        color: white !important;
+      }
+
+      .cancel-quantity:hover {
+        background: linear-gradient(135deg, #c82333 0%, #c0392b 100%) !important;
+        transform: translateY(-1px) !important;
+        box-shadow: 0 3px 6px rgba(220,53,69,0.3) !important;
+      }
+
+      .confirm-quantity:active, .cancel-quantity:active {
+        transform: translateY(0) !important;
+        box-shadow: 0 1px 2px rgba(0,0,0,0.1) !important;
+      }
+    `;
+
+    document.head.appendChild(styles);
+  }
+
+  // === NUEVO: CONFIGURAR LISTENERS PARA CANTIDAD PERSONALIZADA ===
+  setupCustomQuantityListeners(container, isUnit, stepValue, minValue, maxValue) {
+    // MÉTODO OBSOLETO - Ahora se usa setupCustomInputListeners
+    this.log('⚠️ setupCustomQuantityListeners obsoleto - usando setupCustomInputListeners');
+  }
+
+  // === EXTRAER ID DEL PRODUCTO ===
+  extractProductId(dropdownId) {
+    return dropdownId.replace('amount-dropdown-', '');
+  }
+
+  // === SELECCIONAR CANTIDAD ===
+  selectQuantity(productId, amount, dropdown, isUnit) {
+    this.quantities.set(productId, { amount, isUnit });
+    this.updateDropdownLabel(dropdown, amount, isUnit);
+    this.updateTotalPrice(productId);
+    this.closeDropdown(dropdown);
+
+    this.log(`📦 Cantidad actualizada: Producto ${productId} = ${amount} ${isUnit ? 'unidades' : 'gramos'}`);
+  }
+
+  // === ACTUALIZAR LABEL DEL DROPDOWN ===
+  updateDropdownLabel(dropdown, amount, isUnit) {
+    const label = dropdown.querySelector('.select-label');
+    const svg = label.querySelector('svg');
+
+    let text;
+    if (isUnit) {
+      text = amount === 1 ? `Cantidad: ${amount} unidad` : `Cantidad: ${amount} unidades`;
+    } else {
+      text = amount >= 1000 ? `Cantidad: ${amount / 1000}kg` : `Cantidad: ${amount}g`;
+    }
+
+    label.innerHTML = `${text} `;
+    if (svg) label.appendChild(svg.cloneNode(true));
+  }
+
+  // === MOSTRAR INPUT PERSONALIZADO ===
+  showCustomInput(dropdown, productId, isUnit) {
+    const customContainer = dropdown.querySelector('.custom-amount-container');
+
+    if (customContainer) {
+      // Mantener el dropdown abierto
+      dropdown.classList.add('active');
+      dropdown.querySelector('.dropdown-options').style.display = 'block';
+
+      // Mostrar container personalizado
+      customContainer.style.display = 'block';
+
+      // NUEVO: Configurar listeners específicos para este container
+      this.setupCustomInputListeners(customContainer, dropdown, productId, isUnit);
+
+      // Enfocar el input SIN seleccionar el texto
+      setTimeout(() => {
+        const input = customContainer.querySelector('input');
+        if (input) {
+          input.focus();
+          // IMPORTANTE: No seleccionar el texto, solo posicionar el cursor al final
+          const length = input.value.length;
+          input.setSelectionRange(length, length);
+          this.log(`🎯 Input enfocado SIN selección para producto ${productId}`);
+        }
+      }, 100);
+
+      this.log(`📝 Input personalizado mostrado para ${isUnit ? 'unidades' : 'gramos'}`);
+    } else {
+      this.log('❌ No se encontró el container personalizado');
+    }
+  }
+
+  // === NUEVO: CONFIGURAR LISTENERS ESPECÍFICOS PARA EL INPUT PERSONALIZADO ===
+  setupCustomInputListeners(container, dropdown, productId, isUnit) {
+    const input = container.querySelector('input');
+    const minusBtn = container.querySelector('.minus');
+    const plusBtn = container.querySelector('.plus');
+    const confirmBtn = container.querySelector('.confirm-quantity');
+    const cancelBtn = container.querySelector('.cancel-quantity');
+
+    if (!input) return;
+
+    const stepValue = isUnit ? 1 : 50;
+    const minValue = isUnit ? 1 : 50;
+    const maxValue = isUnit ? 100 : 10000;
+
+    // CRÍTICO: Prevenir propagación de eventos para todo el container
+    container.addEventListener('click', (e) => {
+      e.stopPropagation();
+    });
+
+    // Botón menos - CORREGIDO
+    if (minusBtn) {
+      minusBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+
+        // Extraer valor numérico actual
+        const currentValue = this.extractNumericValue(input.value);
+        console.log('MENOS - Input:', input.value, 'Extraído:', currentValue); // ← AÑADIR ESTA LÍNEA
+        const newValue = Math.max(minValue, currentValue - stepValue);
+
+        // Actualizar con formato inteligente
+        this.updateInputDisplay(input, newValue, isUnit);
+
+        // Posicionar cursor al final
+        setTimeout(() => {
+          input.setSelectionRange(input.value.length, input.value.length);
+        }, 10);
+
+        this.log(`➖ Decrementado a: ${newValue} (display: ${input.value})`);
+      });
+    }
+
+    // Botón más - CORREGIDO
+    if (plusBtn) {
+      plusBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+
+        // Extraer valor numérico actual
+        const currentValue = this.extractNumericValue(input.value);
+        console.log('MAS - Input:', input.value, 'Extraído:', currentValue); // ← AÑADIR ESTA LÍNEA
+        const newValue = Math.min(maxValue, currentValue + stepValue); // Usar siempre +50
+
+        // Actualizar con formato inteligente
+        this.updateInputDisplay(input, newValue, isUnit);
+
+        // Posicionar cursor al final
+        setTimeout(() => {
+          input.setSelectionRange(input.value.length, input.value.length);
+        }, 10);
+
+        this.log(`➕ Incrementado a: ${newValue} (display: ${input.value})`);
+      });
+    }
+
+    // Input - MEJORADO para manejar escritura manual
+    input.addEventListener('focus', (e) => {
+      e.stopPropagation();
+      // Posicionar cursor al final sin seleccionar
+      setTimeout(() => {
+        const length = input.value.length;
+        input.setSelectionRange(length, length);
+      }, 10);
+    });
+
+    input.addEventListener('click', (e) => {
+      e.stopPropagation();
+    });
+
+    // NUEVO: Manejar teclas mientras se escribe
+    input.addEventListener('keydown', (e) => {
+      // Permitir teclas de navegación y control
+      const allowedKeys = ['Backspace', 'Delete', 'Tab', 'Enter', 'Escape', 'ArrowLeft', 'ArrowRight', 'Home', 'End'];
+      const isNumber = (e.key >= '0' && e.key <= '9');
+
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        const numericValue = this.extractNumericValue(input.value);
+        const amount = Math.max(minValue, Math.min(maxValue, numericValue || (isUnit ? 1 : 250)));
+        this.selectQuantity(productId, amount, dropdown, isUnit);
+        return;
+      } else if (e.key === 'Escape') {
+        e.preventDefault();
+        this.closeDropdown(dropdown);
+        return;
+      }
+
+      // Solo permitir números y teclas de control
+      if (!allowedKeys.includes(e.key) && !isNumber) {
+        e.preventDefault();
+        return;
+      }
+    });
+
+    // MEJORADO: Validar y formatear al terminar de escribir
+    input.addEventListener('blur', (e) => {
+      this.validateAndFormatInput(e.target, isUnit, minValue, maxValue);
+    });
+
+    // NUEVO: Validar en tiempo real sin formatear constantemente
+    let inputTimeout;
+    input.addEventListener('input', (e) => {
+      // Limpiar timeout previo
+      clearTimeout(inputTimeout);
+
+      // Permitir escritura libre por un momento
+      inputTimeout = setTimeout(() => {
+        this.validateAndFormatInput(e.target, isUnit, minValue, maxValue);
+      }, 1000); // Formatear después de 1 segundo de inactividad
+    });
+
+    // Confirmar cantidad
+    if (confirmBtn) {
+      confirmBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+
+        // Extraer valor numérico del input
+        const numericValue = this.extractNumericValue(input.value);
+        const amount = Math.max(minValue, Math.min(maxValue, numericValue || (isUnit ? 1 : 250)));
+
+        this.selectQuantity(productId, amount, dropdown, isUnit);
+        this.log(`✅ Cantidad confirmada: ${amount}`);
+      });
+    }
+
+    // Cancelar
+    if (cancelBtn) {
+      cancelBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        this.closeDropdown(dropdown);
+        this.log(`❌ Cantidad cancelada`);
+      });
+    }
+
+    this.log(`🎛️ Listeners específicos configurados para ${isUnit ? 'unidades' : 'gramos'}`);
+  }
+
+  // === NUEVO: EXTRAER VALOR NUMÉRICO DE CUALQUIER FORMATO ===
+  extractNumericValue(inputValue) {
+    if (!inputValue) return 0;
+
+    // Si contiene 'kg', convertir a gramos
+    if (inputValue.includes('kg')) {
+      const kgValue = parseFloat(inputValue.replace(/[^\d.]/g, ''));
+      return Math.round(kgValue * 1000);
+    }
+
+    // Si contiene solo números o 'g', extraer el número
+    const numericValue = parseFloat(inputValue.replace(/[^\d.]/g, ''));
+    return isNaN(numericValue) ? 0 : Math.round(numericValue);  // ← CORREGIDO
+  }
+
+  // === NUEVO: VALIDAR Y FORMATEAR INPUT ===
+  validateAndFormatInput(input, isUnit, minValue, maxValue) {
+    const numericValue = this.extractNumericValue(input.value);
+    let validValue = numericValue;
+
+    // Validar rango
+    if (validValue < minValue) {
+      validValue = minValue;
+    } else if (validValue > maxValue) {
+      validValue = maxValue;
+    }
+
+    // Solo actualizar si cambió
+    if (validValue !== numericValue) {
+      this.updateInputDisplay(input, validValue, isUnit);
+    } else if (numericValue > 0) {
+      // Formatear sin cambiar el valor
+      this.updateInputDisplay(input, validValue, isUnit);
+    }
+
+    this.log(`🔍 Validado: ${numericValue} → ${validValue} (display: ${input.value})`);
+  }
+
+  // === MEJORADO: ACTUALIZAR DISPLAY DEL INPUT CON FORMATO INTELIGENTE ===
+  updateInputDisplay(input, value, isUnit) {
+    if (isUnit) {
+      // Para unidades, mostrar solo el número
+      input.value = value.toString();
+    } else {
+      // Para peso, formato inteligente: g hasta 999, luego kg
+      if (value >= 1000) {
+        const kg = value / 1000;
+        if (kg === Math.floor(kg)) {
+          // Número entero de kg
+          input.value = `${kg}kg`;
+        } else {
+          // Decimales de kg con máximo 2 decimales
+          const formattedKg = kg.toFixed(2).replace(/\.?0+$/, ''); // Quitar ceros innecesarios
+          input.value = `${formattedKg}kg`;
+        }
+      } else {
+        // Menos de 1000g, mostrar en gramos
+        input.value = `${value}g`;
+      }
+    }
+
+    // Actualizar también la etiqueta de unidad
+    const unitLabel = input.parentNode?.querySelector('.unit-label');
+    if (unitLabel && !isUnit) {
+      unitLabel.textContent = value >= 1000 ? '' : ''; // Siempre vacío ahora, la unidad está en el input
+    }
+  }
+
+  // === CERRAR DROPDOWN ===
   closeDropdown(dropdown) {
     dropdown.classList.remove('active');
     const options = dropdown.querySelector('.dropdown-options');
     if (options) options.style.display = 'none';
-    this.hideCustomInput(dropdown);
-  }
 
-  closeAllDropdowns() {
-    const allDropdowns = document.querySelectorAll('[id^="amount-dropdown-"]');
-    allDropdowns.forEach(dropdown => {
-      this.closeDropdown(dropdown);
-    });
-  }
-
-  selectQuantity(productId, amount, dropdown) {
-    this.updateQuantity(productId, amount);
-    this.updateDropdownLabel(dropdown, amount);
-    this.updateTotalPrice(productId);
-    this.closeDropdown(dropdown);
-    
-    console.log(`Producto ${productId}: ${amount}${this.quantities.get(productId)?.unit || 'g'} seleccionados`);
-  }
-
-  updateQuantity(productId, amount) {
-    const existingQuantity = this.quantities.get(productId);
-    const productType = existingQuantity?.productType;
-    
-    // Validar cantidad según el tipo de producto
-    let validAmount;
-    if (productType && productType.isUnit) {
-      validAmount = Math.max(1, Math.min(100, amount));
-    } else {
-      validAmount = Math.max(50, Math.min(10000, amount));
-    }
-    
-    this.quantities.set(productId, {
-      amount: validAmount,
-      unit: productType?.isUnit ? 'unidad' : 'g',
-      productType: productType
-    });
-  }
-
-  updateDropdownLabel(dropdown, amount) {
-    const label = dropdown.querySelector('.select-label');
-    const svg = label.querySelector('svg');
-    const svgClone = svg ? svg.cloneNode(true) : null;
-    
-    const quantity = this.quantities.get(this.extractProductId(dropdown.id));
-    const formattedAmount = this.formatAmount(amount, quantity?.productType);
-    
-    label.innerHTML = `Cantidad: ${formattedAmount} `;
-    if (svgClone) {
-      label.appendChild(svgClone);
-    }
-
-    // Actualizar select oculto
-    const hiddenSelect = dropdown.querySelector('select');
-    if (hiddenSelect) {
-      hiddenSelect.value = amount.toString();
-    }
-  }
-
-  showCustomInput(dropdown) {
     const customContainer = dropdown.querySelector('.custom-amount-container');
-    const customInput = dropdown.querySelector('input[type="number"]');
-    
-    if (customContainer && customInput) {
-      dropdown.classList.add('active');
-      dropdown.querySelector('.dropdown-options').style.display = 'block';
-      customContainer.style.display = 'flex';
-      
-      setTimeout(() => {
-        customInput.focus();
-        customInput.select();
-        console.log('✅ Input personalizado enfocado');
-      }, 150);
-      
-      console.log('✅ Input personalizado mostrado');
-    } else {
-      console.error('❌ No se encontró el container o input personalizado');
-    }
+    if (customContainer) customContainer.style.display = 'none';
   }
 
-  hideCustomInput(dropdown) {
-    const customContainer = dropdown.querySelector('.custom-amount-container');
-    if (customContainer) {
-      customContainer.style.display = 'none';
-      this.closeDropdown(dropdown);
-    }
-  }
-
-  // ✅ MEJORADO: Formato que acepta productType como parámetro
-  formatAmount(amount, productType = null) {
-    if (productType && productType.isUnit) {
-      return amount === 1 ? `${amount} unidad` : `${amount} unidades`;
-    }
-    
-    if (amount >= 1000) {
-      return `${amount / 1000}kg`;
-    }
-    return `${amount}g`;
-  }
-
+  // === ACTUALIZAR PRECIO TOTAL ===
   updateTotalPrice(productId) {
     const productCard = document.querySelector(`[data-product="producto-${productId}"]`);
     if (!productCard) return;
 
     const priceElement = productCard.querySelector('.price');
     const totalPriceElement = productCard.querySelector('.total-price');
-    
+
     if (!priceElement || !totalPriceElement) return;
 
     // Extraer precio del texto
     const priceText = priceElement.textContent;
     const priceMatch = priceText.match(/(\d+[,.]?\d*)/);
-    
+
     if (!priceMatch) {
       totalPriceElement.textContent = 'Total: X,XX €';
       return;
     }
 
-    const price = parseFloat(priceMatch[1].replace(',', '.'));
+    const unitPrice = parseFloat(priceMatch[1].replace(',', '.'));
     const quantity = this.quantities.get(productId);
-    
+
     if (quantity) {
       let totalPrice;
-      
-      if (quantity.productType && quantity.productType.isUnit) {
-        // Precio por unidad - multiplicar directamente
-        totalPrice = price * quantity.amount;
+
+      if (quantity.isUnit) {
+        // Precio por unidad
+        totalPrice = unitPrice * quantity.amount;
       } else {
-        // Precio por peso - convertir a kg y multiplicar
+        // Precio por peso
         const weightInKg = quantity.amount / 1000;
-        totalPrice = price * weightInKg;
+        totalPrice = unitPrice * weightInKg;
       }
-      
+
       totalPriceElement.textContent = `Total: ${totalPrice.toFixed(2).replace('.', ',')} €`;
     }
   }
 
-  setupAddToCartButtons() {
-    const addToCartButtons = document.querySelectorAll('.add-to-cart');
-    
-    addToCartButtons.forEach(button => {
-      button.addEventListener('click', (e) => {
-        const productCard = button.closest('.product-card');
-        if (productCard) {
-          this.addToCart(productCard);
-        }
-      });
-    });
-  }
-
+  // === AÑADIR AL CARRITO ===
   addToCart(productCard) {
-    // Verificar si el producto está disponible
+    this.log('🛒 Añadiendo producto al carrito...');
+
+    // Verificar disponibilidad
     if (productCard.classList.contains('unavailable')) {
-      this.showMessage('Este producto no está disponible actualmente', 'warning');
+      this.showMessage('Este producto no está disponible', 'warning');
       return;
     }
 
-    const productId = productCard.dataset.product.replace('producto-', '');
-    const productName = productCard.querySelector('.product-name')?.textContent || 'Producto';
+    // Extraer datos del producto
+    const productId = this.extractProductIdFromCard(productCard);
+    const productName = productCard.querySelector('.product-name')?.textContent?.trim() || 'Producto';
     const quantity = this.quantities.get(productId);
-    const totalPriceElement = productCard.querySelector('.total-price');
 
     if (!quantity) {
-      this.showMessage('Selecciona una cantidad antes de añadir al carrito', 'warning');
+      this.showMessage('Selecciona una cantidad primero', 'warning');
       return;
     }
 
-    // ✅ CORREGIDO: Calcular precio total basado en la lógica existente
+    // Extraer precio
     const priceElement = productCard.querySelector('.price');
-    let calculatedTotalPrice = 0;
-    
-    if (priceElement) {
-      const priceText = priceElement.textContent;
-      const priceMatch = priceText.match(/(\d+[,.]?\d*)/);
-      
-      if (priceMatch) {
-        const unitPrice = parseFloat(priceMatch[1].replace(',', '.'));
-        
-        if (quantity.productType && quantity.productType.isUnit) {
-          calculatedTotalPrice = unitPrice * quantity.amount;
-        } else {
-          const weightInKg = quantity.amount / 1000;
-          calculatedTotalPrice = unitPrice * weightInKg;
-        }
-      }
+    const priceMatch = priceElement?.textContent.match(/(\d+[,.]?\d*)/);
+    const unitPrice = priceMatch ? parseFloat(priceMatch[1].replace(',', '.')) : 0;
+
+    // Calcular precio total
+    let totalPrice;
+    if (quantity.isUnit) {
+      totalPrice = unitPrice * quantity.amount;
+    } else {
+      const weightInKg = quantity.amount / 1000;
+      totalPrice = unitPrice * weightInKg;
     }
 
-    // Crear objeto del producto para el carrito
+    // Crear item del carrito
     const cartItem = {
       id: productId,
       name: productName,
       quantity: quantity,
-      unitPrice: parseFloat(priceElement?.textContent.match(/(\d+[,.]?\d*)/)?.[1].replace(',', '.') || '0'),
-      totalPrice: calculatedTotalPrice,
+      unitPrice: unitPrice,
+      totalPrice: totalPrice,
       timestamp: Date.now()
     };
 
     // Añadir al carrito
-    this.addItemToCart(cartItem);
-    
-    // Mostrar confirmación
-    const formattedAmount = this.formatAmount(quantity.amount, quantity.productType);
-    this.showMessage(`${productName} (${formattedAmount}) añadido al carrito`, 'success');
-    
-    // Animación del botón
-    this.animateButton(productCard.querySelector('.add-to-cart'));
-
-    console.log('✅ Producto añadido al carrito:', cartItem);
-  }
-
-  addItemToCart(item) {
-    const existingItem = this.cart.get(item.id);
-    
-    if (existingItem) {
-      // Si ya existe, sumar la nueva cantidad
-      const oldAmount = existingItem.quantity.amount;
-      const newAmount = oldAmount + item.quantity.amount;
-      
-      existingItem.quantity.amount = newAmount;
-      existingItem.totalPrice = this.calculateItemPrice(existingItem);
-      
-      console.log(`🔄 Producto actualizado: ${existingItem.name} - ${oldAmount} + ${item.quantity.amount} = ${newAmount}`);
-    } else {
-      // Si es nuevo, añadir al carrito
-      const newItem = { 
-        ...item,
-        totalPrice: this.calculateItemPrice(item)
-      };
-      this.cart.set(item.id, newItem);
-      
-      console.log(`➕ Nuevo producto añadido: ${item.name} - ${item.quantity.amount}`);
-    }
-
-    // Actualizar interfaces
+    this.cart.set(productId, cartItem);
     this.updateCartCounter();
     this.updateCartDisplay();
 
-    // Disparar evento personalizado
-    const cartEvent = new CustomEvent('addToCart', {
-      detail: { item, cartSize: this.cart.size }
-    });
-    document.dispatchEvent(cartEvent);
-    
-    console.log('🛒 Carrito actualizado:', Array.from(this.cart.values()));
+    // Mostrar confirmación
+    const formattedAmount = quantity.isUnit ?
+      (quantity.amount === 1 ? `${quantity.amount} unidad` : `${quantity.amount} unidades`) :
+      (quantity.amount >= 1000 ? `${quantity.amount / 1000}kg` : `${quantity.amount}g`);
+
+    this.showMessage(`${productName} (${formattedAmount}) añadido al carrito`, 'success');
+    this.animateButton(productCard.querySelector('.add-to-cart'));
+
+    this.log('✅ Producto añadido:', cartItem);
   }
 
-  // ✅ NUEVO: Método unificado para calcular precio de un item
-  calculateItemPrice(item) {
-    if (item.quantity.productType && item.quantity.productType.isUnit) {
-      return item.unitPrice * item.quantity.amount;
-    } else {
-      const weightInKg = item.quantity.amount / 1000;
-      return item.unitPrice * weightInKg;
+  // === EXTRAER ID DEL PRODUCTO DESDE CARD ===
+  extractProductIdFromCard(productCard) {
+    const dataProduct = productCard.dataset.product;
+    if (dataProduct) {
+      return dataProduct.replace('producto-', '');
+    }
+
+    // Buscar dropdown
+    const dropdown = productCard.querySelector('[id^="amount-dropdown-"]');
+    if (dropdown) {
+      return dropdown.id.replace('amount-dropdown-', '');
+    }
+
+    // Fallback: usar posición
+    const allCards = document.querySelectorAll('.product-card');
+    const index = Array.from(allCards).indexOf(productCard);
+    return (index + 1).toString();
+  }
+
+  // === CONFIGURAR INTERFAZ DEL CARRITO ===
+  setupCartInterface() {
+    this.updateCartDisplay();
+
+    // Configurar botón de checkout
+    const checkoutBtn = document.querySelector('.checkout-btn');
+    if (checkoutBtn) {
+      checkoutBtn.addEventListener('click', () => {
+        if (this.cart.size === 0) {
+          this.showMessage('El carrito está vacío', 'warning');
+          return;
+        }
+        this.showMessage('Funcionalidad de checkout en desarrollo', 'info');
+      });
     }
   }
 
+  // === ACTUALIZAR CONTADOR DEL CARRITO ===
+  updateCartCounter() {
+    const counter = document.querySelector('.number-product');
+    if (counter) {
+      counter.textContent = this.cart.size.toString();
+      this.log(`🔢 Contador actualizado: ${this.cart.size}`);
+    }
+  }
+
+  // === ACTUALIZAR DISPLAY DEL CARRITO ===
+  updateCartDisplay() {
+    const cartEmpty = document.querySelector('.cart-empty');
+    const cartItems = document.querySelector('.cart-items');
+    const cartTotal = document.querySelector('.cart-total');
+
+    if (this.cart.size === 0) {
+      if (cartEmpty) cartEmpty.style.display = 'block';
+      if (cartItems) cartItems.style.display = 'none';
+      if (cartTotal) cartTotal.style.display = 'none';
+    } else {
+      if (cartEmpty) cartEmpty.style.display = 'none';
+      if (cartItems) cartItems.style.display = 'block';
+      if (cartTotal) cartTotal.style.display = 'block';
+
+      this.renderCartItems();
+      this.updateCartTotalPrice();
+    }
+  }
+
+  // === RENDERIZAR ITEMS DEL CARRITO ===
+  renderCartItems() {
+    const container = document.querySelector('.cart-items');
+    if (!container) return;
+
+    container.innerHTML = '';
+
+    this.cart.forEach((item) => {
+      const formattedAmount = item.quantity.isUnit ?
+        (item.quantity.amount === 1 ? `${item.quantity.amount} unidad` : `${item.quantity.amount} unidades`) :
+        (item.quantity.amount >= 1000 ? `${item.quantity.amount / 1000}kg` : `${item.quantity.amount}g`);
+
+      const cartItemElement = document.createElement('div');
+      cartItemElement.className = 'cart-item';
+      cartItemElement.innerHTML = `
+        <div class="cart-item-info">
+          <div class="cart-item-name">${item.name}</div>
+          <div class="cart-item-details">${formattedAmount}</div>
+        </div>
+        <div class="cart-item-actions">
+          <div class="cart-item-price">${item.totalPrice.toFixed(2).replace('.', ',')} €</div>
+          <button class="remove-item-btn" data-product-id="${item.id}">🗑️</button>
+        </div>
+      `;
+
+      // Botón eliminar
+      const removeBtn = cartItemElement.querySelector('.remove-item-btn');
+      removeBtn.addEventListener('click', () => {
+        this.removeFromCart(item.id);
+      });
+
+      container.appendChild(cartItemElement);
+    });
+  }
+
+  // === ACTUALIZAR TOTAL DEL CARRITO ===
+  updateCartTotalPrice() {
+    const totalElement = document.querySelector('.cart-total-price');
+    if (!totalElement) return;
+
+    const total = Array.from(this.cart.values())
+      .reduce((sum, item) => sum + item.totalPrice, 0);
+
+    totalElement.textContent = `Total: ${total.toFixed(2).replace('.', ',')} €`;
+  }
+
+  // === ELIMINAR DEL CARRITO ===
+  removeFromCart(productId) {
+    this.cart.delete(productId);
+    this.updateCartCounter();
+    this.updateCartDisplay();
+    this.showMessage('Producto eliminado del carrito', 'info');
+  }
+
+  // === ANIMAR BOTÓN ===
   animateButton(button) {
+    if (!button) return;
+
     button.style.transform = 'scale(0.95)';
     button.style.backgroundColor = '#28a745';
     button.textContent = '¡AÑADIDO!';
-    
+
     setTimeout(() => {
       button.style.transform = 'scale(1)';
       button.style.backgroundColor = '';
@@ -563,13 +940,11 @@ export class QuantitySystem {
     }, 1000);
   }
 
+  // === MOSTRAR MENSAJE ===
   showMessage(text, type = 'info') {
-    // Crear elemento de notificación
     const notification = document.createElement('div');
-    notification.className = `quantity-notification ${type}`;
     notification.textContent = text;
-    
-    // Estilos inline para la notificación
+
     Object.assign(notification.style, {
       position: 'fixed',
       top: '20px',
@@ -582,33 +957,22 @@ export class QuantitySystem {
       zIndex: '10000',
       opacity: '0',
       transform: 'translateX(100%)',
-      transition: 'all 0.3s ease'
+      transition: 'all 0.3s ease',
+      backgroundColor: type === 'success' ? '#28a745' :
+        type === 'warning' ? '#ffc107' :
+          type === 'error' ? '#dc3545' : '#17a2b8'
     });
 
-    // Colores según el tipo
-    const colors = {
-      success: '#28a745',
-      warning: '#ffc107',
-      error: '#dc3545',
-      info: '#17a2b8'
-    };
-    
-    notification.style.backgroundColor = colors[type] || colors.info;
-
-    // Añadir al DOM
     document.body.appendChild(notification);
 
-    // Animar entrada
     setTimeout(() => {
       notification.style.opacity = '1';
       notification.style.transform = 'translateX(0)';
     }, 100);
 
-    // Remover después de 3 segundos
     setTimeout(() => {
       notification.style.opacity = '0';
       notification.style.transform = 'translateX(100%)';
-      
       setTimeout(() => {
         if (notification.parentNode) {
           notification.parentNode.removeChild(notification);
@@ -617,161 +981,55 @@ export class QuantitySystem {
     }, 3000);
   }
 
-  updateCartDisplay() {
-    const cartEmpty = document.querySelector('.cart-empty');
-    const cartItems = document.querySelector('.cart-items');
-    const cartTotal = document.querySelector('.cart-total');
-
-    console.log(`🔍 Actualizando carrito display. Items en carrito: ${this.cart.size}`);
-    console.log('🔍 Elementos encontrados:', { cartEmpty: !!cartEmpty, cartItems: !!cartItems, cartTotal: !!cartTotal });
-
-    if (this.cart.size === 0) {
-      // Mostrar estado vacío
-      if (cartEmpty) cartEmpty.style.display = 'block';
-      if (cartItems) cartItems.style.display = 'none';
-      if (cartTotal) cartTotal.style.display = 'none';
-      console.log('📦 Carrito vacío mostrado');
-    } else {
-      // Mostrar productos
-      if (cartEmpty) cartEmpty.style.display = 'none';
-      if (cartItems) cartItems.style.display = 'block';
-      if (cartTotal) cartTotal.style.display = 'block';
-
-      // Renderizar productos del carrito
-      this.renderCartItems();
-      this.updateCartTotalPrice();
-      console.log('🛒 Productos del carrito mostrados');
+  // === LOGGING ===
+  log(message, data = null) {
+    if (this.debug) {
+      if (data) {
+        console.log(`[QuantitySystem] ${message}`, data);
+      } else {
+        console.log(`[QuantitySystem] ${message}`);
+      }
     }
   }
 
-  renderCartItems() {
-    const cartItemsContainer = document.querySelector('.cart-items');
-    if (!cartItemsContainer) {
-      console.error('❌ No se encontró el contenedor .cart-items');
-      return;
-    }
+  // === MÉTODO DE DIAGNÓSTICO ===
+  diagnose() {
+    const diagnosis = {
+      productCards: document.querySelectorAll('.product-card').length,
+      addToCartButtons: document.querySelectorAll('.add-to-cart').length,
+      quantityDropdowns: document.querySelectorAll('[id^="amount-dropdown-"]').length,
+      cartSize: this.cart.size,
+      quantitiesSize: this.quantities.size
+    };
 
-    console.log(`🔄 Renderizando ${this.cart.size} items del carrito`);
-
-    // Limpiar contenido actual
-    cartItemsContainer.innerHTML = '';
-
-    // Renderizar cada producto del carrito
-    this.cart.forEach((item, productId) => {
-      const cartItemElement = document.createElement('div');
-      cartItemElement.className = 'cart-item';
-      
-      const formattedAmount = this.formatAmount(item.quantity.amount, item.quantity.productType);
-      const formattedPrice = this.formatPrice(item.totalPrice);
-      
-      cartItemElement.innerHTML = `
-        <div class="cart-item-info">
-          <div class="cart-item-name">${item.name}</div>
-          <div class="cart-item-details">${formattedAmount}</div>
-        </div>
-        <div class="cart-item-actions">
-          <div class="cart-item-price">${formattedPrice}</div>
-          <button class="remove-item-btn" data-product-id="${productId}" title="Eliminar producto">
-            <svg class="trash-icon" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/>
-            </svg>
-          </button>
-        </div>
-      `;
-
-      // Event listener para eliminar producto
-      const removeBtn = cartItemElement.querySelector('.remove-item-btn');
-      removeBtn.addEventListener('click', () => {
-        this.removeFromCart(productId);
-      });
-
-      cartItemsContainer.appendChild(cartItemElement);
-      
-      console.log(`✅ Item renderizado: ${item.name} - ${formattedAmount} - ${formattedPrice}`);
-    });
-  }
-
-  updateCartTotalPrice() {
-    const cartTotalElement = document.querySelector('.cart-total-price');
-    if (!cartTotalElement) {
-      console.error('❌ No se encontró el elemento .cart-total-price');
-      return;
-    }
-
-    const total = Array.from(this.cart.values())
-      .reduce((sum, item) => sum + item.totalPrice, 0);
-
-    cartTotalElement.textContent = `Total: ${this.formatPrice(total)}`;
-    console.log(`💰 Total del carrito actualizado: ${this.formatPrice(total)}`);
-  }
-
-  formatPrice(price) {
-    return `${price.toFixed(2).replace('.', ',')} €`;
-  }
-
-  removeFromCart(productId) {
-    const item = this.cart.get(productId);
-    if (item) {
-      this.cart.delete(productId);
-      this.updateCartCounter();
-      this.updateCartDisplay();
-      
-      this.showMessage('Producto eliminado del carrito', 'info');
-      console.log('🗑️ Producto eliminado del carrito:', productId);
-    }
-  }
-
-  clearCart() {
-    this.cart.clear();
-    this.updateCartCounter();
-    this.updateCartDisplay();
-    this.showMessage('Carrito vaciado', 'info');
-  }
-
-  // Métodos públicos para interactuar con el sistema
-  getQuantity(productId) {
-    return this.quantities.get(productId);
-  }
-
-  setQuantity(productId, amount) {
-    const dropdown = document.getElementById(`amount-dropdown-${productId}`);
-    if (dropdown) {
-      this.selectQuantity(productId, amount, dropdown);
-    }
-  }
-
-  getAllQuantities() {
-    return Object.fromEntries(this.quantities);
-  }
-
-  clearAllQuantities() {
-    this.quantities.clear();
-    
-    // Resetear todos los dropdowns
-    const dropdowns = document.querySelectorAll('[id^="amount-dropdown-"]');
-    dropdowns.forEach(dropdown => {
-      const productId = this.extractProductId(dropdown.id);
-      const productCard = dropdown.closest('.product-card');
-      const productType = this.detectProductType(productCard);
-      const defaultAmount = productType.isUnit ? 1 : 1000;
-      
-      this.quantities.set(productId, { 
-        amount: defaultAmount, 
-        unit: productType.isUnit ? 'unidad' : 'g',
-        productType: productType 
-      });
-      this.updateDropdownLabel(dropdown, defaultAmount);
-      this.updateTotalPrice(productId);
-    });
+    console.log('🔍 DIAGNÓSTICO:', diagnosis);
+    return diagnosis;
   }
 }
 
-// Función para inicializar desde main.js
+// === FUNCIÓN DE INICIALIZACIÓN ===
 export function initQuantitySystem() {
   const quantitySystem = new QuantitySystem();
-  
-  // Hacer disponible globalmente
   window.quantitySystem = quantitySystem;
-  
   return quantitySystem;
 }
+
+// === DIAGNÓSTICO GLOBAL ===
+window.debugQuantitySystem = function () {
+  console.log('🔍 === DIAGNÓSTICO QUANTITY SYSTEM ===');
+
+  const elements = {
+    productCards: document.querySelectorAll('.product-card').length,
+    addToCartButtons: document.querySelectorAll('.add-to-cart').length,
+    quantityDropdowns: document.querySelectorAll('[id^="amount-dropdown-"]').length
+  };
+
+  console.log('📊 Elementos encontrados:', elements);
+
+  if (window.quantitySystem) {
+    console.log('✅ QuantitySystem disponible');
+    window.quantitySystem.diagnose();
+  } else {
+    console.log('❌ QuantitySystem NO disponible');
+  }
+};
