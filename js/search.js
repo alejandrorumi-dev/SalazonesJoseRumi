@@ -1,4 +1,4 @@
-// js/search.js - Sistema de búsqueda con sugerencias en tiempo real
+// js/search.js - Sistema de búsqueda con sugerencias en tiempo real y ocultación de secciones
 
 export class SearchSystem {
   constructor() {
@@ -6,6 +6,13 @@ export class SearchSystem {
     this.suggestionsContainer = document.getElementById('search-suggestions');
     this.allProducts = [];
     this.isSearchActive = false;
+    
+    // === NUEVO: Referencias a las secciones que se ocultan durante la búsqueda ===
+    this.sectionsToHide = [
+      '.banner-delivery',          // Banner principal de envíos
+      '.banners-promocionales',    // Los 3 banners promocionales
+      '.recommendations-section'   // Sección de recomendaciones del día
+    ];
     
     this.init();
   }
@@ -89,14 +96,70 @@ export class SearchSystem {
     if (searchTerm.length === 0) {
       this.hideSuggestions();
       this.resetProductsVisibility();
+      this.showAllSections(); // === NUEVO: Mostrar todas las secciones ===
       this.dispatchSearchEvent('');
       return;
     }
 
-    if (searchTerm.length >= 2) {
+    // === CAMBIADO: Buscar desde la primera letra ===
+    if (searchTerm.length >= 1) {
       this.showSuggestions(searchTerm);
       this.filterProducts(searchTerm);
+      this.hidePromotionalSections(); // === NUEVO: Ocultar secciones promocionales ===
     }
+  }
+
+  // === NUEVO MÉTODO: Ocultar secciones promocionales durante búsqueda ===
+  hidePromotionalSections() {
+    this.sectionsToHide.forEach(selector => {
+      const section = document.querySelector(selector);
+      if (section) {
+        // Guardar el estado de display original si no está guardado
+        if (!section.hasAttribute('data-original-display')) {
+          const originalDisplay = window.getComputedStyle(section).display;
+          section.setAttribute('data-original-display', originalDisplay);
+        }
+        
+        // Ocultar con transición suave
+        section.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
+        section.style.opacity = '0';
+        section.style.transform = 'translateY(-20px)';
+        
+        // Ocultar completamente después de la animación
+        setTimeout(() => {
+          section.style.display = 'none';
+        }, 300);
+      }
+    });
+    
+    console.log('🔍 Secciones promocionales ocultadas durante búsqueda');
+  }
+
+  // === NUEVO MÉTODO: Mostrar todas las secciones cuando no hay búsqueda ===
+  showAllSections() {
+    this.sectionsToHide.forEach(selector => {
+      const section = document.querySelector(selector);
+      if (section) {
+        // Restaurar display original
+        const originalDisplay = section.getAttribute('data-original-display') || 'block';
+        section.style.display = originalDisplay;
+        
+        // Animar aparición
+        setTimeout(() => {
+          section.style.opacity = '1';
+          section.style.transform = 'translateY(0)';
+        }, 50);
+        
+        // Limpiar estilos de transición después de la animación
+        setTimeout(() => {
+          section.style.transition = '';
+          section.style.opacity = '';
+          section.style.transform = '';
+        }, 350);
+      }
+    });
+    
+    console.log('✨ Secciones promocionales restauradas');
   }
 
   showSuggestions(searchTerm) {
@@ -121,7 +184,15 @@ export class SearchSystem {
     this.allProducts.forEach(product => {
       const normalizedName = this.normalizeText(product.name);
       
-      if (normalizedName.startsWith(normalizedSearch)) {
+      // === MEJORADO: startsWith para búsquedas de 1 letra, includes para 2+ letras ===
+      let isMatch;
+      if (searchTerm.length === 1) {
+        isMatch = normalizedName.startsWith(normalizedSearch);
+      } else {
+        isMatch = normalizedName.includes(normalizedSearch);
+      }
+      
+      if (isMatch) {
         if (!uniqueNames.has(product.name)) {
           suggestions.push({
             type: 'product',
@@ -135,9 +206,11 @@ export class SearchSystem {
       }
     });
 
-    // Limitar sugerencias y ordenar
+    // === AJUSTADO: Mostrar más sugerencias para búsquedas de 1 letra ===
+    const maxSuggestions = searchTerm.length === 1 ? 6 : 8;
+    
     return suggestions
-      .slice(0, 8)
+      .slice(0, maxSuggestions)
       .sort((a, b) => {
         // Productos disponibles primero
         if (a.isAvailable && !b.isAvailable) return -1;
@@ -191,48 +264,82 @@ export class SearchSystem {
 
     this.allProducts.forEach(product => {
       const normalizedName = this.normalizeText(product.name);
-      // Usar startsWith en lugar de includes
-      const isMatch = normalizedName.startsWith(normalizedSearch);
+      const normalizedCategory = this.normalizeText(this.formatCategoryName(product.category));
+      
+      // === MEJORADO: Lógica de búsqueda optimizada por longitud ===
+      let nameMatch, categoryMatch;
+      
+      if (searchTerm.length === 1) {
+        // Para 1 letra: solo buscar al inicio del nombre (más específico)
+        nameMatch = normalizedName.startsWith(normalizedSearch);
+        categoryMatch = normalizedCategory.startsWith(normalizedSearch);
+      } else {
+        // Para 2+ letras: buscar en cualquier parte
+        nameMatch = normalizedName.includes(normalizedSearch);
+        categoryMatch = normalizedCategory.includes(normalizedSearch);
+      }
+      
+      const isMatch = nameMatch || categoryMatch;
       
       if (isMatch) {
         // MOSTRAR PRODUCTO COINCIDENTE (disponible o agotado)
         product.element.style.display = 'block';
         product.element.classList.add('search-match');
+        
+        // Destacar si es coincidencia exacta de nombre
+        if (nameMatch) {
+          product.element.classList.add('name-match');
+        }
+        
         visibleCount++;
       } else {
         product.element.style.display = 'none';
-        product.element.classList.remove('search-match');
+        product.element.classList.remove('search-match', 'name-match');
       }
     });
 
     // Mostrar mensaje si no hay resultados
     this.updateSearchResults(visibleCount, searchTerm);
+    
+    console.log(`🔍 Búsqueda "${searchTerm}" (${searchTerm.length} letra${searchTerm.length > 1 ? 's' : ''}): ${visibleCount} productos encontrados`);
   }
 
   scrollToProduct(product) {
     setTimeout(() => {
-      product.element.scrollIntoView({
-        behavior: 'smooth',
-        block: 'center'
-      });
+      // Scroll hasta la sección de productos si no está visible
+      const productSection = document.querySelector('.product-cards');
+      if (productSection) {
+        productSection.scrollIntoView({
+          behavior: 'smooth',
+          block: 'start'
+        });
+      }
       
-      // Efecto de destacado temporal
-      product.element.classList.add('highlighted');
+      // Luego scroll hasta el producto específico
       setTimeout(() => {
-        product.element.classList.remove('highlighted');
-      }, 2000);
+        product.element.scrollIntoView({
+          behavior: 'smooth',
+          block: 'center'
+        });
+        
+        // Efecto de destacado temporal
+        product.element.classList.add('highlighted');
+        setTimeout(() => {
+          product.element.classList.remove('highlighted');
+        }, 2000);
+      }, 500);
     }, 300);
   }
 
   resetProductsVisibility() {
-    // Solo productos disponibles
+    // === MEJORADO: Mostrar productos según estado inicial (solo disponibles) ===
     this.allProducts.forEach(product => {
       if (product.isAvailable) {
         product.element.style.display = 'block';
       } else {
         product.element.style.display = 'none';
       }
-      product.element.classList.remove('search-match', 'category-match');
+      product.element.classList.remove('search-match', 'name-match', 'category-match');
     });
 
     // Limpiar mensajes de búsqueda
@@ -258,7 +365,7 @@ export class SearchSystem {
         <div class="no-results-content">
           <span class="no-results-icon">🔍</span>
           <h3>No se encontraron productos</h3>
-          <p>No hay productos que coincidan con "${searchTerm}"</p>
+          <p>No hay productos que coincidan con "<strong>${searchTerm}</strong>"</p>
           <button class="btn-clear-search" onclick="window.searchSystem.clearSearch()">
             Limpiar búsqueda
           </button>
@@ -273,12 +380,15 @@ export class SearchSystem {
     this.searchInput.value = '';
     this.hideSuggestions();
     this.resetProductsVisibility();
+    this.showAllSections(); // === NUEVO: Restaurar secciones ===
     this.dispatchSearchEvent('');
     
     const messageElement = document.querySelector('.search-results-message');
     if (messageElement) {
       messageElement.remove();
     }
+    
+    console.log('🧹 Búsqueda limpiada y secciones restauradas');
   }
 
   hideSuggestions() {
@@ -314,7 +424,7 @@ export class SearchSystem {
         break;
         
       case 'Escape':
-        this.hideSuggestions();
+        this.clearSearch(); // === MEJORADO: Limpiar completamente al presionar Escape ===
         this.searchInput.blur();
         break;
     }
@@ -329,6 +439,16 @@ export class SearchSystem {
         suggestion.classList.remove('selected');
       }
     });
+  }
+
+  // === NUEVO MÉTODO: Verificar si hay búsqueda activa ===
+  hasActiveSearch() {
+    return this.searchInput.value.trim().length > 0;
+  }
+
+  // === NUEVO MÉTODO: Obtener término de búsqueda actual ===
+  getCurrentSearchTerm() {
+    return this.searchInput.value.trim();
   }
 
   // Utility functions
