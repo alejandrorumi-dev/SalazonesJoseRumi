@@ -94,7 +94,7 @@ export class QuantitySystem {
 
       // Configurar dropdown
       this.setupDropdown(dropdown, productId, isUnit);
-      
+
       // IMPORTANTE: Ocultar precio total inicialmente - solo aparecerá cuando seleccionen cantidad
       const totalPriceElement = productCard.querySelector('.total-price');
       if (totalPriceElement) {
@@ -509,21 +509,19 @@ export class QuantitySystem {
       e.stopPropagation();
     });
 
-    // Botón menos - CORREGIDO
+    // Botón menos - CORREGIDO DEFINITIVO
     if (minusBtn) {
       minusBtn.addEventListener('click', (e) => {
         e.preventDefault();
         e.stopPropagation();
 
-        // Extraer valor numérico actual
-        const currentValue = this.extractNumericValue(input.value);
-        console.log('MENOS - Input:', input.value, 'Extraído:', currentValue); // ← AÑADIR ESTA LÍNEA
+        let currentValue = this.extractNumericValue(input.value);
+        currentValue = Math.round(currentValue / stepValue) * stepValue;
+
         const newValue = Math.max(minValue, currentValue - stepValue);
 
-        // Actualizar con formato inteligente
         this.updateInputDisplay(input, newValue, isUnit);
 
-        // Posicionar cursor al final
         setTimeout(() => {
           input.setSelectionRange(input.value.length, input.value.length);
         }, 10);
@@ -532,21 +530,20 @@ export class QuantitySystem {
       });
     }
 
-    // Botón más - CORREGIDO
+    // Botón más - CORREGIDO DEFINITIVO
     if (plusBtn) {
       plusBtn.addEventListener('click', (e) => {
         e.preventDefault();
         e.stopPropagation();
 
-        // Extraer valor numérico actual
-        const currentValue = this.extractNumericValue(input.value);
-        console.log('MAS - Input:', input.value, 'Extraído:', currentValue); // ← AÑADIR ESTA LÍNEA
-        const newValue = Math.min(maxValue, currentValue + stepValue); // Usar siempre +50
+        // Extraer valor numérico actual y redondear al múltiplo más cercano del step
+        let currentValue = this.extractNumericValue(input.value);
+        currentValue = Math.round(currentValue / stepValue) * stepValue;
 
-        // Actualizar con formato inteligente
+        const newValue = Math.min(maxValue, currentValue + stepValue);
+
         this.updateInputDisplay(input, newValue, isUnit);
 
-        // Posicionar cursor al final
         setTimeout(() => {
           input.setSelectionRange(input.value.length, input.value.length);
         }, 10);
@@ -755,7 +752,7 @@ export class QuantitySystem {
       } else {
         // Precio por peso - necesitamos determinar la unidad base del precio
         let pricePerGram;
-        
+
         if (priceText.includes('/kg') || priceText.includes('kg')) {
           // El precio es por kilogramo
           pricePerGram = displayPrice / 1000; // Convertir €/kg a €/g
@@ -777,9 +774,9 @@ export class QuantitySystem {
           pricePerGram = displayPrice / 1000;
           this.log(`💰 Precio asumido como €/kg: ${displayPrice}€/kg = ${pricePerGram.toFixed(6)}€/g`);
         }
-        
+
         totalPrice = pricePerGram * quantity.amount;
-        
+
         this.log(`💰 Peso: ${pricePerGram.toFixed(6)}€/g x ${quantity.amount}g = ${totalPrice.toFixed(2)}€`);
       }
 
@@ -798,7 +795,7 @@ export class QuantitySystem {
         box-shadow: 0 2px 4px rgba(231, 76, 60, 0.1) !important;
         display: block !important;
       `;
-      
+
       this.log(`✅ Total mostrado: ${totalPrice.toFixed(2)}€ para ${quantity.amount}${quantity.isUnit ? ' unidades' : 'g'}`);
     } else {
       // OCULTAR el total si no hay cantidad seleccionada
@@ -843,7 +840,7 @@ export class QuantitySystem {
     } else {
       // Precio por peso - determinar unidad base
       let pricePerGram;
-      
+
       if (priceText.includes('/kg') || priceText.includes('kg')) {
         pricePerGram = displayPrice / 1000;
       } else if (priceText.includes('/250g') || priceText.includes('250g')) {
@@ -856,39 +853,39 @@ export class QuantitySystem {
         // Fallback: asumir €/kg
         pricePerGram = displayPrice / 1000;
       }
-      
+
       totalPrice = pricePerGram * quantity.amount;
       unitPriceForCart = pricePerGram; // Precio por gramo para el carrito
     }
 
     // NUEVO: Verificar si el producto ya existe en el carrito
     const existingItem = this.cart.get(productId);
-    
+
     if (existingItem) {
       // SUMAR a la cantidad existente
       const newAmount = existingItem.quantity.amount + quantity.amount;
-      const newTotalPrice = quantity.isUnit ? 
-        (displayPrice * newAmount) : 
+      const newTotalPrice = quantity.isUnit ?
+        (displayPrice * newAmount) :
         (unitPriceForCart * newAmount);
 
       // Actualizar item existente
       existingItem.quantity.amount = newAmount;
       existingItem.totalPrice = newTotalPrice;
       existingItem.timestamp = Date.now(); // Actualizar timestamp
-      
+
       this.log(`➕ Cantidad sumada: ${quantity.amount}${quantity.isUnit ? ' unidades' : 'g'} → Total: ${newAmount}${quantity.isUnit ? ' unidades' : 'g'}`);
-      
+
       // Mostrar mensaje específico de suma
       const formattedNewAmount = quantity.isUnit ?
         (quantity.amount === 1 ? `${quantity.amount} unidad` : `${quantity.amount} unidades`) :
         (quantity.amount >= 1000 ? `${quantity.amount / 1000}kg` : `${quantity.amount}g`);
-      
+
       const formattedTotalAmount = quantity.isUnit ?
         (newAmount === 1 ? `${newAmount} unidad` : `${newAmount} unidades`) :
         (newAmount >= 1000 ? `${newAmount / 1000}kg` : `${newAmount}g`);
 
       this.showMessage(`+${formattedNewAmount} de ${productName} añadido. Total: ${formattedTotalAmount}`, 'success');
-      
+
     } else {
       // Crear nuevo item del carrito
       const cartItem = {
@@ -904,9 +901,9 @@ export class QuantitySystem {
 
       // Añadir al carrito
       this.cart.set(productId, cartItem);
-      
+
       this.log(`🆕 Producto nuevo añadido: ${quantity.amount}${quantity.isUnit ? ' unidades' : 'g'}`);
-      
+
       // Mostrar confirmación normal
       const formattedAmount = quantity.isUnit ?
         (quantity.amount === 1 ? `${quantity.amount} unidad` : `${quantity.amount} unidades`) :
@@ -937,7 +934,7 @@ export class QuantitySystem {
     if (dropdown) {
       const label = dropdown.querySelector('.select-label');
       const svg = label?.querySelector('svg');
-      
+
       if (label) {
         label.innerHTML = 'Cantidad: ';
         if (svg) {
@@ -999,23 +996,6 @@ export class QuantitySystem {
     return (index + 1).toString();
   }
 
-  // === CONFIGURAR INTERFAZ DEL CARRITO ===
-  setupCartInterface() {
-    this.updateCartDisplay();
-
-    // Configurar botón de checkout
-    const checkoutBtn = document.querySelector('.checkout-btn');
-    if (checkoutBtn) {
-      checkoutBtn.addEventListener('click', () => {
-        if (this.cart.size === 0) {
-          this.showMessage('El carrito está vacío', 'warning');
-          return;
-        }
-        this.showMessage('Funcionalidad de checkout en desarrollo', 'info');
-      });
-    }
-  }
-
   // === ACTUALIZAR CONTADOR DEL CARRITO ===
   updateCartCounter() {
     const counter = document.querySelector('.number-product');
@@ -1023,83 +1003,6 @@ export class QuantitySystem {
       counter.textContent = this.cart.size.toString();
       this.log(`🔢 Contador actualizado: ${this.cart.size}`);
     }
-  }
-
-  // === ACTUALIZAR DISPLAY DEL CARRITO ===
-  updateCartDisplay() {
-    const cartEmpty = document.querySelector('.cart-empty');
-    const cartItems = document.querySelector('.cart-items');
-    const cartTotal = document.querySelector('.cart-total');
-
-    if (this.cart.size === 0) {
-      if (cartEmpty) cartEmpty.style.display = 'block';
-      if (cartItems) cartItems.style.display = 'none';
-      if (cartTotal) cartTotal.style.display = 'none';
-    } else {
-      if (cartEmpty) cartEmpty.style.display = 'none';
-      if (cartItems) cartItems.style.display = 'block';
-      if (cartTotal) cartTotal.style.display = 'block';
-
-      this.renderCartItems();
-      this.updateCartTotalPrice();
-    }
-  }
-
-  // === RENDERIZAR ITEMS DEL CARRITO ===
-  renderCartItems() {
-    const container = document.querySelector('.cart-items');
-    if (!container) return;
-
-    container.innerHTML = '';
-
-    this.cart.forEach((item) => {
-      // Formatear cantidad acumulada
-      const formattedAmount = item.quantity.isUnit ?
-        (item.quantity.amount === 1 ? `${item.quantity.amount} unidad` : `${item.quantity.amount} unidades`) :
-        (item.quantity.amount >= 1000 ? `${item.quantity.amount / 1000}kg` : `${item.quantity.amount}g`);
-
-      const cartItemElement = document.createElement('div');
-      cartItemElement.className = 'cart-item';
-      cartItemElement.innerHTML = `
-        <div class="cart-item-info">
-          <div class="cart-item-name">${item.name}</div>
-          <div class="cart-item-details">${formattedAmount}</div>
-        </div>
-        <div class="cart-item-actions">
-          <div class="cart-item-price">${item.totalPrice.toFixed(2).replace('.', ',')} €</div>
-          <button class="remove-item-btn" data-product-id="${item.id}" title="Eliminar producto">🗑️</button>
-        </div>
-      `;
-
-      // Botón eliminar
-      const removeBtn = cartItemElement.querySelector('.remove-item-btn');
-      removeBtn.addEventListener('click', () => {
-        this.removeFromCart(item.id);
-      });
-
-      container.appendChild(cartItemElement);
-    });
-
-    this.log(`🛒 Carrito renderizado: ${this.cart.size} productos únicos`);
-  }
-
-  // === ACTUALIZAR TOTAL DEL CARRITO ===
-  updateCartTotalPrice() {
-    const totalElement = document.querySelector('.cart-total-price');
-    if (!totalElement) return;
-
-    const total = Array.from(this.cart.values())
-      .reduce((sum, item) => sum + item.totalPrice, 0);
-
-    totalElement.textContent = `Total: ${total.toFixed(2).replace('.', ',')} €`;
-  }
-
-  // === ELIMINAR DEL CARRITO ===
-  removeFromCart(productId) {
-    this.cart.delete(productId);
-    this.updateCartCounter();
-    this.updateCartDisplay();
-    this.showMessage('Producto eliminado del carrito', 'info');
   }
 
   // === ANIMAR BOTÓN ===
