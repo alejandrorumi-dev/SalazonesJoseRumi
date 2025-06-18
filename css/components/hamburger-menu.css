@@ -1,0 +1,62 @@
+/* === MENÚ HAMBURGUESA === */
+
+/* === BOTÓN HAMBURGUESA === */
+
+.hamburger-menu {
+	display: none;
+}
+
+#hamburger-toggle {
+	width: 2rem;
+	height: 2rem;
+	position: relative;
+	background: none;
+	border: none;
+	cursor: pointer;
+	z-index: 30;
+	/* encima del menú */
+}
+
+/* === LAS TRES LÍNEAS === */
+
+.hamburger-icon,
+.hamburger-icon::before,
+.hamburger-icon::after {
+	content: '';
+	display: block;
+	height: 4px;
+	background-color: var(--color-text);
+	border-radius: 2px;
+	transition: all 0.3s ease;
+	position: absolute;
+	width: 100%;
+}
+
+.hamburger-icon {
+	top: 50%;
+	transform: translateY(-50%);
+}
+
+.hamburger-icon::before {
+	top: -8px;
+}
+
+.hamburger-icon::after {
+	top: 8px;
+}
+
+/* === CUANDO EL MENÚ ESTÁ ABIERTO: TRANSFORMAR EN X === */
+
+#hamburger-toggle.open .hamburger-icon {
+	background: transparent;
+}
+
+#hamburger-toggle.open .hamburger-icon::before {
+	transform: rotate(45deg);
+	top: 0;
+}
+
+#hamburger-toggle.open .hamburger-icon::after {
+	transform: rotate(-45deg);
+	top: 0;
+}
