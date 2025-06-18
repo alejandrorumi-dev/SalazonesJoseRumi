@@ -15,6 +15,9 @@
 	<!--Estilos generales CSS: Hacer Pedido-->
 	<link rel="stylesheet" href="../css/pages/order.css" />
 
+	<!--Estilos del carrito modal-->
+	<link rel="stylesheet" href="../css/cart.css" />
+
 	<!--Favicon-->
 	<link rel="icon" type="image/png" href="../assets/favicon/favicon-96x96.png" sizes="96x96" />
 	<link rel="icon" type="image/svg+xml" href="../assets/favicon/favicon.svg" />
@@ -104,20 +107,20 @@
 						</svg>
 					</a>
 					<div class="cart-button">
-
 						<!--Carrito de compra-->
-
-						<button class="btn-rrss btn-cart" aria-label="Abrir carrito">
-							<span class="number-product">0</span>
-							<svg class="cart-icon" width="800px" height="800px" viewBox="0 0 24 24" fill="currentColor"
-								xmlns="http://www.w3.org/2000/svg">
-								<path
-									d="M6.29977 5H21L19 12H7.37671M20 16H8L6 3H3M9 20C9 20.5523 8.55228 21 8 21C7.44772 21 7 20.5523 7 20C7 19.4477 7.44772 19 8 19C8.55228 19 9 19.4477 9 20ZM20 20C20 20.5523 19.5523 21 19 21C18.4477 21 18 20.5523 18 20C18 19.4477 18.4477 19 19 19C19.5523 19 20 19.4477 20 20Z"
-									stroke="currentColor" stroke-width="2" stroke-linecap="round"
-									stroke-linejoin="round">
-								</path>
-							</svg>
-						</button>
+						<div class="container-cart-icon"> <!-- Añadir este wrapper -->
+							<button class="btn-rrss btn-cart" aria-label="Abrir carrito">
+								<span class="number-product">0</span>
+								<svg class="cart-icon" width="800px" height="800px" viewBox="0 0 24 24"
+									fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+									<path
+										d="M6.29977 5H21L19 12H7.37671M20 16H8L6 3H3M9 20C9 20.5523 8.55228 21 8 21C7.44772 21 7 20.5523 7 20C7 19.4477 7.44772 19 8 19C8.55228 19 9 19.4477 9 20ZM20 20C20 20.5523 19.5523 21 19 21C18.4477 21 18 20.5523 18 20C18 19.4477 18.4477 19 19 19C19.5523 19 20 19.4477 20 20Z"
+										stroke="currentColor" stroke-width="2" stroke-linecap="round"
+										stroke-linejoin="round">
+									</path>
+								</svg>
+							</button>
+						</div>
 					</div>
 				</div>
 
@@ -1082,13 +1085,9 @@
 				</div>
 			</section>
 
-			<aside class="cart-summary">
-				<h3>Tu Pedido</h3>
-
+			<section class="cart-summary">
 				<!-- Estado vacío (se mostrará cuando no hay productos) -->
 				<div class="cart-empty">
-					<p>Tu carrito está vacío</p>
-					<p>Añade productos para comenzar tu pedido</p>
 				</div>
 
 				<!-- Lista de productos (se llenará dinámicamente con JavaScript) -->
@@ -1096,27 +1095,18 @@
 					<!-- Ejemplo de producto en el carrito -->
 					<div class="cart-item">
 						<div class="cart-item-info">
-							<div class="cart-item-name">Jamón Ibérico</div>
-							<div class="cart-item-details">250g</div>
+							<div class="cart-item-name"></div>
+							<div class="cart-item-details"></div>
 						</div>
-						<div class="cart-item-price">12,50 €</div>
+						<div class="cart-item-price"></div>
 					</div>
-
-					<div class="cart-item">
-						<div class="cart-item-info">
-							<div class="cart-item-name">Queso Manchego</div>
-							<div class="cart-item-details">500g</div>
-						</div>
-						<div class="cart-item-price">18,75 €</div>
-					</div>
-				</div>
 
 				<!-- Resumen del total -->
 				<div class="cart-total" style="display: none;">
-					<div class="cart-total-price">Total: 31,25 €</div>
-					<button class="checkout-btn">Finalizar Pedido</button>
+					<div class="cart-total-price"></div>
+					<button class="checkout-btn"></button>
 				</div>
-			</aside>
+			</section>
 		</div>
 	</main>
 
