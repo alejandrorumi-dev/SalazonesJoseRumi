@@ -1,72 +1,100 @@
 # 🐟 Salazones José Rumí
 
-Sitio web oficial de **Salazones José Rumí**, un negocio familiar ubicado en Almería dedicado a la venta de salazones, embutidos, vinos y productos tradicionales de la región.
+Sitio web oficial de **Salazones José Rumí**, un negocio familiar ubicado en el Mercado Central de Almería, especializado en salazones, embutidos, vinos y productos tradicionales de la región.
 
-Este proyecto web tiene como objetivo ofrecer una experiencia moderna, visual y responsive para los clientes, permitiendo consultar productos, precios y realizar pedidos fácilmente.
+Este sitio busca ofrecer una experiencia moderna, visual, ordenada y responsive, con una interfaz clara para que los clientes puedan explorar los productos y realizar sus encargos fácilmente.
 
 ---
 
 ## 🌐 Demo
 
-👉 [Ver sitio web (próximamente en GitHub Pages)](https://alejandrorumi-dev.github.io/SalazonesJoseRumi)
+👉 [Ver sitio web](https://alejandrorumi-dev.github.io/SalazonesJoseRumi)
 
 ---
 
 ## 📁 Estructura del proyecto
 
 ```
+
 SalazonesJoseRumi/
 ├── index.html
 ├── README.md
+├── pages/
+│ └── order.html
 ├── css/
 │ ├── base.css
 │ ├── components.css
 │ ├── layout.css
-│ └── responsive.css
+│ ├── responsive.css
+│ └── pages/
+│ └── order.css
 ├── js/
 │ ├── animations.js
+│ ├── carousel.js
+│ ├── filters.js
+│ ├── loader.js
 │ ├── main.js
-│ └── navigation.js
+│ ├── navigation.js
+│ ├── pagination.js
+│ ├── quantity.js
+│ ├── search.js
+│ └── sorting.js
 ├── assets/
-│ ├── design/ # Archivos de diseño gráfico
-│ ├── favicon/ # Favicon y manifest
-│ ├── icons/ # Iconos SVG o PNG
-│ └── images/ # Fotografías de productos y otras imágenes
+│ ├── banners/
+│ ├── design/
+│ ├── favicon/
+│ ├── icons/
+│ └── images/
+
 ```
 
-
-> El proyecto está estructurado para mantener una separación clara entre estilos, scripts y contenido multimedia, facilitando la escalabilidad y el mantenimiento.
+> La estructura del proyecto sigue un enfoque modular para facilitar la organización, el mantenimiento y la escalabilidad.
 
 ---
 
 ## 📱 Responsive Design
 
-- ✅ Adaptado a escritorio, tablet y móvil.
+- Totalmente adaptado a escritorio, tablet (horizontal y vertical) y móviles.
 - **Cards de productos:**
   - Verticales en escritorio y tablet horizontal.
   - Horizontales en tablet vertical y móvil.
-- **Carrito lateral** en escritorio.  
-- En móviles y tablets verticales, el carrito se accede mediante un botón y se muestra como modal o pantalla aparte.
+- **Header y footer** con altura fija y coherencia visual entre secciones.
+- Carrito accesible como **aside lateral en escritorio** y **modal en móviles/tablets**.
+- Experiencia visual optimizada con transiciones, animaciones y mensajes personalizados.
 
 ---
 
 ## 🛠️ Tecnologías utilizadas
 
 - **HTML5**
-- **CSS3** (modular, responsive)
-- **JavaScript** (navegación, interacciones, animaciones)
-- **GitHub Pages** (para despliegue)
-- **Inteligencia Artificial** (apoyo en ciertas funcionalidades)
+- **CSS3** (modular y responsive)
+- **JavaScript** (funcionalidades dinámicas y control de interfaz)
+- **GitHub Pages** (despliegue)
+- **Photoshop** (diseño visual de banners y assets)
+- **ChatGPT** y **Claude** (asistencia técnica y visual)
+
+---
+
+## ✅ Funcionalidades implementadas
+
+- Menú de navegación responsive con hamburguesa.
+- Cards adaptativas por tipo de dispositivo.
+- Carrito visual e interactivo.
+- Sistema de usuarios con validaciones, edición y eliminación.
+- Confirmaciones estilizadas y alertas personalizadas.
+- Estructura modular de estilos (`css/components`) y scripts.
+- Cambios visuales con animaciones y control de errores.
+- Diseño equilibrado con enfoque en la experiencia de usuario.
 
 ---
 
 ## 🔄 Funcionalidades en desarrollo
 
-- Filtro de productos por categoría y ordenamiento.
-- Paginación de productos.
-- Carrito interactivo con suma de totales.
-- Formulario de pedido.
-- Gestión de stock: productos agotados visibles pero desactivados.
+- Filtro de productos por categoría.
+- Paginación dinámica.
+- Formulario de pedido con validación de campos.
+- Control de stock: productos agotados visibles pero desactivados.
+- Galería visual y página de FAQ.
 
 ---
 
@@ -81,6 +109,3 @@ Desarrollado por [Alejandro Rumí Morales](https://github.com/alejandrorumi-dev)
 ## 📜 Licencia
 
 Este proyecto está licenciado bajo la [MIT License](LICENSE).
-
----
-
