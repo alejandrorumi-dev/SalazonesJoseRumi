@@ -1,4 +1,4 @@
-// Funcionalidad para los filtros y búsqueda de productos
+// Funcionalidad para los filtros y búsqueda de productos - VERSIÓN CORREGIDA
 
 export function setupFilters() {
   // Funcionalidad para los dropdowns personalizados
@@ -12,11 +12,27 @@ export function setupFilters() {
     allDropdowns.forEach(dd => {
       if (dd.id !== dropdownId) {
         dd.classList.remove('active');
+        // Solo cerrar visualmente otros dropdowns que no sean de sorting
+        if (dd.id !== 'sort-dropdown') {
+          const options = dd.querySelector('.dropdown-options');
+          if (options) options.style.display = 'none';
+        }
       }
     });
     
     // Toggle del dropdown actual
+    const isActive = dropdown.classList.contains('active');
     dropdown.classList.toggle('active');
+    
+    // Manejar visibilidad visual
+    const options = dropdown.querySelector('.dropdown-options');
+    if (options) {
+      if (isActive) {
+        options.style.display = 'none';
+      } else {
+        options.style.display = 'block';
+      }
+    }
   }
 
   // Manejar la selección de opciones
@@ -39,7 +55,13 @@ export function setupFilters() {
     // Actualizar el texto del label (manteniendo el SVG)
     const svg = label.querySelector('svg');
     const svgClone = svg.cloneNode(true);
-    label.innerHTML = option.textContent + ' ';
+    
+    // NUEVO: Manejar "Todos los productos" de forma especial
+    if (option.dataset.value === '' || option.dataset.value === 'todos') {
+      label.innerHTML = 'Categorías ';
+    } else {
+      label.innerHTML = option.textContent + ' ';
+    }
     label.appendChild(svgClone);
     
     // Actualizar el select oculto
@@ -49,6 +71,8 @@ export function setupFilters() {
     
     // Cerrar el dropdown
     dropdown.classList.remove('active');
+    const options = dropdown.querySelector('.dropdown-options');
+    if (options) options.style.display = 'none';
     
     // Disparar evento personalizado para filtrar productos
     const filterEvent = new CustomEvent('filterChange', {
@@ -61,9 +85,8 @@ export function setupFilters() {
     document.dispatchEvent(filterEvent);
   }
 
-  // Configurar event listeners para los labels clicables
+  // Configurar event listeners SOLO para categorías (no para sorting)
   const categoryLabel = document.querySelector('#categories-dropdown label');
-  const sortLabel = document.querySelector('#sort-dropdown label');
   
   if (categoryLabel) {
     categoryLabel.addEventListener('click', (e) => {
@@ -71,17 +94,10 @@ export function setupFilters() {
       toggleDropdown('categories-dropdown');
     });
   }
-  
-  if (sortLabel) {
-    sortLabel.addEventListener('click', (e) => {
-      e.stopPropagation();
-      toggleDropdown('sort-dropdown');
-    });
-  }
 
-  // Event listeners para todas las opciones de los dropdowns
-  const allOptions = document.querySelectorAll('.dropdown-option');
-  allOptions.forEach(option => {
+  // Event listeners para todas las opciones de los dropdowns (solo categorías)
+  const categoryOptions = document.querySelectorAll('#categories-dropdown .dropdown-option');
+  categoryOptions.forEach(option => {
     option.addEventListener('click', (e) => {
       e.stopPropagation();
       const dropdown = option.closest('.dropdown');
@@ -140,23 +156,30 @@ export function setupFilters() {
     });
   }
 
-  // Cerrar dropdowns al hacer clic fuera
+  // Cerrar dropdowns al hacer clic fuera - MEJORADO
   document.addEventListener('click', function(event) {
-    const dropdowns = document.querySelectorAll('.dropdown');
+    // Solo cerrar dropdowns que no sean de sorting (que maneja su propio cierre)
+    const dropdowns = document.querySelectorAll('.dropdown:not(#sort-dropdown)');
     
     dropdowns.forEach(dropdown => {
       if (!dropdown.contains(event.target)) {
         dropdown.classList.remove('active');
+        // Asegurar cierre visual
+        const options = dropdown.querySelector('.dropdown-options');
+        if (options) options.style.display = 'none';
       }
     });
   });
 
-  // Cerrar dropdowns con tecla Escape
+  // Cerrar dropdowns con tecla Escape - MEJORADO
   document.addEventListener('keydown', function(event) {
     if (event.key === 'Escape') {
-      const dropdowns = document.querySelectorAll('.dropdown');
+      // Solo cerrar dropdowns que no sean de sorting
+      const dropdowns = document.querySelectorAll('.dropdown:not(#sort-dropdown)');
       dropdowns.forEach(dropdown => {
         dropdown.classList.remove('active');
+        const options = dropdown.querySelector('.dropdown-options');
+        if (options) options.style.display = 'none';
       });
     }
   });
@@ -201,7 +224,11 @@ export function resetFilters() {
   
   // Cerrar todos los dropdowns
   const dropdowns = document.querySelectorAll('.dropdown');
-  dropdowns.forEach(dropdown => dropdown.classList.remove('active'));
+  dropdowns.forEach(dropdown => {
+    dropdown.classList.remove('active');
+    const options = dropdown.querySelector('.dropdown-options');
+    if (options) options.style.display = 'none';
+  });
   
   // Disparar evento de reset
   const resetEvent = new CustomEvent('filtersReset');
