@@ -1,4 +1,4 @@
-// js/quantity.js - Sistema simplificado que SÍ funciona
+// js/quantity.js - Sistema simplificado que SÍ funciona - VERSIÓN CORREGIDA
 
 export class QuantitySystem {
   constructor() {
@@ -94,7 +94,13 @@ export class QuantitySystem {
 
       // Configurar dropdown
       this.setupDropdown(dropdown, productId, isUnit);
-      this.updateTotalPrice(productId);
+      
+      // IMPORTANTE: Ocultar precio total inicialmente - solo aparecerá cuando seleccionen cantidad
+      const totalPriceElement = productCard.querySelector('.total-price');
+      if (totalPriceElement) {
+        totalPriceElement.style.display = 'none';
+        this.log(`👁️ Total oculto inicialmente para producto ${productId}`);
+      }
     });
   }
 
@@ -429,7 +435,7 @@ export class QuantitySystem {
   selectQuantity(productId, amount, dropdown, isUnit) {
     this.quantities.set(productId, { amount, isUnit });
     this.updateDropdownLabel(dropdown, amount, isUnit);
-    this.updateTotalPrice(productId);
+    this.updateTotalPrice(productId); // Esto ahora creará y mostrará el elemento si no existe
     this.closeDropdown(dropdown);
 
     this.log(`📦 Cantidad actualizada: Producto ${productId} = ${amount} ${isUnit ? 'unidades' : 'gramos'}`);
@@ -717,35 +723,87 @@ export class QuantitySystem {
     if (!productCard) return;
 
     const priceElement = productCard.querySelector('.price');
-    const totalPriceElement = productCard.querySelector('.total-price');
+    let totalPriceElement = productCard.querySelector('.total-price');
 
-    if (!priceElement || !totalPriceElement) return;
+    if (!priceElement) return;
 
-    // Extraer precio del texto
-    const priceText = priceElement.textContent;
-    const priceMatch = priceText.match(/(\d+[,.]?\d*)/);
-
-    if (!priceMatch) {
-      totalPriceElement.textContent = 'Total: X,XX €';
+    // Si no existe el elemento, no lo creamos - ya existe en el HTML
+    if (!totalPriceElement) {
+      this.log(`❌ No se encontró elemento .total-price para producto ${productId}`);
       return;
     }
 
-    const unitPrice = parseFloat(priceMatch[1].replace(',', '.'));
+    // Extraer precio del texto
+    const priceText = priceElement.textContent.toLowerCase();
+    const priceMatch = priceText.match(/(\d+[,.]?\d*)/);
+
+    if (!priceMatch) {
+      totalPriceElement.style.display = 'none'; // Ocultar si no hay precio válido
+      return;
+    }
+
+    const displayPrice = parseFloat(priceMatch[1].replace(',', '.'));
     const quantity = this.quantities.get(productId);
 
     if (quantity) {
       let totalPrice;
 
       if (quantity.isUnit) {
-        // Precio por unidad
-        totalPrice = unitPrice * quantity.amount;
+        // Precio por unidad - directo
+        totalPrice = displayPrice * quantity.amount;
+        this.log(`💰 Unidad: ${displayPrice}€ x ${quantity.amount} = ${totalPrice.toFixed(2)}€`);
       } else {
-        // Precio por peso
-        const weightInKg = quantity.amount / 1000;
-        totalPrice = unitPrice * weightInKg;
+        // Precio por peso - necesitamos determinar la unidad base del precio
+        let pricePerGram;
+        
+        if (priceText.includes('/kg') || priceText.includes('kg')) {
+          // El precio es por kilogramo
+          pricePerGram = displayPrice / 1000; // Convertir €/kg a €/g
+          this.log(`💰 Precio base: ${displayPrice}€/kg = ${pricePerGram.toFixed(6)}€/g`);
+        } else if (priceText.includes('/250g') || priceText.includes('250g')) {
+          // El precio es por 250g
+          pricePerGram = displayPrice / 250; // Convertir €/250g a €/g
+          this.log(`💰 Precio base: ${displayPrice}€/250g = ${pricePerGram.toFixed(6)}€/g`);
+        } else if (priceText.includes('/500g') || priceText.includes('500g')) {
+          // El precio es por 500g
+          pricePerGram = displayPrice / 500; // Convertir €/500g a €/g
+          this.log(`💰 Precio base: ${displayPrice}€/500g = ${pricePerGram.toFixed(6)}€/g`);
+        } else if (priceText.includes('/100g') || priceText.includes('100g')) {
+          // El precio es por 100g
+          pricePerGram = displayPrice / 100; // Convertir €/100g a €/g
+          this.log(`💰 Precio base: ${displayPrice}€/100g = ${pricePerGram.toFixed(6)}€/g`);
+        } else {
+          // Fallback: asumir que es por kg si no se especifica
+          pricePerGram = displayPrice / 1000;
+          this.log(`💰 Precio asumido como €/kg: ${displayPrice}€/kg = ${pricePerGram.toFixed(6)}€/g`);
+        }
+        
+        totalPrice = pricePerGram * quantity.amount;
+        
+        this.log(`💰 Peso: ${pricePerGram.toFixed(6)}€/g x ${quantity.amount}g = ${totalPrice.toFixed(2)}€`);
       }
 
+      // MOSTRAR el precio total solo cuando hay cantidad seleccionada
       totalPriceElement.textContent = `Total: ${totalPrice.toFixed(2).replace('.', ',')} €`;
+      totalPriceElement.style.cssText = `
+        font-size: 1.1rem !important;
+        font-weight: 600 !important;
+        color: #e74c3c !important;
+        margin-top: 8px !important;
+        padding: 6px 12px !important;
+        background: linear-gradient(135deg, #fff5f5 0%, #ffe6e6 100%) !important;
+        border: 1px solid #ffcdcd !important;
+        border-radius: 6px !important;
+        text-align: center !important;
+        box-shadow: 0 2px 4px rgba(231, 76, 60, 0.1) !important;
+        display: block !important;
+      `;
+      
+      this.log(`✅ Total mostrado: ${totalPrice.toFixed(2)}€ para ${quantity.amount}${quantity.isUnit ? ' unidades' : 'g'}`);
+    } else {
+      // OCULTAR el total si no hay cantidad seleccionada
+      totalPriceElement.style.display = 'none';
+      this.log(`👁️ Total oculto para producto ${productId} (sin cantidad seleccionada)`);
     }
   }
 
@@ -769,44 +827,157 @@ export class QuantitySystem {
       return;
     }
 
-    // Extraer precio
+    // Extraer precio usando la misma lógica que updateTotalPrice
     const priceElement = productCard.querySelector('.price');
-    const priceMatch = priceElement?.textContent.match(/(\d+[,.]?\d*)/);
-    const unitPrice = priceMatch ? parseFloat(priceMatch[1].replace(',', '.')) : 0;
+    const priceText = priceElement?.textContent.toLowerCase() || '';
+    const priceMatch = priceText.match(/(\d+[,.]?\d*)/);
+    const displayPrice = priceMatch ? parseFloat(priceMatch[1].replace(',', '.')) : 0;
 
-    // Calcular precio total
+    // Calcular precio total usando la misma lógica
     let totalPrice;
+    let unitPriceForCart = displayPrice; // Para mostrar en el carrito
+
     if (quantity.isUnit) {
-      totalPrice = unitPrice * quantity.amount;
+      // Precio por unidad - directo
+      totalPrice = displayPrice * quantity.amount;
     } else {
-      const weightInKg = quantity.amount / 1000;
-      totalPrice = unitPrice * weightInKg;
+      // Precio por peso - determinar unidad base
+      let pricePerGram;
+      
+      if (priceText.includes('/kg') || priceText.includes('kg')) {
+        pricePerGram = displayPrice / 1000;
+      } else if (priceText.includes('/250g') || priceText.includes('250g')) {
+        pricePerGram = displayPrice / 250;
+      } else if (priceText.includes('/500g') || priceText.includes('500g')) {
+        pricePerGram = displayPrice / 500;
+      } else if (priceText.includes('/100g') || priceText.includes('100g')) {
+        pricePerGram = displayPrice / 100;
+      } else {
+        // Fallback: asumir €/kg
+        pricePerGram = displayPrice / 1000;
+      }
+      
+      totalPrice = pricePerGram * quantity.amount;
+      unitPriceForCart = pricePerGram; // Precio por gramo para el carrito
     }
 
-    // Crear item del carrito
-    const cartItem = {
-      id: productId,
-      name: productName,
-      quantity: quantity,
-      unitPrice: unitPrice,
-      totalPrice: totalPrice,
-      timestamp: Date.now()
-    };
+    // NUEVO: Verificar si el producto ya existe en el carrito
+    const existingItem = this.cart.get(productId);
+    
+    if (existingItem) {
+      // SUMAR a la cantidad existente
+      const newAmount = existingItem.quantity.amount + quantity.amount;
+      const newTotalPrice = quantity.isUnit ? 
+        (displayPrice * newAmount) : 
+        (unitPriceForCart * newAmount);
 
-    // Añadir al carrito
-    this.cart.set(productId, cartItem);
+      // Actualizar item existente
+      existingItem.quantity.amount = newAmount;
+      existingItem.totalPrice = newTotalPrice;
+      existingItem.timestamp = Date.now(); // Actualizar timestamp
+      
+      this.log(`➕ Cantidad sumada: ${quantity.amount}${quantity.isUnit ? ' unidades' : 'g'} → Total: ${newAmount}${quantity.isUnit ? ' unidades' : 'g'}`);
+      
+      // Mostrar mensaje específico de suma
+      const formattedNewAmount = quantity.isUnit ?
+        (quantity.amount === 1 ? `${quantity.amount} unidad` : `${quantity.amount} unidades`) :
+        (quantity.amount >= 1000 ? `${quantity.amount / 1000}kg` : `${quantity.amount}g`);
+      
+      const formattedTotalAmount = quantity.isUnit ?
+        (newAmount === 1 ? `${newAmount} unidad` : `${newAmount} unidades`) :
+        (newAmount >= 1000 ? `${newAmount / 1000}kg` : `${newAmount}g`);
+
+      this.showMessage(`+${formattedNewAmount} de ${productName} añadido. Total: ${formattedTotalAmount}`, 'success');
+      
+    } else {
+      // Crear nuevo item del carrito
+      const cartItem = {
+        id: productId,
+        name: productName,
+        quantity: quantity,
+        unitPrice: unitPriceForCart,
+        displayPrice: displayPrice, // Precio original mostrado
+        priceText: priceElement?.textContent || '',
+        totalPrice: totalPrice,
+        timestamp: Date.now()
+      };
+
+      // Añadir al carrito
+      this.cart.set(productId, cartItem);
+      
+      this.log(`🆕 Producto nuevo añadido: ${quantity.amount}${quantity.isUnit ? ' unidades' : 'g'}`);
+      
+      // Mostrar confirmación normal
+      const formattedAmount = quantity.isUnit ?
+        (quantity.amount === 1 ? `${quantity.amount} unidad` : `${quantity.amount} unidades`) :
+        (quantity.amount >= 1000 ? `${quantity.amount / 1000}kg` : `${quantity.amount}g`);
+
+      this.showMessage(`${productName} (${formattedAmount}) añadido al carrito`, 'success');
+    }
+
+    // Actualizar interfaz del carrito
     this.updateCartCounter();
     this.updateCartDisplay();
 
-    // Mostrar confirmación
-    const formattedAmount = quantity.isUnit ?
-      (quantity.amount === 1 ? `${quantity.amount} unidad` : `${quantity.amount} unidades`) :
-      (quantity.amount >= 1000 ? `${quantity.amount / 1000}kg` : `${quantity.amount}g`);
-
-    this.showMessage(`${productName} (${formattedAmount}) añadido al carrito`, 'success');
+    // Animar botón
     this.animateButton(productCard.querySelector('.add-to-cart'));
 
-    this.log('✅ Producto añadido:', cartItem);
+    // Resetear la card después de añadir al carrito
+    this.resetProductCard(productId, productCard);
+
+    this.log('✅ Carrito actualizado:', Array.from(this.cart.values()));
+  }
+
+  // === NUEVO: RESETEAR CARD DESPUÉS DE AÑADIR AL CARRITO ===
+  resetProductCard(productId, productCard) {
+    this.log(`🔄 Reseteando card del producto ${productId}...`);
+
+    // 1. Resetear dropdown label a estado inicial
+    const dropdown = productCard.querySelector(`#amount-dropdown-${productId}`);
+    if (dropdown) {
+      const label = dropdown.querySelector('.select-label');
+      const svg = label?.querySelector('svg');
+      
+      if (label) {
+        label.innerHTML = 'Cantidad: ';
+        if (svg) {
+          label.appendChild(svg.cloneNode(true));
+        }
+      }
+
+      // Cerrar dropdown si está abierto
+      dropdown.classList.remove('active');
+      const options = dropdown.querySelector('.dropdown-options');
+      if (options) options.style.display = 'none';
+
+      // Ocultar input personalizado si está visible
+      const customContainer = dropdown.querySelector('.custom-amount-container');
+      if (customContainer) customContainer.style.display = 'none';
+    }
+
+    // 2. Ocultar el precio total
+    const totalPriceElement = productCard.querySelector('.total-price');
+    if (totalPriceElement) {
+      totalPriceElement.style.display = 'none';
+      this.log(`👁️ Total oculto para producto ${productId}`);
+    }
+
+    // 3. Resetear cantidad en memoria (mantener tipo pero cantidad inicial)
+    const currentQuantity = this.quantities.get(productId);
+    if (currentQuantity) {
+      const defaultAmount = currentQuantity.isUnit ? 1 : 250;
+      this.quantities.set(productId, {
+        amount: defaultAmount,
+        isUnit: currentQuantity.isUnit
+      });
+      this.log(`📦 Cantidad reseteada: ${defaultAmount}${currentQuantity.isUnit ? ' unidades' : 'g'}`);
+    }
+
+    // 4. Remover selección de opciones del dropdown
+    const selectedOptions = dropdown?.querySelectorAll('.dropdown-option.selected');
+    selectedOptions?.forEach(option => option.classList.remove('selected'));
+
+    this.log(`✅ Card reseteada correctamente para producto ${productId}`);
   }
 
   // === EXTRAER ID DEL PRODUCTO DESDE CARD ===
@@ -882,6 +1053,7 @@ export class QuantitySystem {
     container.innerHTML = '';
 
     this.cart.forEach((item) => {
+      // Formatear cantidad acumulada
       const formattedAmount = item.quantity.isUnit ?
         (item.quantity.amount === 1 ? `${item.quantity.amount} unidad` : `${item.quantity.amount} unidades`) :
         (item.quantity.amount >= 1000 ? `${item.quantity.amount / 1000}kg` : `${item.quantity.amount}g`);
@@ -895,7 +1067,7 @@ export class QuantitySystem {
         </div>
         <div class="cart-item-actions">
           <div class="cart-item-price">${item.totalPrice.toFixed(2).replace('.', ',')} €</div>
-          <button class="remove-item-btn" data-product-id="${item.id}">🗑️</button>
+          <button class="remove-item-btn" data-product-id="${item.id}" title="Eliminar producto">🗑️</button>
         </div>
       `;
 
@@ -907,6 +1079,8 @@ export class QuantitySystem {
 
       container.appendChild(cartItemElement);
     });
+
+    this.log(`🛒 Carrito renderizado: ${this.cart.size} productos únicos`);
   }
 
   // === ACTUALIZAR TOTAL DEL CARRITO ===
