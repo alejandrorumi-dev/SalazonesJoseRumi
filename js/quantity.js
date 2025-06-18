@@ -1,4 +1,4 @@
-// js/quantity.js - Sistema simplificado que SÍ funciona - VERSIÓN CORREGIDA
+// js/quantity.js - Sistema corregido con todas las mejoras
 
 export class QuantitySystem {
   constructor() {
@@ -9,7 +9,7 @@ export class QuantitySystem {
   }
 
   init() {
-    this.log('🚀 Iniciando QuantitySystem simplificado...');
+    this.log('🚀 Iniciando QuantitySystem corregido...');
 
     // Esperar a que el DOM esté completamente cargado
     setTimeout(() => {
@@ -17,12 +17,12 @@ export class QuantitySystem {
       this.setupQuantityDropdowns();
       this.setupCartInterface();
       this.updateCartCounter();
-      this.setupGlobalClickListener(); // NUEVO: Configurar listener global una sola vez
+      this.setupGlobalClickListener();
       this.log('✅ Sistema inicializado correctamente');
     }, 500);
   }
 
-  // === NUEVO: CONFIGURAR LISTENER GLOBAL UNA SOLA VEZ ===
+  // === CONFIGURAR LISTENER GLOBAL ===
   setupGlobalClickListener() {
     document.addEventListener('click', (e) => {
       // Solo cerrar dropdowns si el click es completamente fuera de cualquier dropdown
@@ -85,8 +85,8 @@ export class QuantitySystem {
       const isUnit = this.isUnitProduct(productCard);
       this.log(`📦 Producto ${productId}: ${isUnit ? 'POR UNIDAD' : 'POR PESO'}`);
 
-      // Establecer cantidad inicial
-      const defaultAmount = isUnit ? 1 : 250;
+      // CORREGIDO: Establecer cantidad inicial predefinida en 1kg para peso
+      const defaultAmount = isUnit ? 1 : 1000; // ← CORREGIDO: 1kg por defecto
       this.quantities.set(productId, {
         amount: defaultAmount,
         isUnit: isUnit
@@ -95,7 +95,7 @@ export class QuantitySystem {
       // Configurar dropdown
       this.setupDropdown(dropdown, productId, isUnit);
 
-      // IMPORTANTE: Ocultar precio total inicialmente - solo aparecerá cuando seleccionen cantidad
+      // Ocultar precio total inicialmente
       const totalPriceElement = productCard.querySelector('.total-price');
       if (totalPriceElement) {
         totalPriceElement.style.display = 'none';
@@ -112,7 +112,7 @@ export class QuantitySystem {
 
   // === CONFIGURAR UN DROPDOWN ESPECÍFICO ===
   setupDropdown(dropdown, productId, isUnit) {
-    // NUEVO: Reemplazar opciones según el tipo de producto
+    // Reemplazar opciones según el tipo de producto
     this.replaceDropdownOptions(dropdown, isUnit);
 
     const label = dropdown.querySelector('.select-label');
@@ -143,7 +143,7 @@ export class QuantitySystem {
       });
     }
 
-    // Configurar opciones predefinidas (después de reemplazarlas)
+    // Configurar opciones predefinidas
     const options = dropdown.querySelectorAll('.dropdown-option:not(.custom-trigger)');
     options.forEach(option => {
       option.addEventListener('click', (e) => {
@@ -167,24 +167,24 @@ export class QuantitySystem {
       });
     }
 
-    // SIMPLIFICADO: Solo configurar input básico aquí
+    // Configurar input básico
     const customInput = dropdown.querySelector('input[type="number"]');
     if (customInput) {
       customInput.addEventListener('keydown', (e) => {
         if (e.key === 'Enter') {
-          const amount = parseInt(e.target.value) || (isUnit ? 1 : 250);
+          const amount = parseInt(e.target.value) || (isUnit ? 1 : 1000); // ← CORREGIDO
           this.selectQuantity(productId, amount, dropdown, isUnit);
         }
       });
     }
   }
 
-  // === NUEVO: REEMPLAZAR OPCIONES DEL DROPDOWN ===
+  // === REEMPLAZAR OPCIONES DEL DROPDOWN ===
   replaceDropdownOptions(dropdown, isUnit) {
     const optionsContainer = dropdown.querySelector('.dropdown-options');
     if (!optionsContainer) return;
 
-    // Remover opciones existentes (pero conservar custom-trigger y custom-amount-container)
+    // Remover opciones existentes
     const existingOptions = optionsContainer.querySelectorAll('.dropdown-option:not(.custom-trigger)');
     existingOptions.forEach(option => option.remove());
 
@@ -218,7 +218,6 @@ export class QuantitySystem {
       button.dataset.value = optionData.value.toString();
       button.textContent = optionData.text;
 
-      // Insertar antes del custom-trigger
       if (customTrigger) {
         optionsContainer.insertBefore(button, customTrigger);
       } else {
@@ -226,36 +225,34 @@ export class QuantitySystem {
       }
     });
 
-    // NUEVO: Actualizar el contenedor personalizado con botones +/-
+    // Actualizar el contenedor personalizado
     this.updateCustomAmountContainer(optionsContainer, isUnit);
 
-    this.log(`🔄 Opciones reemplazadas para ${isUnit ? 'UNIDADES' : 'PESO'}: ${newOptions.map(o => o.text).join(', ')}`);
+    this.log(`🔄 Opciones reemplazadas para ${isUnit ? 'UNIDADES' : 'PESO'}`);
   }
 
-  // === NUEVO: ACTUALIZAR CONTENEDOR DE CANTIDAD PERSONALIZADA ===
+  // === ACTUALIZAR CONTENEDOR DE CANTIDAD PERSONALIZADA ===
   updateCustomAmountContainer(optionsContainer, isUnit) {
     const customContainer = optionsContainer.querySelector('.custom-amount-container');
     if (!customContainer) return;
 
-    // Crear nuevo HTML con botones +/-
     const inputId = customContainer.querySelector('input')?.id || 'custom-input';
     const stepValue = isUnit ? 1 : 50;
     const minValue = isUnit ? 1 : 50;
     const maxValue = isUnit ? 100 : 10000;
-    const defaultValue = isUnit ? 1 : 250;
-    const unit = isUnit ? 'u' : ''; // Para peso, no mostrar unidad inicial (se mostrará dinámicamente)
+    const defaultValue = isUnit ? 1 : 1000; // 1kg en gramos
+    const defaultDisplay = isUnit ? '1' : '1kg'; // ← CORREGIDO: Mostrar directamente 1kg
 
     customContainer.innerHTML = `
       <div class="quantity-input-wrapper">
         <button type="button" class="quantity-btn minus" data-action="decrease">−</button>
         <input type="text" 
                id="${inputId}" 
-               value="${defaultValue}${isUnit ? '' : 'g'}" 
+               value="${defaultDisplay}" 
                data-min="${minValue}" 
                data-max="${maxValue}" 
                data-step="${stepValue}" />
         <button type="button" class="quantity-btn plus" data-action="increase">+</button>
-        <span class="unit-label">${unit}</span>
       </div>
       <div class="quantity-actions">
         <button type="button" class="confirm-quantity">✓</button>
@@ -263,16 +260,11 @@ export class QuantitySystem {
       </div>
     `;
 
-    // Añadir estilos inline para que funcione inmediatamente
     this.addCustomQuantityStyles();
-
-    // Configurar event listeners
-    this.setupCustomQuantityListeners(customContainer, isUnit, stepValue, minValue, maxValue);
   }
 
-  // === NUEVO: AÑADIR ESTILOS PARA CANTIDAD PERSONALIZADA ===
+  // === AÑADIR ESTILOS PARA CANTIDAD PERSONALIZADA ===
   addCustomQuantityStyles() {
-    // Solo añadir una vez
     if (document.getElementById('custom-quantity-styles')) return;
 
     const styles = document.createElement('style');
@@ -343,11 +335,9 @@ export class QuantitySystem {
         background: transparent !important;
         color: #212529 !important;
         outline: none !important;
-        /* Ocultar flechas del input number */
         -moz-appearance: textfield !important;
       }
 
-      /* Ocultar flechas en WebKit (Chrome, Safari, Edge) */
       .quantity-input-wrapper input::-webkit-outer-spin-button,
       .quantity-input-wrapper input::-webkit-inner-spin-button {
         -webkit-appearance: none !important;
@@ -357,15 +347,6 @@ export class QuantitySystem {
       .quantity-input-wrapper input:focus {
         background: rgba(0,123,255,0.05) !important;
         color: #0d6efd !important;
-      }
-
-      .unit-label {
-        font-size: 14px !important;
-        color: #6c757d !important;
-        font-weight: 600 !important;
-        min-width: 0 !important;
-        padding-right: 0 !important;
-        display: none !important;  
       }
 
       .quantity-actions {
@@ -420,41 +401,40 @@ export class QuantitySystem {
     document.head.appendChild(styles);
   }
 
-  // === NUEVO: CONFIGURAR LISTENERS PARA CANTIDAD PERSONALIZADA ===
-  setupCustomQuantityListeners(container, isUnit, stepValue, minValue, maxValue) {
-    // MÉTODO OBSOLETO - Ahora se usa setupCustomInputListeners
-    this.log('⚠️ setupCustomQuantityListeners obsoleto - usando setupCustomInputListeners');
-  }
-
   // === EXTRAER ID DEL PRODUCTO ===
   extractProductId(dropdownId) {
     return dropdownId.replace('amount-dropdown-', '');
   }
 
-  // === SELECCIONAR CANTIDAD ===
+  // === CORREGIDA: SELECCIONAR CANTIDAD CON LOGGING DETALLADO ===
   selectQuantity(productId, amount, dropdown, isUnit) {
+    this.log(`📦 Seleccionando cantidad: ${amount}${isUnit ? ' unidades' : 'g'} para producto ${productId}`);
+    
     this.quantities.set(productId, { amount, isUnit });
     this.updateDropdownLabel(dropdown, amount, isUnit);
-    this.updateTotalPrice(productId); // Esto ahora creará y mostrará el elemento si no existe
+    this.updateTotalPrice(productId);
     this.closeDropdown(dropdown);
 
-    this.log(`📦 Cantidad actualizada: Producto ${productId} = ${amount} ${isUnit ? 'unidades' : 'gramos'}`);
+    this.log(`✅ Cantidad establecida: Producto ${productId} = ${amount} ${isUnit ? 'unidades' : 'gramos'}`);
+    
+    // VERIFICAR que el label se actualizó correctamente
+    const label = dropdown.querySelector('.select-label');
+    this.log(`🔍 Label final: "${label.textContent.trim()}"`);
   }
 
-  // === ACTUALIZAR LABEL DEL DROPDOWN ===
+  // === CORREGIDA: ACTUALIZAR LABEL DEL DROPDOWN CON FORMATO CORRECTO ===
   updateDropdownLabel(dropdown, amount, isUnit) {
     const label = dropdown.querySelector('.select-label');
     const svg = label.querySelector('svg');
 
-    let text;
-    if (isUnit) {
-      text = amount === 1 ? `Cantidad: ${amount} unidad` : `Cantidad: ${amount} unidades`;
-    } else {
-      text = amount >= 1000 ? `Cantidad: ${amount / 1000}kg` : `Cantidad: ${amount}g`;
-    }
+    // CORREGIDO: Usar formatQuantityDisplay para consistencia total
+    const formattedQuantity = this.formatQuantityDisplay(amount, isUnit);
+    const text = `Cantidad: ${formattedQuantity}`;
 
     label.innerHTML = `${text} `;
     if (svg) label.appendChild(svg.cloneNode(true));
+    
+    this.log(`🏷️ Label actualizado: ${text}`);
   }
 
   // === MOSTRAR INPUT PERSONALIZADO ===
@@ -462,35 +442,31 @@ export class QuantitySystem {
     const customContainer = dropdown.querySelector('.custom-amount-container');
 
     if (customContainer) {
-      // Mantener el dropdown abierto
+      // Mantener dropdown abierto
       dropdown.classList.add('active');
       dropdown.querySelector('.dropdown-options').style.display = 'block';
 
       // Mostrar container personalizado
       customContainer.style.display = 'block';
 
-      // NUEVO: Configurar listeners específicos para este container
+      // Configurar listeners específicos
       this.setupCustomInputListeners(customContainer, dropdown, productId, isUnit);
 
-      // Enfocar el input SIN seleccionar el texto
+      // Enfocar input
       setTimeout(() => {
         const input = customContainer.querySelector('input');
         if (input) {
           input.focus();
-          // IMPORTANTE: No seleccionar el texto, solo posicionar el cursor al final
           const length = input.value.length;
           input.setSelectionRange(length, length);
-          this.log(`🎯 Input enfocado SIN selección para producto ${productId}`);
         }
       }, 100);
 
       this.log(`📝 Input personalizado mostrado para ${isUnit ? 'unidades' : 'gramos'}`);
-    } else {
-      this.log('❌ No se encontró el container personalizado');
     }
   }
 
-  // === NUEVO: CONFIGURAR LISTENERS ESPECÍFICOS PARA EL INPUT PERSONALIZADO ===
+  // === CONFIGURAR LISTENERS ESPECÍFICOS PARA EL INPUT PERSONALIZADO ===
   setupCustomInputListeners(container, dropdown, productId, isUnit) {
     const input = container.querySelector('input');
     const minusBtn = container.querySelector('.minus');
@@ -504,20 +480,20 @@ export class QuantitySystem {
     const minValue = isUnit ? 1 : 50;
     const maxValue = isUnit ? 100 : 10000;
 
-    // CRÍTICO: Prevenir propagación de eventos para todo el container
+    // Prevenir propagación de eventos
     container.addEventListener('click', (e) => {
       e.stopPropagation();
     });
 
-    // Botón menos - CORREGIDO DEFINITIVO
+    // CORREGIDO: Botón menos con cálculo correcto del step
     if (minusBtn) {
       minusBtn.addEventListener('click', (e) => {
         e.preventDefault();
         e.stopPropagation();
 
         let currentValue = this.extractNumericValue(input.value);
-        currentValue = Math.round(currentValue / stepValue) * stepValue;
-
+        
+        // CORREGIDO: Simplificar el cálculo para evitar acumulación
         const newValue = Math.max(minValue, currentValue - stepValue);
 
         this.updateInputDisplay(input, newValue, isUnit);
@@ -526,20 +502,19 @@ export class QuantitySystem {
           input.setSelectionRange(input.value.length, input.value.length);
         }, 10);
 
-        this.log(`➖ Decrementado a: ${newValue} (display: ${input.value})`);
+        this.log(`➖ Decrementado: ${currentValue} → ${newValue} (step fijo: ${stepValue})`);
       });
     }
 
-    // Botón más - CORREGIDO DEFINITIVO
+    // CORREGIDO: Botón más con cálculo correcto del step
     if (plusBtn) {
       plusBtn.addEventListener('click', (e) => {
         e.preventDefault();
         e.stopPropagation();
 
-        // Extraer valor numérico actual y redondear al múltiplo más cercano del step
         let currentValue = this.extractNumericValue(input.value);
-        currentValue = Math.round(currentValue / stepValue) * stepValue;
-
+        
+        // CORREGIDO: Simplificar el cálculo para evitar acumulación
         const newValue = Math.min(maxValue, currentValue + stepValue);
 
         this.updateInputDisplay(input, newValue, isUnit);
@@ -548,14 +523,13 @@ export class QuantitySystem {
           input.setSelectionRange(input.value.length, input.value.length);
         }, 10);
 
-        this.log(`➕ Incrementado a: ${newValue} (display: ${input.value})`);
+        this.log(`➕ Incrementado: ${currentValue} → ${newValue} (step fijo: ${stepValue})`);
       });
     }
 
-    // Input - MEJORADO para manejar escritura manual
+    // Input events
     input.addEventListener('focus', (e) => {
       e.stopPropagation();
-      // Posicionar cursor al final sin seleccionar
       setTimeout(() => {
         const length = input.value.length;
         input.setSelectionRange(length, length);
@@ -566,16 +540,14 @@ export class QuantitySystem {
       e.stopPropagation();
     });
 
-    // NUEVO: Manejar teclas mientras se escribe
     input.addEventListener('keydown', (e) => {
-      // Permitir teclas de navegación y control
       const allowedKeys = ['Backspace', 'Delete', 'Tab', 'Enter', 'Escape', 'ArrowLeft', 'ArrowRight', 'Home', 'End'];
       const isNumber = (e.key >= '0' && e.key <= '9');
 
       if (e.key === 'Enter') {
         e.preventDefault();
         const numericValue = this.extractNumericValue(input.value);
-        const amount = Math.max(minValue, Math.min(maxValue, numericValue || (isUnit ? 1 : 250)));
+        const amount = Math.max(minValue, Math.min(maxValue, numericValue || (isUnit ? 1 : 1000))); // ← CORREGIDO
         this.selectQuantity(productId, amount, dropdown, isUnit);
         return;
       } else if (e.key === 'Escape') {
@@ -584,28 +556,24 @@ export class QuantitySystem {
         return;
       }
 
-      // Solo permitir números y teclas de control
       if (!allowedKeys.includes(e.key) && !isNumber) {
         e.preventDefault();
         return;
       }
     });
 
-    // MEJORADO: Validar y formatear al terminar de escribir
+    // CORREGIDO: Mejor manejo del blur para resetear card
     input.addEventListener('blur', (e) => {
+      // Solo validar y formatear, NO resetear la card aquí
       this.validateAndFormatInput(e.target, isUnit, minValue, maxValue);
     });
 
-    // NUEVO: Validar en tiempo real sin formatear constantemente
     let inputTimeout;
     input.addEventListener('input', (e) => {
-      // Limpiar timeout previo
       clearTimeout(inputTimeout);
-
-      // Permitir escritura libre por un momento
       inputTimeout = setTimeout(() => {
         this.validateAndFormatInput(e.target, isUnit, minValue, maxValue);
-      }, 1000); // Formatear después de 1 segundo de inactividad
+      }, 1000);
     });
 
     // Confirmar cantidad
@@ -614,9 +582,8 @@ export class QuantitySystem {
         e.preventDefault();
         e.stopPropagation();
 
-        // Extraer valor numérico del input
         const numericValue = this.extractNumericValue(input.value);
-        const amount = Math.max(minValue, Math.min(maxValue, numericValue || (isUnit ? 1 : 250)));
+        const amount = Math.max(minValue, Math.min(maxValue, numericValue || (isUnit ? 1 : 1000))); // ← CORREGIDO
 
         this.selectQuantity(productId, amount, dropdown, isUnit);
         this.log(`✅ Cantidad confirmada: ${amount}`);
@@ -636,71 +603,53 @@ export class QuantitySystem {
     this.log(`🎛️ Listeners específicos configurados para ${isUnit ? 'unidades' : 'gramos'}`);
   }
 
-  // === NUEVO: EXTRAER VALOR NUMÉRICO DE CUALQUIER FORMATO ===
+  // === EXTRAER VALOR NUMÉRICO ===
   extractNumericValue(inputValue) {
     if (!inputValue) return 0;
 
-    // Si contiene 'kg', convertir a gramos
     if (inputValue.includes('kg')) {
       const kgValue = parseFloat(inputValue.replace(/[^\d.]/g, ''));
       return Math.round(kgValue * 1000);
     }
 
-    // Si contiene solo números o 'g', extraer el número
     const numericValue = parseFloat(inputValue.replace(/[^\d.]/g, ''));
-    return isNaN(numericValue) ? 0 : Math.round(numericValue);  // ← CORREGIDO
+    return isNaN(numericValue) ? 0 : Math.round(numericValue);
   }
 
-  // === NUEVO: VALIDAR Y FORMATEAR INPUT ===
+  // === VALIDAR Y FORMATEAR INPUT ===
   validateAndFormatInput(input, isUnit, minValue, maxValue) {
     const numericValue = this.extractNumericValue(input.value);
     let validValue = numericValue;
 
-    // Validar rango
     if (validValue < minValue) {
       validValue = minValue;
     } else if (validValue > maxValue) {
       validValue = maxValue;
     }
 
-    // Solo actualizar si cambió
     if (validValue !== numericValue) {
       this.updateInputDisplay(input, validValue, isUnit);
     } else if (numericValue > 0) {
-      // Formatear sin cambiar el valor
       this.updateInputDisplay(input, validValue, isUnit);
     }
-
-    this.log(`🔍 Validado: ${numericValue} → ${validValue} (display: ${input.value})`);
   }
 
-  // === MEJORADO: ACTUALIZAR DISPLAY DEL INPUT CON FORMATO INTELIGENTE ===
+  // === ACTUALIZAR DISPLAY DEL INPUT ===
   updateInputDisplay(input, value, isUnit) {
     if (isUnit) {
-      // Para unidades, mostrar solo el número
       input.value = value.toString();
     } else {
-      // Para peso, formato inteligente: g hasta 999, luego kg
       if (value >= 1000) {
         const kg = value / 1000;
         if (kg === Math.floor(kg)) {
-          // Número entero de kg
           input.value = `${kg}kg`;
         } else {
-          // Decimales de kg con máximo 2 decimales
-          const formattedKg = kg.toFixed(2).replace(/\.?0+$/, ''); // Quitar ceros innecesarios
+          const formattedKg = kg.toFixed(2).replace(/\.?0+$/, '');
           input.value = `${formattedKg}kg`;
         }
       } else {
-        // Menos de 1000g, mostrar en gramos
         input.value = `${value}g`;
       }
-    }
-
-    // Actualizar también la etiqueta de unidad
-    const unitLabel = input.parentNode?.querySelector('.unit-label');
-    if (unitLabel && !isUnit) {
-      unitLabel.textContent = value >= 1000 ? '' : ''; // Siempre vacío ahora, la unidad está en el input
     }
   }
 
@@ -722,20 +671,13 @@ export class QuantitySystem {
     const priceElement = productCard.querySelector('.price');
     let totalPriceElement = productCard.querySelector('.total-price');
 
-    if (!priceElement) return;
+    if (!priceElement || !totalPriceElement) return;
 
-    // Si no existe el elemento, no lo creamos - ya existe en el HTML
-    if (!totalPriceElement) {
-      this.log(`❌ No se encontró elemento .total-price para producto ${productId}`);
-      return;
-    }
-
-    // Extraer precio del texto
     const priceText = priceElement.textContent.toLowerCase();
     const priceMatch = priceText.match(/(\d+[,.]?\d*)/);
 
     if (!priceMatch) {
-      totalPriceElement.style.display = 'none'; // Ocultar si no hay precio válido
+      totalPriceElement.style.display = 'none';
       return;
     }
 
@@ -746,41 +688,25 @@ export class QuantitySystem {
       let totalPrice;
 
       if (quantity.isUnit) {
-        // Precio por unidad - directo
         totalPrice = displayPrice * quantity.amount;
-        this.log(`💰 Unidad: ${displayPrice}€ x ${quantity.amount} = ${totalPrice.toFixed(2)}€`);
       } else {
-        // Precio por peso - necesitamos determinar la unidad base del precio
         let pricePerGram;
 
         if (priceText.includes('/kg') || priceText.includes('kg')) {
-          // El precio es por kilogramo
-          pricePerGram = displayPrice / 1000; // Convertir €/kg a €/g
-          this.log(`💰 Precio base: ${displayPrice}€/kg = ${pricePerGram.toFixed(6)}€/g`);
-        } else if (priceText.includes('/250g') || priceText.includes('250g')) {
-          // El precio es por 250g
-          pricePerGram = displayPrice / 250; // Convertir €/250g a €/g
-          this.log(`💰 Precio base: ${displayPrice}€/250g = ${pricePerGram.toFixed(6)}€/g`);
-        } else if (priceText.includes('/500g') || priceText.includes('500g')) {
-          // El precio es por 500g
-          pricePerGram = displayPrice / 500; // Convertir €/500g a €/g
-          this.log(`💰 Precio base: ${displayPrice}€/500g = ${pricePerGram.toFixed(6)}€/g`);
-        } else if (priceText.includes('/100g') || priceText.includes('100g')) {
-          // El precio es por 100g
-          pricePerGram = displayPrice / 100; // Convertir €/100g a €/g
-          this.log(`💰 Precio base: ${displayPrice}€/100g = ${pricePerGram.toFixed(6)}€/g`);
-        } else {
-          // Fallback: asumir que es por kg si no se especifica
           pricePerGram = displayPrice / 1000;
-          this.log(`💰 Precio asumido como €/kg: ${displayPrice}€/kg = ${pricePerGram.toFixed(6)}€/g`);
+        } else if (priceText.includes('/250g') || priceText.includes('250g')) {
+          pricePerGram = displayPrice / 250;
+        } else if (priceText.includes('/500g') || priceText.includes('500g')) {
+          pricePerGram = displayPrice / 500;
+        } else if (priceText.includes('/100g') || priceText.includes('100g')) {
+          pricePerGram = displayPrice / 100;
+        } else {
+          pricePerGram = displayPrice / 1000;
         }
 
         totalPrice = pricePerGram * quantity.amount;
-
-        this.log(`💰 Peso: ${pricePerGram.toFixed(6)}€/g x ${quantity.amount}g = ${totalPrice.toFixed(2)}€`);
       }
 
-      // MOSTRAR el precio total solo cuando hay cantidad seleccionada
       totalPriceElement.textContent = `Total: ${totalPrice.toFixed(2).replace('.', ',')} €`;
       totalPriceElement.style.cssText = `
         font-size: 1.1rem !important;
@@ -795,12 +721,8 @@ export class QuantitySystem {
         box-shadow: 0 2px 4px rgba(231, 76, 60, 0.1) !important;
         display: block !important;
       `;
-
-      this.log(`✅ Total mostrado: ${totalPrice.toFixed(2)}€ para ${quantity.amount}${quantity.isUnit ? ' unidades' : 'g'}`);
     } else {
-      // OCULTAR el total si no hay cantidad seleccionada
       totalPriceElement.style.display = 'none';
-      this.log(`👁️ Total oculto para producto ${productId} (sin cantidad seleccionada)`);
     }
   }
 
@@ -808,37 +730,37 @@ export class QuantitySystem {
   addToCart(productCard) {
     this.log('🛒 Añadiendo producto al carrito...');
 
-    // Verificar disponibilidad
     if (productCard.classList.contains('unavailable')) {
       this.showMessage('Este producto no está disponible', 'warning');
       return;
     }
 
-    // Extraer datos del producto
     const productId = this.extractProductIdFromCard(productCard);
     const productName = productCard.querySelector('.product-name')?.textContent?.trim() || 'Producto';
-    const quantity = this.quantities.get(productId);
+    let quantity = this.quantities.get(productId);
 
+    // CORREGIDO: Si no hay cantidad seleccionada, usar la predefinida (1kg para peso)
     if (!quantity) {
-      this.showMessage('Selecciona una cantidad primero', 'warning');
-      return;
+      const isUnit = this.isUnitProduct(productCard);
+      const defaultAmount = isUnit ? 1 : 1000; // ← CORREGIDO: 1kg por defecto
+      quantity = { amount: defaultAmount, isUnit };
+      this.quantities.set(productId, quantity);
+      this.log(`📦 Usando cantidad predefinida: ${defaultAmount}${isUnit ? ' unidades' : 'g'}`);
     }
 
-    // Extraer precio usando la misma lógica que updateTotalPrice
+    // Extraer precio
     const priceElement = productCard.querySelector('.price');
     const priceText = priceElement?.textContent.toLowerCase() || '';
     const priceMatch = priceText.match(/(\d+[,.]?\d*)/);
     const displayPrice = priceMatch ? parseFloat(priceMatch[1].replace(',', '.')) : 0;
 
-    // Calcular precio total usando la misma lógica
+    // Calcular precio total
     let totalPrice;
-    let unitPriceForCart = displayPrice; // Para mostrar en el carrito
+    let unitPriceForCart = displayPrice;
 
     if (quantity.isUnit) {
-      // Precio por unidad - directo
       totalPrice = displayPrice * quantity.amount;
     } else {
-      // Precio por peso - determinar unidad base
       let pricePerGram;
 
       if (priceText.includes('/kg') || priceText.includes('kg')) {
@@ -850,32 +772,29 @@ export class QuantitySystem {
       } else if (priceText.includes('/100g') || priceText.includes('100g')) {
         pricePerGram = displayPrice / 100;
       } else {
-        // Fallback: asumir €/kg
         pricePerGram = displayPrice / 1000;
       }
 
       totalPrice = pricePerGram * quantity.amount;
-      unitPriceForCart = pricePerGram; // Precio por gramo para el carrito
+      unitPriceForCart = pricePerGram;
     }
 
-    // NUEVO: Verificar si el producto ya existe en el carrito
+    // Verificar si el producto ya existe en el carrito
     const existingItem = this.cart.get(productId);
 
     if (existingItem) {
-      // SUMAR a la cantidad existente
+      // Sumar a la cantidad existente
       const newAmount = existingItem.quantity.amount + quantity.amount;
       const newTotalPrice = quantity.isUnit ?
         (displayPrice * newAmount) :
         (unitPriceForCart * newAmount);
 
-      // Actualizar item existente
       existingItem.quantity.amount = newAmount;
       existingItem.totalPrice = newTotalPrice;
-      existingItem.timestamp = Date.now(); // Actualizar timestamp
+      existingItem.timestamp = Date.now();
 
       this.log(`➕ Cantidad sumada: ${quantity.amount}${quantity.isUnit ? ' unidades' : 'g'} → Total: ${newAmount}${quantity.isUnit ? ' unidades' : 'g'}`);
 
-      // Mostrar mensaje específico de suma
       const formattedNewAmount = quantity.isUnit ?
         (quantity.amount === 1 ? `${quantity.amount} unidad` : `${quantity.amount} unidades`) :
         (quantity.amount >= 1000 ? `${quantity.amount / 1000}kg` : `${quantity.amount}g`);
@@ -893,18 +812,14 @@ export class QuantitySystem {
         name: productName,
         quantity: quantity,
         unitPrice: unitPriceForCart,
-        displayPrice: displayPrice, // Precio original mostrado
+        displayPrice: displayPrice,
         priceText: priceElement?.textContent || '',
         totalPrice: totalPrice,
         timestamp: Date.now()
       };
 
-      // Añadir al carrito
       this.cart.set(productId, cartItem);
 
-      this.log(`🆕 Producto nuevo añadido: ${quantity.amount}${quantity.isUnit ? ' unidades' : 'g'}`);
-
-      // Mostrar confirmación normal
       const formattedAmount = quantity.isUnit ?
         (quantity.amount === 1 ? `${quantity.amount} unidad` : `${quantity.amount} unidades`) :
         (quantity.amount >= 1000 ? `${quantity.amount / 1000}kg` : `${quantity.amount}g`);
@@ -925,7 +840,7 @@ export class QuantitySystem {
     this.log('✅ Carrito actualizado:', Array.from(this.cart.values()));
   }
 
-  // === NUEVO: RESETEAR CARD DESPUÉS DE AÑADIR AL CARRITO ===
+  // === RESETEAR CARD DESPUÉS DE AÑADIR AL CARRITO ===
   resetProductCard(productId, productCard) {
     this.log(`🔄 Reseteando card del producto ${productId}...`);
 
@@ -956,18 +871,17 @@ export class QuantitySystem {
     const totalPriceElement = productCard.querySelector('.total-price');
     if (totalPriceElement) {
       totalPriceElement.style.display = 'none';
-      this.log(`👁️ Total oculto para producto ${productId}`);
     }
 
     // 3. Resetear cantidad en memoria (mantener tipo pero cantidad inicial)
     const currentQuantity = this.quantities.get(productId);
     if (currentQuantity) {
-      const defaultAmount = currentQuantity.isUnit ? 1 : 250;
+      const defaultAmount = currentQuantity.isUnit ? 1 : 1000; // 1kg por defecto
       this.quantities.set(productId, {
         amount: defaultAmount,
         isUnit: currentQuantity.isUnit
       });
-      this.log(`📦 Cantidad reseteada: ${defaultAmount}${currentQuantity.isUnit ? ' unidades' : 'g'}`);
+      this.log(`📦 Cantidad reseteada: ${defaultAmount}${currentQuantity.isUnit ? ' unidades' : 'g (1kg)'}`);
     }
 
     // 4. Remover selección de opciones del dropdown
@@ -984,13 +898,11 @@ export class QuantitySystem {
       return dataProduct.replace('producto-', '');
     }
 
-    // Buscar dropdown
     const dropdown = productCard.querySelector('[id^="amount-dropdown-"]');
     if (dropdown) {
       return dropdown.id.replace('amount-dropdown-', '');
     }
 
-    // Fallback: usar posición
     const allCards = document.querySelectorAll('.product-card');
     const index = Array.from(allCards).indexOf(productCard);
     return (index + 1).toString();
@@ -1003,6 +915,737 @@ export class QuantitySystem {
       counter.textContent = this.cart.size.toString();
       this.log(`🔢 Contador actualizado: ${this.cart.size}`);
     }
+  }
+
+  // === CORREGIDA: CONFIGURAR INTERFAZ DEL CARRITO PARA TU HTML ===
+  setupCartInterface() {
+    // CORREGIDO: Buscar el botón correcto en tu HTML
+    const cartButton = document.querySelector('.cart-button .btn-cart') || 
+                      document.querySelector('.cart-button') ||
+                      document.querySelector('.btn-cart');
+
+    if (cartButton) {
+      this.log(`🛒 Botón del carrito encontrado en tu HTML`);
+      
+      cartButton.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        this.log('🛒 Click en botón del carrito');
+        this.openCartModal();
+      });
+    } else {
+      this.log('⚠️ No se encontró botón del carrito en tu HTML');
+    }
+
+    this.log('🛒 Interfaz del carrito configurada para tu HTML');
+  }
+
+  // === CORREGIDA: ABRIR MODAL CON VALIDACIÓN MEJORADA ===
+  openCartModal() {
+    this.log('🛒 Abriendo modal del carrito...');
+    
+    let modal = document.querySelector('.cart-modal');
+    
+    // Si no existe el modal, crearlo
+    if (!modal) {
+      this.log('🔨 Creando modal del carrito...');
+      modal = this.createCartModal();
+      
+      // Verificar que se creó correctamente
+      if (!modal) {
+        this.log('❌ Error al crear modal del carrito');
+        return;
+      }
+    }
+
+    // Verificar que el modal tiene la estructura correcta
+    const cartItems = modal.querySelector('.cart-items');
+    if (!cartItems) {
+      this.log('❌ Modal del carrito no tiene estructura correcta, recreando...');
+      modal.remove();
+      modal = this.createCartModal();
+    }
+
+    // Actualizar contenido del carrito
+    this.updateCartDisplay();
+    
+    // Mostrar modal
+    modal.style.display = 'flex';
+    document.body.style.overflow = 'hidden';
+
+    this.log('✅ Modal del carrito abierto');
+  }
+
+  // === SIMPLIFICADA: CREAR MODAL DEL CARRITO ===
+  createCartModal() {
+    const modal = document.createElement('div');
+    modal.className = 'cart-modal';
+    modal.innerHTML = `
+      <div class="cart-modal-backdrop"></div>
+      <div class="cart-modal-content">
+        <div class="cart-header">
+          <h2>Mi Carrito</h2>
+          <button class="close-cart" type="button">×</button>
+        </div>
+        <div class="cart-body">
+          <div class="cart-items"></div>
+          <div class="cart-empty" style="display: none;">
+            <p>Tu carrito está vacío</p>
+          </div>
+        </div>
+        <div class="cart-footer">
+          <div class="cart-total">
+            <strong>Total: <span class="total-amount">0,00 €</span></strong>
+          </div>
+          <div class="cart-actions">
+            <button class="continue-shopping">Seguir Comprando</button>
+            <button class="checkout-btn">Finalizar Compra</button>
+          </div>
+        </div>
+      </div>
+    `;
+
+    // Añadir estilos del modal
+    this.addCartModalStyles();
+
+    // Configurar eventos del modal de forma simple
+    this.setupCartModal(modal);
+
+    document.body.appendChild(modal);
+    return modal;
+  }
+
+  // === SIMPLIFICADA: CONFIGURAR MODAL DEL CARRITO ===
+  setupCartModal(modal) {
+    // Configurar eventos de cierre de forma simple
+    const closeBtn = modal.querySelector('.close-cart');
+    const backdrop = modal.querySelector('.cart-modal-backdrop');
+    const continueBtn = modal.querySelector('.continue-shopping');
+    const checkoutBtn = modal.querySelector('.checkout-btn');
+
+    // Función para cerrar modal
+    const closeModal = () => {
+      modal.style.display = 'none';
+      document.body.style.overflow = '';
+      this.log('🛒 Modal cerrado');
+    };
+
+    // Eventos de cierre
+    if (closeBtn) {
+      closeBtn.addEventListener('click', closeModal);
+    }
+    if (backdrop) {
+      backdrop.addEventListener('click', closeModal);
+    }
+    if (continueBtn) {
+      continueBtn.addEventListener('click', closeModal);
+    }
+
+    // Checkout
+    if (checkoutBtn) {
+      checkoutBtn.addEventListener('click', () => {
+        this.checkout();
+      });
+    }
+
+    this.log('🛒 Modal configurado');
+  }
+
+  // === ELIMINAR MÉTODOS NO USADOS ===
+
+  // === CORREGIDA: ACTUALIZAR DISPLAY PARA TU HTML EXISTENTE ===
+  updateCartDisplay() {
+    // CORREGIDO: Buscar primero tu estructura HTML existente
+    let cartItems = document.querySelector('.cart-summary .cart-items');
+    let cartEmpty = document.querySelector('.cart-summary .cart-empty');
+    let totalAmount = document.querySelector('.cart-summary .cart-total-price');
+    
+    // Si no existe tu estructura, buscar el modal creado
+    if (!cartItems) {
+      const modal = document.querySelector('.cart-modal');
+      if (modal) {
+        cartItems = modal.querySelector('.cart-items');
+        cartEmpty = modal.querySelector('.cart-empty');
+        totalAmount = modal.querySelector('.total-amount');
+      }
+    }
+
+    if (!cartItems) {
+      this.log('❌ No se encontró estructura de carrito');
+      return;
+    }
+
+    this.log(`🛒 Actualizando carrito en tu HTML. Items: ${this.cart.size}`);
+
+    if (this.cart.size === 0) {
+      cartItems.innerHTML = '';
+      cartItems.style.display = 'none';
+      
+      if (cartEmpty) {
+        cartEmpty.style.display = 'block';
+        cartEmpty.innerHTML = '<p style="text-align: center; padding: 20px; color: #666;">Tu carrito está vacío</p>';
+      }
+      
+      if (totalAmount) {
+        totalAmount.textContent = '0,00 €';
+      }
+      
+      this.log('📭 Carrito vacío mostrado en tu HTML');
+      return;
+    }
+
+    // Mostrar items y ocultar mensaje vacío
+    if (cartEmpty) {
+      cartEmpty.style.display = 'none';
+    }
+    cartItems.style.display = 'block';
+
+    // Configurar event delegation solo una vez
+    if (!cartItems.dataset.eventsConfigured) {
+      this.log('🎛️ Configurando eventos del carrito en tu HTML');
+      this.setupCartEventDelegation(cartItems);
+      cartItems.dataset.eventsConfigured = 'true';
+    }
+
+    // Recrear contenido usando tu estructura HTML
+    cartItems.innerHTML = '';
+    let total = 0;
+
+    this.cart.forEach((item, productId) => {
+      const itemElement = this.createCartItemElementForYourHTML(item, productId);
+      cartItems.appendChild(itemElement);
+      total += item.totalPrice;
+    });
+
+    // Actualizar total
+    if (totalAmount) {
+      totalAmount.textContent = `${total.toFixed(2).replace('.', ',')} €`;
+    }
+    
+    // Mostrar el total si estaba oculto
+    const cartTotalContainer = document.querySelector('.cart-summary .cart-total');
+    if (cartTotalContainer && this.cart.size > 0) {
+      cartTotalContainer.style.display = 'block';
+    }
+    
+    this.log(`✅ Carrito actualizado en tu HTML. Total: ${total.toFixed(2)}€`);
+  }
+
+  // === NUEVA: CREAR ELEMENTO ADAPTADO A TU HTML ===
+  createCartItemElementForYourHTML(item, productId) {
+    const element = document.createElement('div');
+    element.className = 'cart-item';
+    element.dataset.productId = productId;
+
+    const formattedQuantity = this.formatQuantityDisplay(item.quantity.amount, item.quantity.isUnit);
+
+    // ADAPTADO: Usar la estructura de tu HTML existente
+    element.innerHTML = `
+      <div class="cart-item-info">
+        <div class="cart-item-name">${item.name}</div>
+        <div class="cart-item-details">${formattedQuantity} - ${item.priceText}</div>
+      </div>
+      <div class="cart-item-controls">
+        <button class="quantity-decrease" data-product-id="${productId}">−</button>
+        <span class="quantity-display">${formattedQuantity}</span>
+        <button class="quantity-increase" data-product-id="${productId}">+</button>
+        <button class="remove-item" data-product-id="${productId}">🗑️</button>
+      </div>
+      <div class="cart-item-price">${item.totalPrice.toFixed(2).replace('.', ',')} €</div>
+    `;
+
+    this.log(`📦 Elemento creado para tu HTML: ${productId} - ${formattedQuantity}`);
+
+    return element;
+  }
+
+  // === CORREGIDA: CONFIGURAR EVENT DELEGATION CON MEJOR DETECCIÓN ===
+  setupCartEventDelegation(cartItems) {
+    cartItems.addEventListener('click', (e) => {
+      const target = e.target;
+      
+      // CORREGIDO: Mejor detección del productId y tipo de botón
+      let productId = target.dataset.productId;
+      let buttonType = null;
+
+      // Detectar tipo de botón
+      if (target.classList.contains('quantity-decrease')) {
+        buttonType = 'decrease';
+      } else if (target.classList.contains('quantity-increase')) {
+        buttonType = 'increase';
+      } else if (target.classList.contains('remove-item')) {
+        buttonType = 'remove';
+      }
+
+      // Si no encontramos productId o buttonType, salir
+      if (!productId || !buttonType) {
+        this.log(`⚠️ Click ignorado: productId=${productId}, buttonType=${buttonType}`);
+        return;
+      }
+
+      // Prevenir comportamiento por defecto
+      e.preventDefault();
+      e.stopPropagation();
+
+      this.log(`🖱️ Click en botón ${buttonType} para producto ${productId}`);
+
+      // Ejecutar acción correspondiente
+      switch (buttonType) {
+        case 'decrease':
+          this.decreaseCartItemQuantity(productId);
+          break;
+        case 'increase':
+          this.increaseCartItemQuantity(productId);
+          break;
+        case 'remove':
+          this.removeCartItem(productId);
+          break;
+      }
+    });
+
+    this.log('🎛️ Event delegation configurado con mejor detección');
+  }
+
+  // === CORREGIDA: CREAR ELEMENTO DE ITEM DEL CARRITO CON FORMATO MEJORADO ===
+  createCartItemElement(item, productId) {
+    const element = document.createElement('div');
+    element.className = 'cart-item';
+    element.dataset.productId = productId;
+
+    // CORREGIDO: Formato inteligente para mostrar cantidades
+    const formattedQuantity = this.formatQuantityDisplay(item.quantity.amount, item.quantity.isUnit);
+
+    element.innerHTML = `
+      <div class="cart-item-info">
+        <h4 class="cart-item-name">${item.name}</h4>
+        <p class="cart-item-price">${item.priceText}</p>
+      </div>
+      <div class="cart-item-quantity">
+        <button class="quantity-decrease" data-product-id="${productId}">−</button>
+        <span class="quantity-display">${formattedQuantity}</span>
+        <button class="quantity-increase" data-product-id="${productId}">+</button>
+      </div>
+      <div class="cart-item-total">
+        ${item.totalPrice.toFixed(2).replace('.', ',')} €
+      </div>
+      <button class="remove-item" data-product-id="${productId}">🗑️</button>
+    `;
+
+    this.log(`📦 Elemento creado para ${productId}: ${formattedQuantity}`);
+
+    return element;
+  }
+
+  // === CORREGIDA: FORMATEAR QUANTITY DISPLAY CON MEJOR PRECISIÓN ===
+  formatQuantityDisplay(amount, isUnit) {
+    if (isUnit) {
+      return amount === 1 ? `${amount} unidad` : `${amount} unidades`;
+    } else {
+      // CORREGIDO: Formato más preciso para peso
+      if (amount >= 1000) {
+        const kg = amount / 1000;
+        if (kg === Math.floor(kg)) {
+          // Número entero de kg (ej: 1000g → 1kg, 2000g → 2kg)
+          return `${kg}kg`;
+        } else {
+          // Decimales de kg (ej: 1050g → 1.1kg, 1500g → 1.5kg)
+          const formattedKg = kg.toFixed(1).replace(/\.0$/, '');
+          return `${formattedKg}kg`;
+        }
+      } else {
+        // Menos de 1000g, mostrar en gramos (ej: 999g, 500g, 250g)
+        return `${amount}g`;
+      }
+    }
+  }
+
+  // === NUEVA: CONFIGURAR EVENTOS DE ITEMS DEL CARRITO ===
+  setupCartItemEvents(element, productId, item) {
+    // CORREGIDO: Configurar eventos sin reemplazar elementos
+    const decreaseBtn = element.querySelector('.quantity-decrease');
+    const increaseBtn = element.querySelector('.quantity-increase');
+    const removeBtn = element.querySelector('.remove-item');
+
+    // Botón para disminuir cantidad
+    if (decreaseBtn) {
+      decreaseBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        this.log(`🖱️ Click en botón DISMINUIR para producto ${productId}`);
+        this.decreaseCartItemQuantity(productId);
+      });
+    }
+
+    // Botón para aumentar cantidad  
+    if (increaseBtn) {
+      increaseBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        this.log(`🖱️ Click en botón AUMENTAR para producto ${productId}`);
+        this.increaseCartItemQuantity(productId);
+      });
+    }
+
+    // Botón para eliminar item
+    if (removeBtn) {
+      removeBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        this.log(`🖱️ Click en botón ELIMINAR para producto ${productId}`);
+        this.removeCartItem(productId);
+      });
+    }
+
+    this.log(`🎛️ Eventos configurados correctamente para item ${productId}`);
+  }
+
+  // === CORREGIDA: DISMINUIR/AUMENTAR CANTIDAD CON LOGGING ===
+  decreaseCartItemQuantity(productId) {
+    this.log(`➖ Disminuyendo cantidad para producto ${productId}`);
+    
+    const item = this.cart.get(productId);
+    if (!item) {
+      this.log(`❌ No se encontró producto ${productId} en el carrito`);
+      return;
+    }
+
+    const stepValue = item.quantity.isUnit ? 1 : 50;
+    const minValue = item.quantity.isUnit ? 1 : 50;
+
+    this.log(`📊 Cantidad actual: ${item.quantity.amount}, step: ${stepValue}, min: ${minValue}`);
+
+    if (item.quantity.amount > minValue) {
+      const oldAmount = item.quantity.amount;
+      item.quantity.amount = Math.max(minValue, item.quantity.amount - stepValue);
+      
+      // Recalcular precio
+      item.totalPrice = item.quantity.isUnit ?
+        (item.displayPrice * item.quantity.amount) :
+        (item.unitPrice * item.quantity.amount);
+
+      this.log(`✅ Cantidad actualizada: ${oldAmount} → ${item.quantity.amount}`);
+
+      // IMPORTANTE: Actualizar display después de cambiar los datos
+      this.updateCartDisplay();
+      this.updateCartCounter();
+
+    } else {
+      this.log(`⚠️ Cantidad mínima alcanzada`);
+      if (confirm('¿Eliminar este producto del carrito?')) {
+        this.removeCartItem(productId);
+      }
+    }
+  }
+
+  increaseCartItemQuantity(productId) {
+    this.log(`➕ Aumentando cantidad para producto ${productId}`);
+    
+    const item = this.cart.get(productId);
+    if (!item) {
+      this.log(`❌ No se encontró producto ${productId} en el carrito`);
+      return;
+    }
+
+    const stepValue = item.quantity.isUnit ? 1 : 50;
+    const maxValue = item.quantity.isUnit ? 100 : 10000;
+
+    this.log(`📊 Cantidad actual: ${item.quantity.amount}, step: ${stepValue}, max: ${maxValue}`);
+
+    if (item.quantity.amount < maxValue) {
+      const oldAmount = item.quantity.amount;
+      item.quantity.amount = Math.min(maxValue, item.quantity.amount + stepValue);
+      
+      // Recalcular precio
+      item.totalPrice = item.quantity.isUnit ?
+        (item.displayPrice * item.quantity.amount) :
+        (item.unitPrice * item.quantity.amount);
+
+      this.log(`✅ Cantidad actualizada: ${oldAmount} → ${item.quantity.amount}`);
+
+      // IMPORTANTE: Actualizar display después de cambiar los datos
+      this.updateCartDisplay();
+      this.updateCartCounter();
+
+    } else {
+      this.log(`⚠️ Cantidad máxima alcanzada: ${maxValue}`);
+      this.showMessage('Cantidad máxima alcanzada', 'warning');
+    }
+  }
+
+  // === NUEVA: ELIMINAR ITEM DEL CARRITO ===
+  removeCartItem(productId) {
+    const item = this.cart.get(productId);
+    if (!item) return;
+
+    this.cart.delete(productId);
+
+    // Actualizar displays
+    this.updateCartDisplay();
+    this.updateCartCounter();
+
+    this.showMessage(`${item.name} eliminado del carrito`, 'info');
+    this.log(`🗑️ Producto eliminado del carrito: ${productId}`);
+  }
+
+  // === NUEVA: AÑADIR ESTILOS DEL MODAL DEL CARRITO ===
+  addCartModalStyles() {
+    if (document.getElementById('cart-modal-styles')) return;
+
+    const styles = document.createElement('style');
+    styles.id = 'cart-modal-styles';
+    styles.textContent = `
+      .cart-modal {
+        position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
+        width: 100% !important;
+        height: 100% !important;
+        z-index: 10000 !important;
+        display: none !important;
+        align-items: center !important;
+        justify-content: center !important;
+      }
+
+      .cart-modal-backdrop {
+        position: absolute !important;
+        top: 0 !important;
+        left: 0 !important;
+        width: 100% !important;
+        height: 100% !important;
+        background: rgba(0, 0, 0, 0.5) !important;
+        cursor: pointer !important;
+      }
+
+      .cart-modal-content {
+        position: relative !important;
+        background: white !important;
+        border-radius: 12px !important;
+        max-width: 600px !important;
+        width: 90% !important;
+        max-height: 80vh !important;
+        overflow: hidden !important;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3) !important;
+      }
+
+      .cart-header {
+        display: flex !important;
+        justify-content: space-between !important;
+        align-items: center !important;
+        padding: 20px !important;
+        border-bottom: 1px solid #eee !important;
+        background: #f8f9fa !important;
+      }
+
+      .cart-header h2 {
+        margin: 0 !important;
+        color: #333 !important;
+        font-size: 1.5rem !important;
+      }
+
+      .close-cart {
+        background: none !important;
+        border: none !important;
+        font-size: 24px !important;
+        cursor: pointer !important;
+        color: #666 !important;
+        padding: 5px !important;
+        border-radius: 50% !important;
+        width: 35px !important;
+        height: 35px !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+      }
+
+      .close-cart:hover {
+        background: #e9ecef !important;
+        color: #333 !important;
+      }
+
+      .cart-body {
+        padding: 20px !important;
+        max-height: 400px !important;
+        overflow-y: auto !important;
+      }
+
+      .cart-empty {
+        text-align: center !important;
+        padding: 40px 20px !important;
+        color: #666 !important;
+      }
+
+      .cart-item {
+        display: flex !important;
+        align-items: center !important;
+        gap: 15px !important;
+        padding: 15px 0 !important;
+        border-bottom: 1px solid #eee !important;
+      }
+
+      .cart-item:last-child {
+        border-bottom: none !important;
+      }
+
+      .cart-item-info {
+        flex: 1 !important;
+      }
+
+      .cart-item-name {
+        margin: 0 0 5px 0 !important;
+        font-size: 1rem !important;
+        font-weight: 600 !important;
+        color: #333 !important;
+      }
+
+      .cart-item-price {
+        margin: 0 !important;
+        font-size: 0.9rem !important;
+        color: #666 !important;
+      }
+
+      .cart-item-quantity {
+        display: flex !important;
+        align-items: center !important;
+        gap: 10px !important;
+        background: #f8f9fa !important;
+        border-radius: 6px !important;
+        padding: 5px !important;
+      }
+
+      .quantity-decrease, .quantity-increase {
+        width: 30px !important;
+        height: 30px !important;
+        border: 1px solid #ddd !important;
+        background: white !important;
+        border-radius: 4px !important;
+        cursor: pointer !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        font-weight: bold !important;
+        color: #333 !important;
+      }
+
+      .quantity-decrease:hover, .quantity-increase:hover {
+        background: #e9ecef !important;
+        border-color: #adb5bd !important;
+      }
+
+      .quantity-display {
+        min-width: 80px !important;
+        text-align: center !important;
+        font-weight: 600 !important;
+        color: #333 !important;
+        font-size: 0.9rem !important;
+      }
+
+      .cart-item-total {
+        font-weight: 600 !important;
+        color: #e74c3c !important;
+        min-width: 80px !important;
+        text-align: right !important;
+      }
+
+      .remove-item {
+        background: #dc3545 !important;
+        color: white !important;
+        border: none !important;
+        border-radius: 4px !important;
+        padding: 8px 10px !important;
+        cursor: pointer !important;
+        font-size: 14px !important;
+      }
+
+      .remove-item:hover {
+        background: #c82333 !important;
+      }
+
+      .cart-footer {
+        padding: 20px !important;
+        border-top: 1px solid #eee !important;
+        background: #f8f9fa !important;
+      }
+
+      .cart-total {
+        text-align: center !important;
+        margin-bottom: 15px !important;
+        font-size: 1.2rem !important;
+        color: #333 !important;
+      }
+
+      .total-amount {
+        color: #e74c3c !important;
+      }
+
+      .cart-actions {
+        display: flex !important;
+        gap: 10px !important;
+        justify-content: center !important;
+      }
+
+      .continue-shopping, .checkout-btn {
+        padding: 12px 24px !important;
+        border: none !important;
+        border-radius: 6px !important;
+        cursor: pointer !important;
+        font-weight: 600 !important;
+        transition: all 0.2s ease !important;
+      }
+
+      .continue-shopping {
+        background: #6c757d !important;
+        color: white !important;
+      }
+
+      .continue-shopping:hover {
+        background: #5a6268 !important;
+      }
+
+      .checkout-btn {
+        background: #28a745 !important;
+        color: white !important;
+      }
+
+      .checkout-btn:hover {
+        background: #218838 !important;
+      }
+    `;
+
+    document.head.appendChild(styles);
+  }
+
+  // === NUEVA: CHECKOUT ===
+  checkout() {
+    if (this.cart.size === 0) {
+      this.showMessage('Tu carrito está vacío', 'warning');
+      return;
+    }
+
+    // Aquí puedes implementar la lógica de checkout
+    // Por ahora, solo mostrar un mensaje
+    let total = 0;
+    this.cart.forEach(item => {
+      total += item.totalPrice;
+    });
+
+    this.showMessage(`Procesando compra por ${total.toFixed(2).replace('.', ',')} €...`, 'info');
+    
+    // Simular proceso de checkout
+    setTimeout(() => {
+      this.showMessage('¡Compra realizada con éxito!', 'success');
+      this.cart.clear();
+      this.updateCartCounter();
+      this.updateCartDisplay();
+      
+      // Cerrar modal
+      const modal = document.querySelector('.cart-modal');
+      if (modal) {
+        modal.style.display = 'none';
+        document.body.style.overflow = '';
+      }
+    }, 2000);
+
+    this.log('💰 Iniciando proceso de checkout');
   }
 
   // === ANIMAR BOTÓN ===
@@ -1113,26 +1756,3 @@ window.debugQuantitySystem = function () {
     console.log('❌ QuantitySystem NO disponible');
   }
 };
-
-/* === ERRORES A SOLUCIONAR === */
-
-/*
-
-- Solucionar el incremento de "Otra Cantidad"
-    * Si se añaden 250g, luego si se quiere intentar aumentar o disminuir cantidad, sube o baja en 100g, en lugar de 50g
-
-- Solucionar la cantidad predefinida en "Añadir Producto"
-    * A la hora de querer añadir un producto sin elegir una cantidad, es decir, sin desplegar el menú, que sea predefinido en 1kg, en lugar de 250g
-
-- Resetear input "Cantidad"
-    * Cuando un usuario elige 100g, si hace clic fuera del input, no se resetea la card, se queda en 100g.
-
-- Solucionar aumentar o disminuir cantidad en el modal del carrito
-    * El botón (-) y (+) no reaccionan al clic para disminuir o aumentar la cantidad deseada
-
-- Solucionar eliminar producto en el modal del carrito
-    * El botón de eliminar no reacciona y no elimina el producto deseado
-
-- Eliminar toda parte del aside que ya no sea necesaria para el correcto funcionamiento de la página
-
-*/
