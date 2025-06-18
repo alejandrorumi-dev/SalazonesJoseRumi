@@ -25,6 +25,9 @@ import { initLoader } from '../js/loader.js';
 // Importar el sistema de ordenación
 import { initSortingSystem } from '../js/sorting.js';
 
+// Importar el sistema de carrito modal
+import { initCartModal } from '../js/cart.js';
+
 document.addEventListener('DOMContentLoaded', () => {
   // Configurar sistema de carga de páginas
   const pageLoader = initLoader({
@@ -105,13 +108,22 @@ document.addEventListener('DOMContentLoaded', () => {
     window.pagination = pagination;
   }
 
-  // === NUEVO: Configurar sistema de ordenación ===
+  // === Configurar sistema de ordenación ===
   if (document.querySelector('#sort-dropdown')) {
     const sortingSystem = initSortingSystem();
     console.log('📊 Sistema de ordenación activado');
     
     // Hacer disponible globalmente para debug (opcional)
     window.sortingSystem = sortingSystem;
+  }
+
+  // === Configurar sistema de carrito modal ===
+  if (document.querySelector('.container-cart-icon') || document.querySelector('.btn-cart')) {
+    const cartModal = initCartModal();
+    console.log('🛒 Sistema de carrito modal activado');
+    
+    // Hacer disponible globalmente para debug
+    window.cartModal = cartModal;
   }
 
   // Hacer disponible el pageLoader globalmente para debug (opcional)
