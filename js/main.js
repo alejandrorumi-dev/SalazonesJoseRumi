@@ -19,11 +19,14 @@ import { initSearchSystem } from '../js/search.js';
 // Importar el sistema de cantidades
 import { initQuantitySystem } from '../js/quantity.js';
 
-// NUEVO: Importar el sistema de carga
+// Importar el sistema de carga
 import { initLoader } from '../js/loader.js';
 
+// Importar el sistema de ordenación
+import { initSortingSystem } from '../js/sorting.js';
+
 document.addEventListener('DOMContentLoaded', () => {
-  // NUEVO: Configurar sistema de carga de páginas
+  // Configurar sistema de carga de páginas
   const pageLoader = initLoader({
     duration: 3000 // 3 segundos - puedes cambiar este valor
   });
@@ -61,6 +64,12 @@ document.addEventListener('DOMContentLoaded', () => {
       console.log('Filtros reseteados');
       // La paginación se encarga automáticamente de esto
     });
+
+    // Event listener para ordenación
+    document.addEventListener('productsSort', (e) => {
+      console.log('Productos ordenados:', e.detail);
+      // La paginación se encarga automáticamente de esto
+    });
   }
 
   // === Configurar carrusel de recomendaciones ===
@@ -69,7 +78,7 @@ document.addEventListener('DOMContentLoaded', () => {
     console.log('🎠 Carrusel de recomendaciones activado');
   }
 
-  // === NUEVO: Configurar sistema de búsqueda ===
+  // === Configurar sistema de búsqueda ===
   if (document.querySelector('#search-products')) {
     const searchSystem = initSearchSystem();
     console.log('🔍 Sistema de búsqueda con sugerencias activado');
@@ -78,7 +87,7 @@ document.addEventListener('DOMContentLoaded', () => {
     window.searchSystem = searchSystem;
   }
 
-  // === NUEVO: Configurar sistema de cantidades ===
+  // === Configurar sistema de cantidades ===
   if (document.querySelector('.product-card')) {
     const quantitySystem = initQuantitySystem();
     console.log('📦 Sistema de cantidades activado');
@@ -87,13 +96,22 @@ document.addEventListener('DOMContentLoaded', () => {
     window.quantitySystem = quantitySystem;
   }
 
-  // === NUEVO: Configurar sistema de paginación ===
+  // === Configurar sistema de paginación ===
   if (document.querySelector('.product-cards')) {
     const pagination = initPagination();
     console.log('📄 Sistema de paginación activado');
 
     // Hacer disponible globalmente para debug (opcional)
     window.pagination = pagination;
+  }
+
+  // === NUEVO: Configurar sistema de ordenación ===
+  if (document.querySelector('#sort-dropdown')) {
+    const sortingSystem = initSortingSystem();
+    console.log('📊 Sistema de ordenación activado');
+    
+    // Hacer disponible globalmente para debug (opcional)
+    window.sortingSystem = sortingSystem;
   }
 
   // Hacer disponible el pageLoader globalmente para debug (opcional)
