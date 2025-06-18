@@ -1,0 +1,173 @@
+/* === BOTONES === */
+
+/* === BOTÓN EXPANSIBLE DEL HEADER (Sobre Nosotros / Contacto) === */
+
+.expand-button {
+	display: flex;
+	align-items: center;
+	background-color: var(--color-accent);
+	width: 4.5rem;
+	height: 4.5rem;
+	border-radius: 50%;
+	overflow: hidden;
+	white-space: nowrap;
+	transition: all 0.3s ease;
+	gap: 0.5rem;
+	font-family: var(--font-secondary);
+	font-size: 1.3rem;
+	padding: 0 1rem;
+}
+
+.expand-button:hover {
+	width: 14rem;
+	border-radius: 2rem;
+	justify-content: flex-start;
+}
+
+.about-us:hover {
+	width: 15rem;
+}
+
+.contact:hover {
+	width: 11rem;
+}
+
+.faq:hover {
+	width: 18.5rem;
+}
+
+.expand-button svg {
+	width: 2.5rem;
+	height: 2.5rem;
+	flex-shrink: 0;
+	transition: transform 0.3s ease;
+}
+
+.expand-button .text {
+	opacity: 0;
+	width: 0;
+	margin-left: 0.5rem;
+	transition: opacity 0.3s ease;
+	color: var(--color-text-buttons);
+}
+
+.expand-button:hover .text {
+	opacity: 1;
+}
+
+/* === ICONOS DE REDES SOCIALES === */
+
+.btn-rrss {
+	display: flex;
+	align-items: center;
+	width: 3.5rem;
+	height: 3.5rem;
+	border-radius: 50%;
+	gap: 0.5rem;
+	padding: 1rem;
+}
+
+.btn-rrss {
+	background: none;
+	border: none;
+	font: inherit;
+	color: inherit;
+	text-align: inherit;
+	cursor: pointer;
+}
+
+.twitter,
+.instagram,
+.tiktok {
+	display: flex;
+	align-items: center;
+	background-color: var(--color-accent);
+	color: var(--color-text-buttons);
+	width: 4.5rem;
+	height: 4.5rem;
+	border-radius: 50%;
+}
+
+.rrss-icon,
+.cart-icon {
+	transform: scale(1);
+}
+
+.btn-rrss:hover .rrss-icon {
+	transform: scale(1.5);
+}
+
+.btn-cart {
+	position: relative;
+	border-radius: 50%;
+	background-color: #fff;
+	padding: 1rem;
+}
+
+.btn-cart .cart-icon {
+	align-items: center;
+	justify-content: center;
+	color: var(--color-bg-secundary);
+}
+
+/* === BOTONES: INICIO === */
+
+.main-buttons {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+	gap: 1.5rem;
+	margin-top: 4rem;
+	margin-bottom: 2rem;
+}
+
+.btn {
+	padding: 0.9rem 2rem;
+	border-radius: 2rem;
+	/* Forma de píldora */
+
+	background-color: var(--color-btn-light);
+	/* Color base */
+
+	font-family: var(--font-main);
+	font-size: 2.2rem;
+	font-weight: 600;
+	text-transform: uppercase;
+	letter-spacing: 1px;
+	transition: background-color 0.3s ease, transform 0.2s ease;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+	/* Sombra suave */
+}
+
+/* === HOVER PARA TODOS LOS BOTONES === */
+
+.btn:hover {
+	background-color: var(--color-btn-dark);
+	/* Color más intenso */
+
+	color: #fff;
+	/* Texto blanco */
+
+	transform: translateY(-2px);
+	/* Efecto flotante */
+}
+
+/* === BOTÓN DESTACADO: Hacer Pedido === */
+
+.btn.cta {
+	background-color: var(--color-btn-dark);
+	/* Color más fuerte */
+
+	color: #fff;
+	box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+}
+
+/* === HOVER ESPECÍFICO DEL CTA === */
+
+.btn.cta:hover {
+	color: #fff;
+}
+
+.black {
+	color: var(--color-bg-secundary);
+}
