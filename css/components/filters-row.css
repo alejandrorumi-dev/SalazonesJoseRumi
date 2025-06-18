@@ -1,0 +1,34 @@
+/* === CONTENEDOR DE LAS TARJETAS DE PRODUCTOS === */
+
+/* === SECCIÓN DE FILTROS: CATEGORÍA + ORDENAR  === */
+
+.product-actions {
+  width: 100%;
+}
+
+.filters-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 2rem;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 3rem 0;
+  height: auto;
+}
+
+/* === TEXTO CONTENEDOR === */
+
+.products-section-header h2 {
+  font-size: 2rem;
+  font-family: var(--font-secondary);
+  color: var(--color-bg-secundary);
+  margin: 0;
+  font-weight: 600;
+}
+
+.filters-container {
+  display: flex;
+  gap: 2rem;
+  align-items: center;
+}
