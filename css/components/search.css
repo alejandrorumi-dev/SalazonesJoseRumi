@@ -1,0 +1,236 @@
+/* === BUSCADOR === */
+
+/* === ESTILOS PARA EL SISTEMA DE BÚSQUEDA === */
+
+/* === CONTENEDOR DEL BUSCADOR === */
+
+.search-container {
+	position: relative;
+	width: 100%;
+	max-width: 500px;
+	margin: 0 auto;
+}
+
+.search-container input[type="search"] {
+	width: 100%;
+	padding: 0.75rem 1rem;
+	border: 2px solid #ddd;
+	border-radius: 20px;
+	font-size: 1rem;
+	outline: none;
+	transition: all 0.3s ease;
+	background-color: white;
+}
+
+.search-container input[type="search"]:focus {
+	border-color: var(--color-accent);
+	box-shadow: 0 0 0 3px rgba(var(--color-accent-rgb), 0.1);
+}
+
+/* === CONTENEDOR DE SUGERENCIAS === */
+
+.search-suggestions {
+	position: absolute;
+	top: 100%;
+	left: 0;
+	right: 0;
+	background-color: var(--color-text-buttons);
+	color: var(--color-btn-dark);
+	border: 1px solid #ddd;
+	border-top: none;
+	border-radius: 0 0 12px 12px;
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+	z-index: 1000;
+	max-height: 320px;
+	overflow-y: auto;
+	display: none;
+}
+
+/* === SUGERENCIA INDIVIDUAL === */
+
+.search-suggestion {
+	padding: 0.75rem 1rem;
+	cursor: pointer;
+	border-bottom: 1px solid #f0f0f0;
+	transition: all 0.2s ease;
+	position: relative;
+}
+
+.search-suggestion:last-child {
+	border-bottom: none;
+}
+
+.search-suggestion:hover,
+.search-suggestion.selected {
+	background-color: var(--color-btn-light);
+	color: var(--color-bg-secundary);
+}
+
+.search-suggestion.product:hover,
+.search-suggestion.product.selected {
+	background-color: #f8f9fa;
+	border-left: 3px solid var(--color-accent);
+}
+
+.search-suggestion.category:hover,
+.search-suggestion.category.selected {
+	background-color: #e9ecef;
+	border-left: 3px solid var(--color-btn-dark);
+}
+
+/* === CONTENIDO DE LA SUGERENCIA === */
+
+.suggestion-content {
+	display: flex;
+	align-items: center;
+	gap: 0.75rem;
+}
+
+.suggestion-name {
+	font-weight: 500;
+	font-size: 0.95rem;
+	flex: 1;
+}
+
+.suggestion-category {
+	font-size: 0.8rem;
+	color: #666;
+	background-color: #f1f3f4;
+	padding: 0.2rem 0.5rem;
+	border-radius: 8px;
+	text-transform: capitalize;
+}
+
+.suggestion-status {
+	font-size: 0.8rem;
+	font-weight: 500;
+	padding: 0.2rem 0.5rem;
+	border-radius: 6px;
+}
+
+.suggestion-status.available {
+	color: #28a745;
+	background-color: #d4edda;
+}
+
+.suggestion-status.unavailable {
+	color: #dc3545;
+	background-color: #f8d7da;
+}
+
+/* === SUGERENCIAS DE CATEGORÍAS === */
+
+.category-suggestion {
+	align-items: center;
+}
+
+.suggestion-icon {
+	font-size: 1.2rem;
+	margin-right: 0.5rem;
+}
+
+/* === RRESULTADO DE TEXTO COINCIDENTE === */
+
+.search-suggestion mark {
+	background-color: #fff3cd;
+	color: #856404;
+	padding: 0.1rem 0.2rem;
+	border-radius: 3px;
+	font-weight: 600;
+}
+
+/* === RESULTADOS DE BÚSQUEDA === */
+
+.search-results-message {
+	grid-column: 1 / -1;
+	padding: 3rem 2rem;
+	text-align: center;
+	background-color: #f8f9fa;
+	border-radius: 12px;
+	margin: 2rem 0;
+}
+
+.no-results-content {
+	max-width: 400px;
+	margin: 0 auto;
+}
+
+.no-results-icon {
+	font-size: 3rem;
+	display: block;
+	margin-bottom: 1rem;
+	opacity: 0.5;
+}
+
+.no-results-content h3 {
+	color: #495057;
+	margin-bottom: 0.5rem;
+	font-size: 1.5rem;
+}
+
+.no-results-content p {
+	color: #6c757d;
+	margin-bottom: 1.5rem;
+	font-size: 1rem;
+}
+
+.btn-clear-search {
+	background-color: var(--color-accent);
+	color: white;
+	border: none;
+	padding: 0.75rem 1.5rem;
+	border-radius: 8px;
+	font-size: 0.9rem;
+	font-weight: 500;
+	cursor: pointer;
+	transition: all 0.3s ease;
+}
+
+.btn-clear-search:hover {
+	background-color: var(--color-btn-dark);
+	transform: translateY(-1px);
+}
+
+/* === PRODUCTOS DESTACADOS EN LA BÚSQUEDA === */
+
+.product-card.search-match {
+	border: 2px solid var(--color-accent);
+	box-shadow: 0 4px 12px rgba(var(--color-accent-rgb), 0.2);
+}
+
+.product-card.highlighted {
+	animation: highlightPulse 2s ease-in-out;
+}
+
+@keyframes highlightPulse {
+
+	0%,
+	100% {
+		box-shadow: 0 4px 12px rgba(var(--color-accent-rgb), 0.2);
+	}
+
+	50% {
+		box-shadow: 0 8px 24px rgba(var(--color-accent-rgb), 0.4);
+		transform: translateY(-2px);
+	}
+}
+
+/* === SCROLL PERSONALIZADO PARA SUBERENCIAS === */
+
+.search-suggestions::-webkit-scrollbar {
+	width: 6px;
+}
+
+.search-suggestions::-webkit-scrollbar-track {
+	background: #f1f1f1;
+	border-radius: 3px;
+}
+
+.search-suggestions::-webkit-scrollbar-thumb {
+	background: #c1c1c1;
+	border-radius: 3px;
+}
+
+.search-suggestions::-webkit-scrollbar-thumb:hover {
+	background: #a8a8a8;
+}
