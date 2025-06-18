@@ -56,9 +56,9 @@ export function setupFilters() {
     const svg = label.querySelector('svg');
     const svgClone = svg.cloneNode(true);
     
-    // NUEVO: Manejar "Todos los productos" de forma especial
+    // CORREGIDO: Mostrar "Todos los productos" en lugar de resetear a "Categorías"
     if (option.dataset.value === '' || option.dataset.value === 'todos') {
-      label.innerHTML = 'Categorías ';
+      label.innerHTML = 'Todos los productos ';
     } else {
       label.innerHTML = option.textContent + ' ';
     }
