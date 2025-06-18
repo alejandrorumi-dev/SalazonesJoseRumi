@@ -1,4 +1,4 @@
-// Sistema de paginación para productos
+// Sistema de paginación para productos - VERSIÓN CORREGIDA
 
 export function setupPagination() {
 	// === CONFIGURACIÓN ===
@@ -7,6 +7,12 @@ export function setupPagination() {
 	let totalProducts = 0;
 	let filteredProducts = []; // Productos después de aplicar filtros
 	let allProducts = []; // Todos los productos originales
+	let currentFilters = { // Estado actual de los filtros
+		category: '',
+		search: '',
+		sortBy: '',
+		showOnlyAvailable: true // Por defecto solo disponibles
+	};
 
 	// === ELEMENTOS DEL DOM ===
 	const productCardsContainer = document.querySelector('.product-cards');
@@ -63,12 +69,8 @@ export function setupPagination() {
 			originalIndex: index
 		}));
 
-		// Por defecto mostrar solo productos disponibles
-		filteredProducts = allProducts.filter(product => product.available);
-		totalProducts = filteredProducts.length;
-
-		console.log(`Productos cargados: ${allProducts.length} total, ${totalProducts} disponibles mostrados inicialmente`);
-		return filteredProducts;
+		console.log(`Productos cargados: ${allProducts.length} total`);
+		return allProducts;
 	}
 
 	// === FUNCIÓN: Mostrar productos de la página actual ===
@@ -91,7 +93,18 @@ export function setupPagination() {
 		updatePaginationControls();
 		updateProductsInfo();
 
-		console.log(`Página ${currentPage}: mostrando productos ${startIndex + 1}-${Math.min(endIndex, totalProducts)}`);
+		console.log(`Página ${currentPage}: mostrando productos ${startIndex + 1}-${Math.min(endIndex, totalProducts)} de ${totalProducts} totales`);
+	}
+
+	// === FUNCIÓN AUXILIAR: Formatear nombre de categoría ===
+	function formatCategoryName(category) {
+		if (!category) return '';
+		
+		// Convertir guiones en espacios y capitalizar cada palabra
+		return category
+			.split('-')
+			.map(word => word.charAt(0).toUpperCase() + word.slice(1))
+			.join(' ');
 	}
 
 	// === FUNCIÓN: Actualizar información de productos ===
@@ -102,9 +115,26 @@ export function setupPagination() {
 		const infoElement = paginationContainer?.querySelector('.products-count');
 		if (infoElement) {
 			if (totalProducts === 0) {
-				infoElement.textContent = 'No se encontraron productos';
+				infoElement.innerHTML = 'No se encontraron productos';
 			} else {
-				infoElement.textContent = `Mostrando ${startIndex}-${endIndex} de ${totalProducts} productos`;
+				let infoText = `Mostrando ${startIndex}-${endIndex} de ${totalProducts} productos`;
+				
+				// NUEVO: Añadir indicador de qué tipo de productos se muestran con estilos
+				const { category, showOnlyAvailable } = currentFilters;
+				
+				if (category) {
+					// Formatear y mostrar categoría específica
+					const categoryFormatted = formatCategoryName(category);
+					infoText += ` en <strong>${categoryFormatted}</strong>`;
+				} else if (!showOnlyAvailable) {
+					// Mostrando "Todos los productos" (disponibles + agotados)
+					infoText += ` <strong>(incluye agotados)</strong>`;
+				} else {
+					// Estado inicial - solo disponibles
+					infoText += ` <strong>disponibles</strong>`;
+				}
+				
+				infoElement.innerHTML = infoText; // Usar innerHTML para renderizar el HTML
 			}
 		}
 	}
@@ -216,42 +246,32 @@ export function setupPagination() {
 	}
 
 	// === FUNCIÓN: Aplicar filtros ===
-	function applyFilters(filters = {}) {
-		const { category = '', search = '', sortBy = '', showOnlyAvailable = null } = filters;
+	function applyFilters(newFilters = {}) {
+		// Actualizar el estado de filtros actuales
+		currentFilters = { ...currentFilters, ...newFilters };
+
+		const { category, search, sortBy, showOnlyAvailable } = currentFilters;
+
+		console.log('🔍 Aplicando filtros:', {
+			category: category || '(todos)',
+			search: search || '(sin búsqueda)',
+			sortBy: sortBy || '(sin ordenar)',
+			showOnlyAvailable,
+			source: category ? 'categoría específica' : showOnlyAvailable ? 'estado inicial' : 'todos los productos'
+		});
 
 		// Empezar con todos los productos
 		let filtered = [...allProducts];
 
-		// Mostrar productos agotados
-		let shouldShowOnlyAvailable;
-
-		if (showOnlyAvailable !== null) {
-			// Si se especifica explícitamente, usar ese valor
-			shouldShowOnlyAvailable = showOnlyAvailable;
-		} else if (search && search !== '') {
-			// Si hay búsqueda activa, mostrar todos (disponibles + agotados)
-			shouldShowOnlyAvailable = false;
-		} else if (category && category !== '') {
-			// Si hay categoría seleccionada, mostrar todos (disponibles + agotados)
-			shouldShowOnlyAvailable = false;
-		} else {
-			// Estado inicial: mostrar solo disponibles
-			shouldShowOnlyAvailable = true;
-		}
-
-		// Filtrar por disponibilidad
-		if (shouldShowOnlyAvailable) {
-			filtered = filtered.filter(product => product.available);
-		}
-
-		// Filtrar por categoría
+		// 1. Filtrar por categoría PRIMERO
 		if (category && category !== '') {
 			filtered = filtered.filter(product =>
 				product.category.toLowerCase() === category.toLowerCase()
 			);
+			console.log(`📂 Filtrado por categoría "${category}": ${filtered.length} productos`);
 		}
 
-		// Filtrar por búsqueda
+		// 2. Filtrar por búsqueda
 		if (search && search !== '') {
 			const searchTerm = search.toLowerCase();
 			filtered = filtered.filter(product => {
@@ -261,14 +281,27 @@ export function setupPagination() {
 					.replace(/[^a-z0-9\s]/g, '') // Remover caracteres especiales
 					.trim();
 
-				
 				return normalizedName.startsWith(searchTerm);
 			});
+			console.log(`🔍 Filtrado por búsqueda "${search}": ${filtered.length} productos`);
 		}
 
-		// Ordenar
+		// 3. Filtrar por disponibilidad AL FINAL
+		if (showOnlyAvailable) {
+			const beforeFilter = filtered.length;
+			filtered = filtered.filter(product => product.available);
+			console.log(`✅ Filtrado solo disponibles: ${filtered.length} de ${beforeFilter} productos`);
+		} else {
+			console.log(`👁️ Mostrando todos (${filtered.filter(p => p.available).length} disponibles + ${filtered.filter(p => !p.available).length} agotados)`);
+		}
+
+		// 4. Ordenar
 		if (sortBy) {
 			filtered = sortProducts(filtered, sortBy);
+			console.log(`📊 Ordenado por "${sortBy}": ${filtered.length} productos`);
+			
+			// IMPORTANTE: Reordenar físicamente en el DOM
+			reorderProductsInDOM(filtered);
 		}
 
 		// Actualizar productos filtrados
@@ -279,28 +312,76 @@ export function setupPagination() {
 		// Mostrar resultados
 		showCurrentPage();
 
-		console.log(`Filtros aplicados: ${totalProducts} productos encontrados`);
-		console.log(`Categoría: "${category}", Búsqueda: "${search}", Solo disponibles: ${shouldShowOnlyAvailable}`);
+		console.log(`✅ Resultado final: ${totalProducts} productos mostrados`);
 	}
 
 	// === FUNCIÓN: Ordenar productos ===
 	function sortProducts(products, sortBy) {
-		return products.sort((a, b) => {
+		console.log(`🔄 Ordenando ${products.length} productos por: ${sortBy}`);
+		
+		const sortedProducts = [...products].sort((a, b) => {
 			switch (sortBy) {
 				case 'name-asc':
-					return a.name.localeCompare(b.name);
+					return a.name.localeCompare(b.name, 'es', { sensitivity: 'base' });
 				case 'name-desc':
-					return b.name.localeCompare(a.name);
+					return b.name.localeCompare(a.name, 'es', { sensitivity: 'base' });
 				case 'price-asc':
-					return parseFloat(a.price.replace(/[^\d.,]/g, '')) - parseFloat(b.price.replace(/[^\d.,]/g, ''));
+					const priceA = extractPrice(a.price);
+					const priceB = extractPrice(b.price);
+					return (priceA || 0) - (priceB || 0);
 				case 'price-desc':
-					return parseFloat(b.price.replace(/[^\d.,]/g, '')) - parseFloat(a.price.replace(/[^\d.,]/g, ''));
+					const priceA2 = extractPrice(a.price);
+					const priceB2 = extractPrice(b.price);
+					return (priceB2 || 0) - (priceA2 || 0);
 				case 'available':
 					return b.available - a.available; // Disponibles primero
 				default:
 					return 0;
 			}
 		});
+
+		// Log para debug
+		if (sortBy === 'price-desc' || sortBy === 'price-asc') {
+			console.log('💰 Precios ordenados:', sortedProducts.map(p => `${p.name}: ${p.price}`));
+		}
+
+		return sortedProducts;
+	}
+
+	// === FUNCIÓN: Reordenar productos en el DOM ===
+	function reorderProductsInDOM(sortedProducts) {
+		const container = productCardsContainer;
+		if (!container) return;
+
+		console.log('🔄 Reordenando productos en el DOM...');
+
+		// Crear fragmento para reordenar eficientemente
+		const fragment = document.createDocumentFragment();
+		
+		// Añadir productos en el orden correcto
+		sortedProducts.forEach(product => {
+			fragment.appendChild(product.element);
+		});
+
+		// Limpiar contenedor y añadir productos ordenados
+		container.innerHTML = '';
+		container.appendChild(fragment);
+		
+		console.log('✅ Productos reordenados en el DOM');
+	}
+
+	// === FUNCIÓN: Extraer precio numérico ===
+	function extractPrice(priceText) {
+		if (!priceText) return 0;
+		
+		// Buscar números en el texto del precio
+		const priceMatch = priceText.match(/(\d+[,.]?\d*)/);
+		if (!priceMatch) return 0;
+		
+		// Convertir a número (reemplazar coma por punto si es necesario)
+		const price = parseFloat(priceMatch[1].replace(',', '.'));
+		console.log(`💰 Precio extraído: "${priceText}" → ${price}`);
+		return price;
 	}
 
 	// === EVENT LISTENERS ===
@@ -317,35 +398,77 @@ export function setupPagination() {
 			nextBtn.addEventListener('click', goToNextPage);
 		}
 
-		// Escuchar eventos de filtros
+		// Escuchar eventos de búsqueda
 		document.addEventListener('searchProducts', (e) => {
-			applyFilters({ search: e.detail.searchTerm });
+			applyFilters({ 
+				search: e.detail.searchTerm,
+				// IMPORTANTE: Si hay búsqueda, mostrar todos los productos (disponibles + agotados)
+				showOnlyAvailable: e.detail.searchTerm ? false : currentFilters.showOnlyAvailable
+			});
 		});
 
+		// Escuchar eventos de filtros (categorías)
 		document.addEventListener('filterChange', (e) => {
-			const filters = {};
 			if (e.detail.type === 'categories') {
-				filters.category = e.detail.value;
-			} else if (e.detail.type === 'sort') {
-				filters.sortBy = e.detail.value;
+				// NUEVO: Distinguir entre estado inicial y "Todos los productos"
+				if (e.detail.value === '') {
+					// "Todos los productos" seleccionado explícitamente → mostrar TODOS (disponibles + agotados)
+					applyFilters({ 
+						category: e.detail.value,
+						showOnlyAvailable: false // Mostrar todos cuando se selecciona "Todos los productos"
+					});
+				} else {
+					// Categoría específica → mostrar todos de esa categoría
+					applyFilters({ 
+						category: e.detail.value,
+						showOnlyAvailable: false
+					});
+				}
 			}
-			applyFilters(filters);
 		});
 
+		// Escuchar eventos de ordenación (sorting.js)
+		document.addEventListener('productsSort', (e) => {
+			const sortValue = e.detail.sortValue;
+			
+			// ESPECIAL: Si es "Solo disponibles", cambiar el filtro de disponibilidad
+			if (sortValue === 'available') {
+				applyFilters({ 
+					sortBy: '',
+					showOnlyAvailable: true 
+				});
+			} else {
+				applyFilters({ 
+					sortBy: sortValue,
+					// IMPORTANTE: Para otras ordenaciones, mantener todos los productos visibles
+					showOnlyAvailable: false
+				});
+			}
+		});
+
+		// Escuchar reset de filtros
 		document.addEventListener('filtersReset', () => {
-			applyFilters(); // Aplicar filtros por defecto (solo disponibles)
+			// Reset completo a estado inicial
+			currentFilters = {
+				category: '',
+				search: '',
+				sortBy: '',
+				showOnlyAvailable: true
+			};
+			applyFilters();
 		});
 	}
 
 	// === FUNCIÓN DE INICIALIZACIÓN ===
 	function init() {
-		
 		getAllProducts();
 		setupEventListeners();
-		showCurrentPage(); 
+		
+		// Aplicar filtros iniciales (solo disponibles por defecto)
+		applyFilters();
 
 		console.log('✅ Sistema de paginación configurado correctamente');
-		console.log(`📊 Estado inicial: ${totalProducts} productos visibles de ${allProducts.length} totales`);
+		console.log(`📊 Estado inicial: mostrando solo productos disponibles`);
 	}
 
 	// LLAMAR INIT INMEDIATAMENTE
@@ -358,6 +481,7 @@ export function setupPagination() {
 		getCurrentPage: () => currentPage,
 		getTotalPages: () => Math.ceil(totalProducts / PRODUCTS_PER_PAGE),
 		getTotalProducts: () => totalProducts,
+		getCurrentFilters: () => currentFilters,
 		refresh: init
 	};
 }
