@@ -93,7 +93,7 @@
 
 .number-product {
   position: absolute;
-  top: -5px;
+  top: -7px;
   /* un poco más arriba */
   right: -5px;
   /* un poco más a la derecha */
@@ -1099,6 +1099,7 @@
 
 .cart-item-info {
   flex: 1;
+  max-width: 70%;
 }
 
 .cart-item-name {
