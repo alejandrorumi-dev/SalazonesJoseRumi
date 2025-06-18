@@ -1,0 +1,185 @@
+/* === SECCIÓN DE RECOMENDACIONES === */
+
+.recommendations-section {
+  width: 100%;
+  background-color: #f6f6f6;
+  border-bottom: 1px solid #e9ecef;
+  padding: 2rem 0;
+}
+
+.recommendations-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 3rem;
+}
+
+/* === HEADER RECOMENDACIONES === */
+
+.recommendations-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  position: relative;
+  z-index: 5;
+  /* 🔹 Encima del carrusel */
+}
+
+.recommendations-header h2 {
+  font-size: 1.8rem;
+  font-family: var(--font-secondary);
+  color: var(--color-bg-secundary);
+  margin: 0;
+  font-weight: 600;
+}
+
+/* === CONTROLES DEL CARRUSEL === */
+
+.carousel-controls {
+  display: flex;
+  gap: 0.8rem;
+  position: relative;
+  z-index: 10;
+  /* 🔹 Asegurar que estén encima */
+}
+
+.carousel-btn {
+  width: 40px;
+  height: 40px;
+  border: 2px solid var(--color-btn-dark);
+  background-color: #fff;
+  color: var(--color-btn-dark);
+  border-radius: 50%;
+  font-size: 1.2rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  z-index: 15;
+  /* 🔹 Z-index más alto */
+  flex-shrink: 0;
+  /* 🔹 No se encoge */
+  box-sizing: border-box;
+  /* 🔹 Incluir border en el tamaño */
+}
+
+.carousel-btn:hover {
+  background-color: var(--color-btn-dark);
+  color: var(--color-text-buttons);
+  transform: scale(1.1);
+}
+
+.carousel-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* === CARRUSEL PRINCIPAL === */
+
+.recommendations-carousel {
+  display: flex;
+  gap: 1.5rem;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  padding: 1rem 0;
+  position: relative;
+  z-index: 1;
+  /* 🔹 Z-index bajo */
+
+  /* === OCULTAR SCROLLBAR PERO MANTENER FUNCIONALIDAD === */
+
+  scrollbar-width: none;
+  /* Firefox */
+  -ms-overflow-style: none;
+  /* IE/Edge */
+}
+
+.recommendations-carousel::-webkit-scrollbar {
+  display: none;
+  /* Chrome/Safari */
+}
+
+/* === ITEMS INDIVIDUALES === */
+
+.recommendation-item {
+  flex: 0 0 auto;
+  /* No se encoge ni crece */
+  width: 200px;
+  background-color: #fff;
+  border-radius: 12px;
+  padding: 1.2rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  cursor: pointer;
+  border: 2px solid transparent;
+}
+
+.recommendation-item:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+  border-color: var(--color-accent);
+}
+
+/* === IMAGEN DEL PRODUCTO RECOMENDADO === */
+
+.recommendation-item img {
+  width: 120px;
+  height: 120px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+  background-color: #f8f9fa;
+  /* Fondo por si la imagen no carga */
+}
+
+/* === NOMBRE DEL PRODUCTO === */
+
+.recommendation-item h3 {
+  font-size: 1.1rem;
+  font-family: var(--font-secondary);
+  color: var(--color-bg-secundary);
+  margin: 0 0 0.5rem 0;
+  font-weight: 600;
+  line-height: 1.3;
+
+  /* === TRUNCAR TEXTO SI ES MUY LARGO === */
+
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* === PRECIO DEL PRODUCTO === */
+
+.recommendation-item p {
+  font-size: 1rem;
+  font-weight: bold;
+  color: var(--color-btn-dark);
+  margin: 0;
+}
+
+/* === INDICADOR DE DISPONIBILIDAD === */
+
+.recommendation-item .status {
+  display: inline-block;
+  padding: 0.2rem 0.8rem;
+  border-radius: 12px;
+  font-size: 0.8rem;
+  font-weight: bold;
+  margin-top: 0.5rem;
+}
+
+.recommendation-item .status.available {
+  background-color: #d4edda;
+  color: #155724;
+}
+
+.recommendation-item .status.limited {
+  background-color: #fff3cd;
+  color: #856404;
+}
