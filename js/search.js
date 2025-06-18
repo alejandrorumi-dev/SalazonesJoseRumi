@@ -6,14 +6,14 @@ export class SearchSystem {
     this.suggestionsContainer = document.getElementById('search-suggestions');
     this.allProducts = [];
     this.isSearchActive = false;
-    
+
     // === NUEVO: Referencias a las secciones que se ocultan durante la búsqueda ===
     this.sectionsToHide = [
       '.banner-delivery',          // Banner principal de envíos
       '.banners-promocionales',    // Los 3 banners promocionales
       '.recommendations-section'   // Sección de recomendaciones del día
     ];
-    
+
     this.init();
   }
 
@@ -25,10 +25,10 @@ export class SearchSystem {
 
     // Recopilar todos los productos disponibles
     this.collectProducts();
-    
+
     // Configurar event listeners
     this.setupEventListeners();
-    
+
     console.log('🔍 Sistema de búsqueda inicializado con', this.allProducts.length, 'productos');
   }
 
@@ -41,7 +41,7 @@ export class SearchSystem {
       const categoryElement = card.getAttribute('data-category');
       const stockElement = card.querySelector('.stock, .no-stock');
       const priceElement = card.querySelector('.price');
-      
+
       if (nameElement) {
         const product = {
           id: index + 1,
@@ -52,7 +52,7 @@ export class SearchSystem {
           price: priceElement ? priceElement.textContent.trim() : '',
           element: card
         };
-        
+
         this.allProducts.push(product);
       }
     });
@@ -119,52 +119,90 @@ export class SearchSystem {
           const originalDisplay = window.getComputedStyle(section).display;
           section.setAttribute('data-original-display', originalDisplay);
         }
-        
+
         // Ocultar con transición suave
         section.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
         section.style.opacity = '0';
         section.style.transform = 'translateY(-20px)';
-        
+
         // Ocultar completamente después de la animación
         setTimeout(() => {
           section.style.display = 'none';
         }, 300);
       }
     });
-    
+
     console.log('🔍 Secciones promocionales ocultadas durante búsqueda');
   }
 
   // === NUEVO MÉTODO: Mostrar todas las secciones cuando no hay búsqueda ===
+  // === MÉTODO CORREGIDO: Mostrar todas las secciones cuando no hay búsqueda ===
   showAllSections() {
     this.sectionsToHide.forEach(selector => {
       const section = document.querySelector(selector);
       if (section) {
-        // Restaurar display original
+        // Restaurar display original inmediatamente
         const originalDisplay = section.getAttribute('data-original-display') || 'block';
         section.style.display = originalDisplay;
-        
+
+        // Configurar animación de entrada
+        section.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
+        section.style.opacity = '0';
+        section.style.transform = 'translateY(-20px)';
+
+        // Forzar reflow para asegurar que se apliquen los estilos iniciales
+        section.offsetHeight;
+
         // Animar aparición
-        setTimeout(() => {
+        requestAnimationFrame(() => {
           section.style.opacity = '1';
           section.style.transform = 'translateY(0)';
-        }, 50);
-        
+        });
+
         // Limpiar estilos de transición después de la animación
         setTimeout(() => {
           section.style.transition = '';
           section.style.opacity = '';
           section.style.transform = '';
+          section.removeAttribute('data-original-display');
         }, 350);
       }
     });
-    
+
     console.log('✨ Secciones promocionales restauradas');
+  }
+
+  // === MÉTODO MEJORADO: Ocultar secciones promocionales durante búsqueda ===
+  hidePromotionalSections() {
+    this.sectionsToHide.forEach(selector => {
+      const section = document.querySelector(selector);
+      if (section && section.style.display !== 'none') {
+        // Guardar el estado de display original solo si no está guardado
+        if (!section.hasAttribute('data-original-display')) {
+          const originalDisplay = window.getComputedStyle(section).display;
+          section.setAttribute('data-original-display', originalDisplay);
+        }
+
+        // Configurar transición suave
+        section.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
+        section.style.opacity = '0';
+        section.style.transform = 'translateY(-20px)';
+
+        // Ocultar completamente después de la animación
+        setTimeout(() => {
+          if (section.style.opacity === '0') { // Solo ocultar si aún está en estado oculto
+            section.style.display = 'none';
+          }
+        }, 300);
+      }
+    });
+
+    console.log('🔍 Secciones promocionales ocultadas durante búsqueda');
   }
 
   showSuggestions(searchTerm) {
     const suggestions = this.getSuggestions(searchTerm);
-    
+
     if (suggestions.length === 0) {
       this.hideSuggestions();
       return;
@@ -183,7 +221,7 @@ export class SearchSystem {
     // Buscar productos que coincidan
     this.allProducts.forEach(product => {
       const normalizedName = this.normalizeText(product.name);
-      
+
       // === MEJORADO: startsWith para búsquedas de 1 letra, includes para 2+ letras ===
       let isMatch;
       if (searchTerm.length === 1) {
@@ -191,7 +229,7 @@ export class SearchSystem {
       } else {
         isMatch = normalizedName.includes(normalizedSearch);
       }
-      
+
       if (isMatch) {
         if (!uniqueNames.has(product.name)) {
           suggestions.push({
@@ -208,14 +246,14 @@ export class SearchSystem {
 
     // === AJUSTADO: Mostrar más sugerencias para búsquedas de 1 letra ===
     const maxSuggestions = searchTerm.length === 1 ? 6 : 8;
-    
+
     return suggestions
       .slice(0, maxSuggestions)
       .sort((a, b) => {
         // Productos disponibles primero
         if (a.isAvailable && !b.isAvailable) return -1;
         if (!a.isAvailable && b.isAvailable) return 1;
-        
+
         return a.text.localeCompare(b.text);
       });
   }
@@ -253,7 +291,7 @@ export class SearchSystem {
     this.searchInput.value = suggestion.text;
     this.filterProducts(suggestion.text);
     this.scrollToProduct(suggestion.product);
-    
+
     this.hideSuggestions();
     this.dispatchSearchEvent(this.searchInput.value);
   }
@@ -265,10 +303,10 @@ export class SearchSystem {
     this.allProducts.forEach(product => {
       const normalizedName = this.normalizeText(product.name);
       const normalizedCategory = this.normalizeText(this.formatCategoryName(product.category));
-      
+
       // === MEJORADO: Lógica de búsqueda optimizada por longitud ===
       let nameMatch, categoryMatch;
-      
+
       if (searchTerm.length === 1) {
         // Para 1 letra: solo buscar al inicio del nombre (más específico)
         nameMatch = normalizedName.startsWith(normalizedSearch);
@@ -278,19 +316,19 @@ export class SearchSystem {
         nameMatch = normalizedName.includes(normalizedSearch);
         categoryMatch = normalizedCategory.includes(normalizedSearch);
       }
-      
+
       const isMatch = nameMatch || categoryMatch;
-      
+
       if (isMatch) {
         // MOSTRAR PRODUCTO COINCIDENTE (disponible o agotado)
         product.element.style.display = 'block';
         product.element.classList.add('search-match');
-        
+
         // Destacar si es coincidencia exacta de nombre
         if (nameMatch) {
           product.element.classList.add('name-match');
         }
-        
+
         visibleCount++;
       } else {
         product.element.style.display = 'none';
@@ -300,7 +338,7 @@ export class SearchSystem {
 
     // Mostrar mensaje si no hay resultados
     this.updateSearchResults(visibleCount, searchTerm);
-    
+
     console.log(`🔍 Búsqueda "${searchTerm}" (${searchTerm.length} letra${searchTerm.length > 1 ? 's' : ''}): ${visibleCount} productos encontrados`);
   }
 
@@ -314,14 +352,14 @@ export class SearchSystem {
           block: 'start'
         });
       }
-      
+
       // Luego scroll hasta el producto específico
       setTimeout(() => {
         product.element.scrollIntoView({
           behavior: 'smooth',
           block: 'center'
         });
-        
+
         // Efecto de destacado temporal
         product.element.classList.add('highlighted');
         setTimeout(() => {
@@ -371,7 +409,7 @@ export class SearchSystem {
           </button>
         </div>
       `;
-      
+
       document.querySelector('.product-cards').appendChild(messageElement);
     }
   }
@@ -382,12 +420,12 @@ export class SearchSystem {
     this.resetProductsVisibility();
     this.showAllSections(); // === NUEVO: Restaurar secciones ===
     this.dispatchSearchEvent('');
-    
+
     const messageElement = document.querySelector('.search-results-message');
     if (messageElement) {
       messageElement.remove();
     }
-    
+
     console.log('🧹 Búsqueda limpiada y secciones restauradas');
   }
 
@@ -409,20 +447,20 @@ export class SearchSystem {
         selectedIndex = (selectedIndex + 1) % suggestions.length;
         this.updateSelection(suggestions, selectedIndex);
         break;
-        
+
       case 'ArrowUp':
         e.preventDefault();
         selectedIndex = selectedIndex <= 0 ? suggestions.length - 1 : selectedIndex - 1;
         this.updateSelection(suggestions, selectedIndex);
         break;
-        
+
       case 'Enter':
         e.preventDefault();
         if (currentSelected) {
           currentSelected.click();
         }
         break;
-        
+
       case 'Escape':
         this.clearSearch(); // === MEJORADO: Limpiar completamente al presionar Escape ===
         this.searchInput.blur();
@@ -462,7 +500,7 @@ export class SearchSystem {
 
   highlightMatch(text, searchTerm) {
     if (!searchTerm) return text;
-    
+
     const regex = new RegExp(`(${searchTerm})`, 'gi');
     return text.replace(regex, '<mark>$1</mark>');
   }
@@ -484,9 +522,9 @@ export class SearchSystem {
 
   dispatchFilterEvent(filterType, value) {
     const event = new CustomEvent('filterChange', {
-      detail: { 
+      detail: {
         type: filterType,
-        value: value 
+        value: value
       }
     });
     document.dispatchEvent(event);
@@ -496,9 +534,9 @@ export class SearchSystem {
 // Inicializar el sistema de búsqueda
 export function initSearchSystem() {
   const searchSystem = new SearchSystem();
-  
+
   // Hacer disponible globalmente para uso en botones inline
   window.searchSystem = searchSystem;
-  
+
   return searchSystem;
 }
