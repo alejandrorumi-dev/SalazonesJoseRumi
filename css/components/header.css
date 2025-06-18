@@ -1,0 +1,60 @@
+/* === HEADER === */
+
+/* === ESTRUCTURA PRINCIPAL CON GRID === */
+
+.header-wrapper {
+  display: grid;
+  grid-template-columns: 1fr 3fr 1fr;
+  /* ← 3 columnas */
+  align-items: center;
+  gap: 2rem;
+  height: 6rem;
+  width: 100%;
+  max-width: 1400px;
+  /* 🔹 LÍMITE DE ANCHO MÁXIMO */
+  margin: 0 auto;
+  /* 🔹 CENTRADO HORIZONTAL */
+  padding: 0 3rem;
+}
+
+/* === LOGO CENTRADO === */
+
+.logo-header {
+  display: flex;
+  align-items: center;
+  justify-self: flex-start;
+  height: 4rem;
+}
+
+.logo-header img {
+  width: auto;
+  height: 9rem;
+  /* 🔹 Limita su altura para que no empuje */
+  display: block;
+}
+
+/* === FONDO ATENUADO === */
+
+.overlay {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(12, 3, 16, 0.6);
+
+	backdrop-filter: blur(3px);
+	/* Más difuminado */
+
+	z-index: 15;
+	display: none;
+	opacity: 0;
+	transition: opacity 0.3s ease;
+}
+
+/* CUANDO EL MENÚ SE ABRE */
+
+.overlay.active {
+	display: block;
+	opacity: 1;
+}
