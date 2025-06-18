@@ -1,0 +1,34 @@
+/* === TEXTOS === */
+
+/* === TEXTOS: INICIO === */
+
+/* === SUBTÍTULO (h2): Bienvenidos a... === */
+
+.welcome {
+	font-size: 3rem;
+	font-family: var(--font-secondary);
+	color: var(--color-text);
+	margin-bottom: 1rem;
+}
+
+/* === TÍTULO PRINCIPAL (h1): Mercado Central... === */
+
+.main-title {
+	font-size: 4rem;
+	font-family: var(--font-main);
+	font-style: oblique;
+	color: var(--color-text);
+	margin-bottom: 1rem;
+	position: relative;
+	z-index: 1;
+}
+
+/* === FRASE DEBAJO DEL TÍTULO Y SUBTÍTULO === */
+
+.phrase {
+	font-size: 2.5rem;
+	font-family: var(--font-secondary);
+	font-style: italic;
+	color: var(--color-text-buttons);
+	margin-top: 1rem;
+}
