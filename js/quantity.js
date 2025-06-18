@@ -1113,3 +1113,26 @@ window.debugQuantitySystem = function () {
     console.log('❌ QuantitySystem NO disponible');
   }
 };
+
+/* === ERRORES A SOLUCIONAR === */
+
+/*
+
+- Solucionar el incremento de "Otra Cantidad"
+    * Si se añaden 250g, luego si se quiere intentar aumentar o disminuir cantidad, sube o baja en 100g, en lugar de 50g
+
+- Solucionar la cantidad predefinida en "Añadir Producto"
+    * A la hora de querer añadir un producto sin elegir una cantidad, es decir, sin desplegar el menú, que sea predefinido en 1kg, en lugar de 250g
+
+- Resetear input "Cantidad"
+    * Cuando un usuario elige 100g, si hace clic fuera del input, no se resetea la card, se queda en 100g.
+
+- Solucionar aumentar o disminuir cantidad en el modal del carrito
+    * El botón (-) y (+) no reaccionan al clic para disminuir o aumentar la cantidad deseada
+
+- Solucionar eliminar producto en el modal del carrito
+    * El botón de eliminar no reacciona y no elimina el producto deseado
+
+- Eliminar toda parte del aside que ya no sea necesaria para el correcto funcionamiento de la página
+
+*/
