@@ -1,0 +1,113 @@
+/* === SISTEMA DE PAGINACIÓN === */
+
+/* === SISTEMA DE PAGINACIÓN === */
+
+.pagination-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  margin-top: 3rem;
+  padding: 2rem 0;
+  border-top: 1px solid #e9ecef;
+}
+
+/* === INFORMACIÓN DE PRODUCTOS === */
+
+.pagination-info {
+  text-align: center;
+}
+
+.products-count {
+  font-size: 1.1rem;
+  color: #666;
+  font-family: var(--font-secondary);
+}
+
+/* === CONTROLES DE PAGINACIÓN === */
+
+.pagination-controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+/* === NÚMEROS DE PÁGINA === */
+
+.pagination-numbers {
+  display: flex;
+  gap: 0.25rem;
+  align-items: center;
+  margin: 0 1rem;
+}
+
+/* === BOTONES DE PAGINACIÓN === */
+
+.pagination-btn {
+  padding: 0.75rem 1rem;
+  border: 2px solid var(--color-btn-light);
+  background-color: #fff;
+  color: var(--color-bg-secundary);
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  min-width: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.pagination-btn:hover:not(:disabled) {
+  background-color: var(--color-btn-light);
+  border-color: var(--color-btn-dark);
+  transform: translateY(-1px);
+}
+
+.pagination-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* === BOTÓN DE PÁGINA ACTIVA === */
+
+.pagination-btn.active {
+  background-color: var(--color-btn-dark);
+  color: var(--color-text-buttons);
+  border-color: var(--color-btn-dark);
+  font-weight: bold;
+}
+
+.pagination-btn.active:hover {
+  background-color: var(--color-bg-secundary);
+  border-color: var(--color-bg-secundary);
+}
+
+/* === BOTONES DE NAVEGACIÓN === */
+
+.pagination-btn.prev-btn,
+.pagination-btn.next-btn {
+  padding: 0.75rem 1.25rem;
+  font-weight: 600;
+  background-color: var(--color-accent);
+  color: var(--color-text-buttons);
+  border-color: var(--color-accent);
+}
+
+.pagination-btn.prev-btn:hover:not(:disabled),
+.pagination-btn.next-btn:hover:not(:disabled) {
+  background-color: var(--color-btn-dark);
+  border-color: var(--color-btn-dark);
+}
+
+/* === PUNTOS SUSPENSIVOS === */
+
+.pagination-ellipsis {
+  padding: 0.75rem 0.5rem;
+  color: #666;
+  font-weight: bold;
+  user-select: none;
+}
