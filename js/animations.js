@@ -46,9 +46,19 @@ export function blockExpandButtonClickOnTouchDevices() {
     const buttons = document.querySelectorAll('.expand-button');
 
     buttons.forEach(button => {
+      // Eliminar cualquier clase que provoque expansión visual
+      const text = button.querySelector('.text');
+      if (text) {
+        text.style.transform = 'none';
+        text.style.opacity = '1';
+        text.style.visibility = 'visible';
+      }
+
+      // Bloquear la navegación completamente
       button.addEventListener('click', (e) => {
         e.preventDefault();
         e.stopPropagation();
+        console.log('❌ Clic bloqueado en botón expansible (modo táctil)');
       });
     });
   }
