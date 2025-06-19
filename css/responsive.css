@@ -12,6 +12,11 @@
 /* === RESPONSIVE - MÓVILES === */
 @import url('../css/responsive/responsive-mobile.css');
 
-
-
-
+/* === BLOQUEO DE EXPANSIÓN EN DISPOSITIVOS TÁCTILES === */
+@media (hover: none) {
+	.expand-button .text {
+		transform: none !important;
+		opacity: 1 !important;
+		visibility: visible !important;
+	}
+}
