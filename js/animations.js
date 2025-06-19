@@ -37,3 +37,19 @@ export function animateTitle() {
     }, 120); // velocidad de escritura
   }
 }
+
+// Evitar expansión por clic en dispositivos táctiles
+export function blockExpandButtonClickOnTouchDevices() {
+  const isTouchDevice = window.matchMedia('(hover: none)').matches;
+
+  if (isTouchDevice) {
+    const buttons = document.querySelectorAll('.expand-button');
+
+    buttons.forEach(button => {
+      button.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+      });
+    });
+  }
+}
