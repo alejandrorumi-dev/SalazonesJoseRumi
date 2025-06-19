@@ -1,0 +1,80 @@
+/* === RESPONSIVE - TABLET HORIZONTAL === */
+
+/* === ESTILOS PARA PANTALLA ENTRE 769px Y 1023px === */
+
+@media (min-width: 769px) and (max-width: 1023px) {
+
+	.mobile-nav.open {
+		display: block;
+		animation: fadeIn 0.3s ease;
+	}
+
+	.mobile-nav {
+		display: none;
+		position: absolute;
+		top: 8rem;
+		right: 5rem;
+		width: 80%;
+		padding: 2rem;
+		z-index: 20;
+	}
+
+	.mobile-nav ul li a {
+		font-size: 1.7rem;
+	}
+
+	.header-left {
+		display: none;
+	}
+
+	.header-right {
+		display: none;
+	}
+
+	/* === HEADER === */
+
+	.main-header {
+		height: 6rem;
+	}
+
+	/* === MAIN === */
+
+	.main {
+		min-height: calc(100vh - 12rem);
+	}
+
+	/* === TEXTOS ===  */
+
+	.welcome {
+		font-size: 2rem;
+	}
+
+	.main-title {
+		font-size: 2.5rem;
+	}
+
+	.phrase {
+		font-size: 1.8rem;
+	}
+
+	/* === BOTONES === */
+
+	.main-buttons {
+		margin-top: 2.5rem;
+	}
+
+	.btn {
+		font-size: 1.5rem;
+	}
+
+	/* === FOOTER === */
+
+	.site-footer {
+		height: 6rem;
+		font-size: 1.6rem;
+	}
+}
+
+/* ==================
+	HACER PEDIDOS 
+================== */
