@@ -1,0 +1,136 @@
+/* === RESPONSIVE NO ESCRITORIO - TABLET VERTICAL Y HORIZONTAL === */
+
+/* === ESTILOS PARA PANTALLAS CON UN MÁXIMO DE 1024px === */
+
+@media (max-width: 1024px) {
+
+	/* === MOSTRAR MENÚ HAMBURGUESA === */
+
+	.hamburger-menu {
+		display: block;
+		position: relative;
+		left: 90%;
+	}
+
+	/* === ACTIVAR EL MENÚ SI TIENE CLASE OPEN === */
+
+	.mobile-nav.open {
+		display: block;
+		animation: fadeIn 0.3s ease;
+	}
+
+	/* === MENÚ DESPLEGABLE === */
+
+	.mobile-nav ul li a {
+		font-size: 2rem;
+	}
+
+	.header-left {
+		display: none;
+	}
+
+	.header-right {
+		display: none;
+	}
+
+	.main-header .dropdown-menu {
+		display: none;
+	}
+
+	/* === HEADER === */
+
+	.main-header {
+		height: 7rem;
+	}
+
+	/* === MAIN === */
+
+	.main {
+		min-height: calc(100vh - 12rem);
+	}
+
+	/* === TEXTOS === */
+
+	.welcome {
+		font-size: 2rem;
+	}
+
+	.main-title {
+		font-size: 2.7rem;
+		margin-bottom: 0.5rem;
+	}
+
+	.phrase {
+		font-size: 1.5rem;
+	}
+
+	/* === BOTONES === */
+
+	.main-buttons {
+		margin-top: 2rem;
+		margin-bottom: 1rem;
+	}
+
+	.btn {
+		font-size: 1.3rem;
+	}
+
+	/* === FOOTER === */
+
+	.site-footer {
+		height: 5rem;
+		font-size: 1rem;
+	}
+}
+
+/* ==================
+	HACER PEDIDOS 
+================== */
+
+@media (max-width: 1024px) {
+
+	.order-header .hamburger-menu {
+		display: none;
+	}
+
+	.search-suggestions {
+		min-width: 430px;
+	}
+	
+	.search-container .suggestion-content 
+	.suggestion-name,
+	.suggestion-category,
+	.suggestion-status {
+		font-size: 0.8rem;
+	}
+
+	.order-header .dropdown-menu {
+		width: 90%;
+		margin: 0 auto;
+	}
+
+	.order-header .dropdown-menu ul li a {
+		font-size: 1.1rem;
+	}
+
+	.banner-delivery {
+		width: 90%;
+		margin: 0 auto;
+	}
+
+	.products-section-header h2 {
+		font-size: 1.7rem;
+	}
+
+	.filters-container .dropdown label {
+		min-width: 240px !important;
+	}
+
+	.product-card .dropdown-options {
+		max-height: 160px;
+	}
+
+	.cart-body {
+		min-height: 150px;
+	}
+}
