@@ -1,8 +1,12 @@
-// js/loader.js - Sistema de loaders temáticos
+// js/loader.js - Sistema de loaders temáticos - VERSIÓN CORREGIDA PARA GITHUB PAGES
 export class LoaderSystem {
   constructor(options = {}) {
     this.duration = options.duration || 3000;
     this.isLoading = false;
+    this.navigationTimeout = null;
+    this.maxWaitTime = 8000; // Máximo tiempo de espera
+    this.isBackNavigation = false;
+    this.lastUrl = window.location.href;
     this.loaderTypes = {
       order: this.createOrderLoader(),
       products: this.createProductsLoader(),
@@ -56,6 +60,10 @@ export class LoaderSystem {
           <div class="progress-bar">
             <div class="progress-fill artisan-gradient"></div>
           </div>
+          
+          <div class="loader-actions">
+            <button class="cancel-loader" onclick="window.loaderSystem.cancelLoading()">Cancelar</button>
+          </div>
         </div>
       </div>
     `;
@@ -104,6 +112,10 @@ export class LoaderSystem {
           
           <div class="progress-bar">
             <div class="progress-fill deli-gradient"></div>
+          </div>
+          
+          <div class="loader-actions">
+            <button class="cancel-loader" onclick="window.loaderSystem.cancelLoading()">Cancelar</button>
           </div>
         </div>
       </div>
@@ -161,6 +173,10 @@ export class LoaderSystem {
           <div class="progress-bar">
             <div class="progress-fill photo-gradient"></div>
           </div>
+          
+          <div class="loader-actions">
+            <button class="cancel-loader" onclick="window.loaderSystem.cancelLoading()">Cancelar</button>
+          </div>
         </div>
       </div>
     `;
@@ -189,40 +205,77 @@ export class LoaderSystem {
           <div class="progress-bar">
             <div class="progress-fill default-gradient"></div>
           </div>
+          
+          <div class="loader-actions">
+            <button class="cancel-loader" onclick="window.loaderSystem.cancelLoading()">Cancelar</button>
+          </div>
         </div>
       </div>
     `;
   }
 
-  // Comprobar si ya estamos en la página de destino
-  isCurrentPage(targetUrl) {
-    // Obtener la URL actual sin parámetros ni fragmentos
-    const currentPath = window.location.pathname;
-    const currentFile = currentPath.split('/').pop() || 'index.html';
-    
-    // Obtener el archivo de destino desde la URL del enlace
-    let targetFile;
-    try {
-      const url = new URL(targetUrl, window.location.origin);
-      targetFile = url.pathname.split('/').pop() || 'index.html';
-    } catch {
-      // Si es una URL relativa
-      targetFile = targetUrl.split('/').pop().split('?')[0].split('#')[0] || 'index.html';
+  // DETECTAR NAVEGACIÓN HACIA ATRÁS
+  detectBackNavigation() {
+    // Detectar si es navegación del historial del navegador
+    const currentUrl = window.location.href;
+    if (currentUrl !== this.lastUrl) {
+      this.isBackNavigation = true;
+      this.lastUrl = currentUrl;
+    }
+  }
+
+  // CANCELAR CARGA MANUAL
+  cancelLoading() {
+    console.log('🚫 Cancelando carga manualmente');
+    if (this.navigationTimeout) {
+      clearTimeout(this.navigationTimeout);
+      this.navigationTimeout = null;
     }
     
-    // Normalizar nombres de archivos
-    const normalizeFileName = (filename) => {
-      if (!filename || filename === '' || filename === '/') return 'index.html';
-      if (filename.endsWith('/')) return 'index.html';
-      return filename;
-    };
+    const loader = document.getElementById('page-loader');
+    if (loader) {
+      this.hide(loader);
+    }
     
-    const normalizedCurrent = normalizeFileName(currentFile);
-    const normalizedTarget = normalizeFileName(targetFile);
-    
-    console.log(`🔍 Comparando páginas: actual="${normalizedCurrent}" vs destino="${normalizedTarget}"`);
-    
-    return normalizedCurrent === normalizedTarget;
+    // Reestablecer estado
+    this.isLoading = false;
+    this.isBackNavigation = false;
+  }
+
+  // Comprobar si ya estamos en la página de destino
+  isCurrentPage(targetUrl) {
+    try {
+      // Obtener la URL actual sin parámetros ni fragmentos
+      const currentPath = window.location.pathname;
+      const currentFile = currentPath.split('/').pop() || 'index.html';
+      
+      // Obtener el archivo de destino desde la URL del enlace
+      let targetFile;
+      if (targetUrl.includes('://')) {
+        const url = new URL(targetUrl);
+        targetFile = url.pathname.split('/').pop() || 'index.html';
+      } else {
+        // URL relativa
+        targetFile = targetUrl.split('/').pop().split('?')[0].split('#')[0] || 'index.html';
+      }
+      
+      // Normalizar nombres de archivos
+      const normalizeFileName = (filename) => {
+        if (!filename || filename === '' || filename === '/') return 'index.html';
+        if (filename.endsWith('/')) return 'index.html';
+        return filename;
+      };
+      
+      const normalizedCurrent = normalizeFileName(currentFile);
+      const normalizedTarget = normalizeFileName(targetFile);
+      
+      console.log(`🔍 Comparando páginas: actual="${normalizedCurrent}" vs destino="${normalizedTarget}"`);
+      
+      return normalizedCurrent === normalizedTarget;
+    } catch (error) {
+      console.log('⚠️ Error al comparar URLs:', error);
+      return false;
+    }
   }
 
   // Detectar tipo de loader según la URL de destino
@@ -240,8 +293,12 @@ export class LoaderSystem {
 
   // Mostrar el loader específico
   show(type = 'default') {
-    if (this.isLoading) return;
+    if (this.isLoading) {
+      console.log('⚠️ Ya hay un loader activo');
+      return null;
+    }
     
+    console.log(`🔄 Mostrando loader tipo: ${type}`);
     this.isLoading = true;
     
     const loaderHTML = this.loaderTypes[type] || this.loaderTypes.default;
@@ -258,13 +315,26 @@ export class LoaderSystem {
       this.startTextAnimation();
     });
 
+    // Auto-ocultar después del tiempo máximo (NUEVO)
+    setTimeout(() => {
+      if (this.isLoading) {
+        console.log('⏰ Tiempo máximo alcanzado, ocultando loader');
+        this.cancelLoading();
+      }
+    }, this.maxWaitTime);
+
     return loader;
   }
 
   // Ocultar el loader
   hide(loader) {
-    if (!this.isLoading) return;
+    if (!loader) {
+      loader = document.getElementById('page-loader');
+    }
     
+    if (!loader) return;
+    
+    console.log('👻 Ocultando loader');
     loader.classList.add('fade-out');
     
     setTimeout(() => {
@@ -281,7 +351,7 @@ export class LoaderSystem {
     if (textElements.length === 0) return;
 
     let currentIndex = 0;
-    const interval = this.duration / textElements.length;
+    const interval = Math.max(800, this.duration / textElements.length);
 
     textElements.forEach((el, index) => {
       el.style.opacity = '0';
@@ -289,13 +359,15 @@ export class LoaderSystem {
     });
 
     const showText = () => {
-      if (currentIndex < textElements.length) {
+      if (currentIndex < textElements.length && this.isLoading) {
         const currentText = textElements[currentIndex];
-        currentText.style.opacity = '1';
-        currentText.style.transform = 'translateY(0)';
-        
-        if (currentIndex > 0) {
-          textElements[currentIndex - 1].style.opacity = '0.5';
+        if (currentText) {
+          currentText.style.opacity = '1';
+          currentText.style.transform = 'translateY(0)';
+          
+          if (currentIndex > 0 && textElements[currentIndex - 1]) {
+            textElements[currentIndex - 1].style.opacity = '0.5';
+          }
         }
         
         currentIndex++;
@@ -314,30 +386,64 @@ export class LoaderSystem {
     }
   }
 
-  // Interceptar navegación con loader temático
+  // MEJORADO: Detectar navegación del historial
+  setupHistoryDetection() {
+    // Detectar navegación hacia atrás/adelante
+    window.addEventListener('popstate', (event) => {
+      console.log('🔙 Navegación del historial detectada');
+      this.isBackNavigation = true;
+      
+      // Si hay un loader activo, cancelarlo
+      if (this.isLoading) {
+        console.log('🚫 Cancelando loader por navegación del historial');
+        this.cancelLoading();
+      }
+    });
+
+    // Detectar cambios en la URL
+    let lastUrl = location.href;
+    new MutationObserver(() => {
+      const url = location.href;
+      if (url !== lastUrl) {
+        lastUrl = url;
+        this.detectBackNavigation();
+      }
+    }).observe(document, { subtree: true, childList: true });
+  }
+
+  // MEJORADO: Configurar transiciones de página
   setupPageTransitions() {
+    // Configurar detección del historial primero
+    this.setupHistoryDetection();
+
     document.addEventListener('click', (e) => {
       const link = e.target.closest('a');
       
-      if (link && 
-          !link.target && 
-          !link.href.includes('#') && 
-          !link.href.includes('mailto:') && 
-          !link.href.includes('tel:') &&
-          (link.href.includes(window.location.origin) || 
-           link.getAttribute('href').startsWith('.') || 
-           link.getAttribute('href').startsWith('/') ||
-           !link.getAttribute('href').includes('://'))) {
+      if (link && this.shouldInterceptLink(link)) {
+        // Si ya hay un loader activo, no hacer nada
+        if (this.isLoading) {
+          console.log('⚠️ Loader ya activo, ignorando click');
+          e.preventDefault();
+          return;
+        }
+
+        // Si es navegación hacia atrás, no interceptar
+        if (this.isBackNavigation) {
+          console.log('🔙 Navegación hacia atrás, no interceptando');
+          this.isBackNavigation = false;
+          return;
+        }
         
         // Comprobar si ya estamos en la página de destino
         if (this.isCurrentPage(link.href)) {
-          // Si ya estamos en la página, hacer refresh normal (como F5)
+          console.log('🔄 Ya en la página de destino, haciendo refresh');
           e.preventDefault();
           window.location.reload();
           return;
         }
         
-        // Si es una página diferente, mostrar loader
+        // Interceptar navegación normal
+        console.log('🔗 Interceptando navegación a:', link.href);
         e.preventDefault();
         const loaderType = this.detectLoaderType(link.href);
         this.navigateWithLoader(link.href, loaderType);
@@ -345,23 +451,55 @@ export class LoaderSystem {
     });
   }
 
-  // Navegar con loader temático
+  // NUEVO: Verificar si debemos interceptar el enlace
+  shouldInterceptLink(link) {
+    return link && 
+           !link.target && 
+           !link.href.includes('#') && 
+           !link.href.includes('mailto:') && 
+           !link.href.includes('tel:') &&
+           (link.href.includes(window.location.origin) || 
+            link.getAttribute('href').startsWith('.') || 
+            link.getAttribute('href').startsWith('/') ||
+            !link.getAttribute('href').includes('://'));
+  }
+
+  // MEJORADO: Navegar con loader temático
   navigateWithLoader(url, type = 'default') {
     const loader = this.show(type);
+    if (!loader) return;
     
-    setTimeout(() => {
-      window.location.href = url;
+    // Configurar timeout de navegación
+    this.navigationTimeout = setTimeout(() => {
+      console.log(`➡️ Navegando a: ${url}`);
+      
+      try {
+        window.location.href = url;
+      } catch (error) {
+        console.error('❌ Error en navegación:', error);
+        this.cancelLoading();
+      }
     }, this.duration);
   }
 
-  // Inicializar sistema completo
+  // MEJORADO: Inicializar sistema completo
   init() {
+    // Hacer disponible globalmente para el botón de cancelar
+    window.loaderSystem = this;
+    
     this.setupPageTransitions();
     this.addStyles();
-    console.log('🔄 Sistema de loaders temáticos activado');
+    
+    // Detectar si la página se carga desde el historial
+    if (performance.navigation.type === 2) {
+      console.log('📖 Página cargada desde historial');
+      this.isBackNavigation = true;
+    }
+    
+    console.log('🚀 Sistema de loaders temáticos activado para GitHub Pages');
   }
 
-  // Añadir todos los estilos CSS
+  // MEJORADO: Añadir todos los estilos CSS
   addStyles() {
     if (document.getElementById('loader-styles')) return;
 
@@ -456,6 +594,28 @@ export class LoaderSystem {
         height: 100%;
         background: linear-gradient(90deg, transparent, rgba(255,255,255,0.5));
         animation: shimmer 1.5s ease-in-out infinite;
+      }
+
+      /* NUEVO: Botón de cancelar */
+      .loader-actions {
+        margin-top: 1.5rem;
+      }
+
+      .cancel-loader {
+        background: rgba(255, 255, 255, 0.2);
+        color: white;
+        border: 2px solid rgba(255, 255, 255, 0.3);
+        padding: 8px 16px;
+        border-radius: 20px;
+        cursor: pointer;
+        font-size: 0.9rem;
+        transition: all 0.3s ease;
+      }
+
+      .cancel-loader:hover {
+        background: rgba(255, 255, 255, 0.3);
+        border-color: rgba(255, 255, 255, 0.5);
+        transform: translateY(-2px);
       }
 
       /* === LOADER PEDIDOS (DELICATESSEN ARTESANAL) === */
@@ -771,6 +931,13 @@ export class LoaderSystem {
         background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
       }
 
+      .general-animation {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100%;
+      }
+
       .rotating-logo {
         font-size: 3rem;
         animation: rotate-logo 2s linear infinite;
@@ -878,17 +1045,65 @@ export class LoaderSystem {
         }
 
         .camera-scene,
-        .market-stall {
+        .deli-scene,
+        .deli-counter {
           transform: scale(0.8);
+        }
+        
+        .cancel-loader {
+          font-size: 0.8rem;
+          padding: 6px 12px;
+        }
+      }
+
+      /* === DETECCIÓN DE RENDIMIENTO === */
+      @media (prefers-reduced-motion: reduce) {
+        .page-loader * {
+          animation-duration: 0.01ms !important;
+          animation-iteration-count: 1 !important;
+          transition-duration: 0.01ms !important;
         }
       }
     `;
   }
 }
 
-// Función para inicializar el sistema de carga
+// FUNCIÓN DE INICIALIZACIÓN MEJORADA
 export function initLoader(options = {}) {
-  const loader = new LoaderSystem(options);
+  // Configuración por defecto optimizada para GitHub Pages
+  const defaultOptions = {
+    duration: 2500, // Reducido para mejor UX
+    maxWaitTime: 6000, // Tiempo máximo antes de auto-cancelar
+    ...options
+  };
+  
+  const loader = new LoaderSystem(defaultOptions);
   loader.init();
+  
+  // Detectar errores de navegación
+  window.addEventListener('error', () => {
+    if (loader.isLoading) {
+      console.log('❌ Error detectado, cancelando loader');
+      loader.cancelLoading();
+    }
+  });
+  
+  // Detectar cuando la página se carga completamente
+  window.addEventListener('load', () => {
+    if (loader.isLoading) {
+      console.log('✅ Página cargada, ocultando loader');
+      loader.cancelLoading();
+    }
+  });
+  
+  // Detectar cambios en la visibilidad de la página
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden && loader.isLoading) {
+      console.log('👻 Página oculta, cancelando loader');
+      loader.cancelLoading();
+    }
+  });
+  
+  console.log('🚀 Loader optimizado para GitHub Pages inicializado');
   return loader;
 }
