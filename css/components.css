@@ -38,3 +38,6 @@
 
 /* === TEXTOS === */
 @import url('../css/components/texts.css');
+
+/* === MANTENIMIENTO === */
+@import url('../css/components/maintenance.css');
