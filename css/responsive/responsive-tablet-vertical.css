@@ -1,0 +1,41 @@
+/* === RESPONSIVE - TABLET VERTICAL === */
+
+/* === ESTILOS PARA PANTALLA CON UN MÁXIMO DE 922px === */
+
+@media (max-width: 922px) {
+	.btn {
+		font-size: 1.4rem;
+	}
+}
+
+/* === ESTILOS PARA PANTALLA CON UN MÁXIMO DE 884px === */
+
+@media (max-width: 884px) {
+	.btn {
+		font-size: 1.3rem;
+	}
+}
+
+/* === ESTILOS PARA PANTALLA CON UN MÁXIMO DE 846px === */
+
+@media (max-width: 846px) {
+	.btn {
+		font-size: 1.2rem;
+	}
+
+	.site-footer {
+		font-size: 1.4rem;
+	}
+}
+
+/* === ESTILOS PARA PANTALLA CON UN MÁXIMO DE 806px === */
+
+@media (max-width: 806px) {
+	.btn {
+		font-size: 1.1rem;
+	}
+}
+
+/* ==================
+	HACER PEDIDOS 
+================== */
