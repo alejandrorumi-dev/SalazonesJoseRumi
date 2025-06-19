@@ -2,7 +2,7 @@
 
 Sitio web oficial de **Salazones José Rumí**, un negocio familiar ubicado en el Mercado Central de Almería, especializado en salazones, embutidos, vinos y productos tradicionales de la región.
 
-Este sitio busca ofrecer una experiencia moderna, visual, ordenada y responsive, con una interfaz clara para que los clientes puedan explorar los productos y realizar sus encargos fácilmente.
+Esta web ofrece una experiencia moderna, visual, clara y responsive, pensada para que los clientes puedan explorar productos, recibir recomendaciones y realizar sus encargos fácilmente.
 
 ---
 
@@ -17,84 +17,120 @@ Este sitio busca ofrecer una experiencia moderna, visual, ordenada y responsive,
 ```
 
 SalazonesJoseRumi/
-├── index.html
-├── README.md
-├── pages/
-│ └── order.html
-├── css/
-│ ├── base.css
-│ ├── components.css
-│ ├── layout.css
-│ ├── responsive.css
-│ └── pages/
-│ └── order.css
-├── js/
-│ ├── animations.js
-│ ├── carousel.js
-│ ├── filters.js
-│ ├── loader.js
-│ ├── main.js
-│ ├── navigation.js
-│ ├── pagination.js
-│ ├── quantity.js
-│ ├── search.js
-│ └── sorting.js
-├── assets/
-│ ├── banners/
-│ ├── design/
-│ ├── favicon/
-│ ├── icons/
-│ └── images/
+|   index.html
+|   README.md
+|   
++---assets
+|   +---banners
+|   |       
+|   +---design
+|   |   |   
+|   |   \---responsive
+|   |       +---mobile
+|   |       |       
+|   |       \---tablet
+|   |           +---horizontal
+|   |           |       
+|   |           \---vertical
+|   |                   
+|   +---favicon
+|   |       
+|   +---icons
+|   |       
+|   \---images
+|           
++---css
+|   |   base.css
+|   |   components.css
+|   |   layout.css
+|   |   responsive.css
+|   |   
+|   +---components
+|   |       banners.css
+|   |       buttons.css
+|   |       cards.css
+|   |       carousel.css
+|   |       cart.css
+|   |       dropdown.css
+|   |       filters-row.css
+|   |       hamburger-menu.css
+|   |       header.css
+|   |       icons.css
+|   |       pagination.css
+|   |       search.css
+|   |       texts.css
+|   |       
+|   \---pages
+|           order.css
+|           
++---js
+|       animations.js
+|       carousel.js
+|       cart.js
+|       filters.js
+|       loader.js
+|       main.js
+|       navigation.js
+|       pagination.js
+|       quantity.js
+|       search.js
+|       sorting.js
+|       
+\---pages
+        order.html
 
 ```
 
-> La estructura del proyecto sigue un enfoque modular para facilitar la organización, el mantenimiento y la escalabilidad.
+> La estructura modular facilita el mantenimiento, escalabilidad y claridad entre componentes reutilizables y específicos por página.
 
 ---
 
 ## 📱 Responsive Design
 
-- Totalmente adaptado a escritorio, tablet (horizontal y vertical) y móviles.
-- **Cards de productos:**
-  - Verticales en escritorio y tablet horizontal.
-  - Horizontales en tablet vertical y móvil.
-- **Header y footer** con altura fija y coherencia visual entre secciones.
-- Carrito accesible como **aside lateral en escritorio** y **modal en móviles/tablets**.
-- Experiencia visual optimizada con transiciones, animaciones y mensajes personalizados.
+- Adaptado a escritorio, tablet (horizontal y vertical) y móviles.
+- Cards de productos:
+  - **Verticales** en escritorio y tablet horizontal.
+  - **Horizontales** en tablet vertical y móvil.
+- Header y footer con altura fija (8rem), sin romper el diseño al añadir elementos.
+- Carrito:
+  - Como **aside** en escritorio.
+  - Como **modal** en móvil y tablet.
+- Responsive modularizado por componente y comportamiento.
 
 ---
 
 ## 🛠️ Tecnologías utilizadas
 
 - **HTML5**
-- **CSS3** (modular y responsive)
-- **JavaScript** (funcionalidades dinámicas y control de interfaz)
+- **CSS3** (modular, responsive y por componente)
+- **JavaScript** (funcionalidades dinámicas, validaciones, interacciones visuales)
 - **GitHub Pages** (despliegue)
-- **Photoshop** (diseño visual de banners y assets)
-- **ChatGPT** y **Claude** (asistencia técnica y visual)
+- **Photoshop** (banners, assets gráficos)
+- **ChatGPT** y **Claude** (soporte técnico y diseño asistido)
 
 ---
 
 ## ✅ Funcionalidades implementadas
 
-- Menú de navegación responsive con hamburguesa.
-- Cards adaptativas por tipo de dispositivo.
-- Carrito visual e interactivo.
-- Sistema de usuarios con validaciones, edición y eliminación.
-- Confirmaciones estilizadas y alertas personalizadas.
-- Estructura modular de estilos (`css/components`) y scripts.
-- Cambios visuales con animaciones y control de errores.
-- Diseño equilibrado con enfoque en la experiencia de usuario.
+- Navegación responsive con menú hamburguesa y overlay.
+- Cards adaptativas según el dispositivo.
+- Carrito visual, con alertas personalizadas y contador.
+- Sistema de usuarios con creación, edición, validaciones y eliminación.
+- Selección múltiple de usuarios y confirmaciones con cuenta regresiva.
+- Menús desplegables con opciones interactivas.
+- Animaciones suaves y diseño accesible.
+- Modularización completa de estilos y scripts.
 
 ---
 
 ## 🔄 Funcionalidades en desarrollo
 
 - Filtro de productos por categoría.
-- Paginación dinámica.
-- Formulario de pedido con validación de campos.
-- Control de stock: productos agotados visibles pero desactivados.
-- Galería visual y página de FAQ.
+- Paginación real según disponibilidad.
+- Formulario de pedido con validación y selección de fecha/envío.
+- Control visual de stock (productos agotados desactivados).
+- Galería multimedia (fotos y vídeos).
+- Página de FAQ.
 
 ---
 
@@ -109,3 +145,4 @@ Desarrollado por [Alejandro Rumí Morales](https://github.com/alejandrorumi-dev)
 ## 📜 Licencia
 
 Este proyecto está licenciado bajo la [MIT License](LICENSE).
+
