@@ -131,7 +131,9 @@
 
 	.order-header .hamburger-menu {
 		display: block;
+		top: -4px;
 		left: 0;
+		height: 100%;
 	}
 
 	.social-buttons,
