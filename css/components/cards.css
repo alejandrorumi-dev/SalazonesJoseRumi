@@ -35,7 +35,7 @@
 
 .product-cards {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(330px, 1fr));
   /* 🔹 Cards responsivas más pequeñas */
   gap: 1.5rem;
   padding: 0;
@@ -45,7 +45,7 @@
 
 .product-card {
   width: 100%;
-  max-width: 320px;
+  max-width: 370px;
   background-color: #fff;
   border-radius: 12px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
@@ -69,6 +69,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  margin-bottom: 1rem;
 }
 
 .product-image img {
@@ -91,29 +92,71 @@
   font-size: 1rem;
 }
 
-.stock {
-  font-size: 1.2rem;
-  font-weight: bold;
-  color: var(--color-product-available);
-}
+/* === FILA DE STOCK CON FAVORITOS === */
 
-.buttons-card {
+.status-favorites-row {
+  width: 100%;
+}
+.stock-container {
   display: flex;
   justify-content: space-between;
   align-items: center;
   width: 100%;
-  gap: 1rem;
+  margin-bottom: 1rem;
+  position: relative;
 }
 
-.buttons-card .favorites-icon {
-  transform: scale(2);
-  border-radius: 50%;
-  border: 1px solid black;
-  padding: 0.2rem;
+.stock,
+.no-stock {
+  flex: 1;
+  text-align: center;
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin: 0;
 }
 
-.buttons-card .favorites-icon:hover {
-  transform: scale(2.3);
+.stock {
+  color: var(--color-product-available);
+}
+
+.no-stock {
+  color: var(--color-product-unavailable, #e74c3c);
+}
+
+/* Favoritos en la misma fila que el stock */
+.stock-container .favorites-container-card .btn-favorites {
+  transform: scale(1.5);
+  border: none;
+  background: transparent;
+  margin-left: 1rem;
+  padding: 0;
+  cursor: pointer;
+  position: absolute;
+  top: -13px;
+  right: 0;
+}
+
+.stock-container .btn-favorites:hover {
+  transform: scale(1.7);
+  border-color: var(--color-accent);
+}
+
+.stock-container .favorites-icon {
+  width: 20px;
+  height: 20px;
+}
+
+.buttons-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+/* Ocultar favoritos duplicados que estén en buttons-card */
+.buttons-card .btn-favorites {
+  display: none;
 }
 
 .buttons-card .view-details {
@@ -129,6 +172,7 @@
   width: 80%;
   text-transform: uppercase;
   letter-spacing: 0.5px;
+  margin-top: 1rem;
 }
 
 .view-details:hover {
@@ -142,6 +186,8 @@
   margin: 0.75rem 0 0.5rem 0;
   text-align: center;
   font-size: 1.1rem;
+  width: 70%;
+  margin: 0 auto;
 }
 
 .add-to-cart {
