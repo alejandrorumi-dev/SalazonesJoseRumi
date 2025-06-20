@@ -55,15 +55,15 @@ export function initLoader(options = {}) {
       }
 
       .loader-logo img {
-        width: 120px;
+        width: 820px;
         height: auto;
         margin-bottom: 20px;
         animation: pulse 2s ease-in-out infinite;
       }
 
       .loader-spinner {
-        width: 40px;
-        height: 40px;
+        width: 80px;
+        height: 80px;
         border: 4px solid rgba(255, 255, 255, 0.3);
         border-top: 4px solid white;
         border-radius: 50%;
@@ -73,7 +73,7 @@ export function initLoader(options = {}) {
 
       .loader-text {
         font-family: 'Segoe UI', sans-serif;
-        font-size: 18px;
+        font-size: 32px;
         font-weight: 500;
         margin-top: 10px;
       }
