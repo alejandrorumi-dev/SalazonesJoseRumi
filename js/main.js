@@ -29,11 +29,13 @@ import { initSortingSystem } from '../js/sorting.js';
 import { initCartModal } from '../js/cart.js';
 
 document.addEventListener('DOMContentLoaded', () => {
-  // Configurar sistema de carga de páginas
+  // ✅ CONFIGURACIÓN CORREGIDA: Solo mostrar loader en primera carga
   const pageLoader = initLoader({
-    duration: 3000 // 3 segundos - puedes cambiar este valor
+    duration: 2000, // 2 segundos (reducido)
+    showOnFirstLoad: true, // ✅ Solo en primera carga
+    showOnNavigation: false // ✅ NO en navegación (esto causaba el problema)
   });
-  console.log('🔄 Sistema de pantalla de carga activado');
+  console.log('🔄 Sistema de pantalla de carga activado (solo primera carga)');
 
   // Configurar menú hamburguesa
   setupHamburgerMenu();
