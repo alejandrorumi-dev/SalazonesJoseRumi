@@ -16,13 +16,15 @@
 
 	.mobile-nav.open {
 		display: block;
+		height: 220px;
+		width: 250px;
 		animation: fadeIn 0.3s ease;
 	}
 
 	/* === MENÚ DESPLEGABLE === */
 
 	.mobile-nav ul li a {
-		font-size: 2rem;
+		font-size: 1rem;
 	}
 
 	.header-left {
@@ -35,6 +37,29 @@
 
 	.main-header .dropdown-menu {
 		display: none;
+	}
+
+	.order-header .mobile-nav {
+		width: 300px;
+		height: 250px;
+		padding: 1rem;
+	}
+
+	.order-header .mobile-nav ul {
+		gap: 0.5rem;
+	}
+
+	.order-header .mobile-nav ul li a {
+		font-size: 0.5rem;
+	}
+
+	.order-header .mobile-nav ul li>ul {
+		height: 190px;
+		margin-top: 0;
+	}
+
+	.order-header .mobile-nav ul li>ul li {
+		height: 50px;
 	}
 
 	/* === HEADER === */
@@ -81,36 +106,50 @@
 		height: 5rem;
 		font-size: 1rem;
 	}
-}
 
-/* ==================
-	HACER PEDIDOS 
-================== */
+	/* ==================
+		HACER PEDIDOS 
+	================== */
 
-@media (max-width: 1024px) {
-
-	.order-header .hamburger-menu {
-		display: none;
-	}
-
-	.search-suggestions {
-		min-width: 430px;
-	}
-	
-	.search-container .suggestion-content 
-	.suggestion-name,
-	.suggestion-category,
-	.suggestion-status {
-		font-size: 0.8rem;
-	}
-
-	.order-header .dropdown-menu {
+	.header-wrapper {
+		display: grid;
+		grid-template-columns: 1fr 2fr 1fr;
 		width: 90%;
+		padding: 0;
 		margin: 0 auto;
 	}
 
-	.order-header .dropdown-menu ul li a {
-		font-size: 1.1rem;
+	.header-wrapper img {
+		width: auto;
+		height: 7rem;
+	}
+
+	.header-icons {
+		justify-content: space-around;
+	}
+
+	.order-header .hamburger-menu {
+		display: block;
+		left: 0;
+	}
+
+	.social-buttons,
+	.dropdown-menu {
+		display: none;
+	}
+
+	.search-container {
+		width: 25rem;
+	}
+
+	.search-suggestions {
+		min-width: 370px;
+	}
+
+	.search-container .suggestion-content .suggestion-name,
+	.suggestion-category,
+	.suggestion-status {
+		font-size: 0.8rem;
 	}
 
 	.banner-delivery {
