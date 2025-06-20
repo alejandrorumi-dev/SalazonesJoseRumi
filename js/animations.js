@@ -1,5 +1,4 @@
 // Función para activar animación de borrado en texto
-
 export function animateTitle() {
   const titleElement = document.querySelector('.main-title');
   if (!titleElement) return;
@@ -38,8 +37,7 @@ export function animateTitle() {
   }
 }
 
-// Evitar expansión por clic en dispositivos táctiles,
-// pero permitir que los enlaces funcionen correctamente
+// No bloquear enlaces válidos en dispositivos táctiles
 export function blockExpandButtonClickOnTouchDevices() {
   const isTouchDevice = window.matchMedia('(hover: none)').matches;
 
@@ -47,21 +45,19 @@ export function blockExpandButtonClickOnTouchDevices() {
     const buttons = document.querySelectorAll('.expand-button');
 
     buttons.forEach(button => {
-      const text = button.querySelector('.text');
-      if (text) {
-        text.style.transform = 'none';
-        text.style.opacity = '1';
-        text.style.visibility = 'visible';
-        text.style.width = 'auto'; // Añade esto para asegurar que el texto se vea si lo necesitas
-      }
-
-      // No bloqueamos si el botón es un enlace <a href="...">
-      if (!button.hasAttribute('href')) {
+      // ✅ SOLO bloqueamos si NO es un enlace válido
+      const hasValidHref = button.hasAttribute('href') && button.getAttribute('href') !== '#';
+      
+      if (!hasValidHref) {
+        // Solo bloquear botones sin enlace válido
         button.addEventListener('click', (e) => {
           e.preventDefault();
           e.stopPropagation();
-          console.log('❌ Clic bloqueado (sin enlace)');
+          console.log('❌ Clic bloqueado (sin enlace válido)');
         });
+      } else {
+        // ✅ Para enlaces válidos, permitir navegación normal
+        console.log('✅ Enlace válido detectado:', button.getAttribute('href'));
       }
     });
   }
