@@ -56,27 +56,14 @@
 	position: relative;
 }
 
-.mobile-nav ul li>ul {
-	display: none;
-	margin-top: 0.5rem;
-	background-color: var(--color-bg-secundary);
-	border-radius: 0.5rem;
-	padding: 1rem;
-	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-	transition: all 0.3s ease;
-	opacity: 0;
-	transform: translateY(-10px);
+.rrss-nav {
+	display: flex;
+	justify-content: center;
+	align-items: center;
 }
 
-.mobile-nav ul li:hover>ul {
-	display: block;
-	opacity: 1;
-	transform: translateY(0);
-}
-
-.mobile-nav ul li>ul li {
-	margin: 0;
-	padding: 0.5rem 0;
+.rrss-nav a {
+	font-size: 0.5rem !important;
 }
 
 /* === MENÚ DESPLEGABLE - CATEGORÍAS | ORDENAR | TARJETAS === */
