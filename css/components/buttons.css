@@ -60,32 +60,18 @@
 .btn-rrss {
 	display: flex;
 	align-items: center;
+	justify-content: center;
 	width: 3.5rem;
 	height: 3.5rem;
 	border-radius: 50%;
 	gap: 0.5rem;
 	padding: 1rem;
-}
-
-.btn-rrss {
-	background: none;
+	background: white;
 	border: none;
 	font: inherit;
-	color: inherit;
+	color: black;
 	text-align: inherit;
 	cursor: pointer;
-}
-
-.twitter,
-.instagram,
-.tiktok {
-	display: flex;
-	align-items: center;
-	background-color: var(--color-accent);
-	color: var(--color-text-buttons);
-	width: 4.5rem;
-	height: 4.5rem;
-	border-radius: 50%;
 }
 
 .rrss-icon,
@@ -93,9 +79,6 @@
 	transform: scale(1);
 }
 
-.btn-rrss:hover .rrss-icon {
-	transform: scale(1.5);
-}
 
 .btn-favorites {
 	border-radius: 50%;
