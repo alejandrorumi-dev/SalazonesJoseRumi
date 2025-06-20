@@ -428,141 +428,180 @@
 				<!-- PRODUCTO DISPONIBLE -->
 				<div class="product-card" data-product="producto-1" data-category="salazones">
 					<div class="product-content">
+						<!-- IMAGEN DEL PRODUCTO -->
 						<div class="product-image">
 							<img src="../assets/images/fondoSalazones.png" alt="Foto del producto" />
 						</div>
-						<div class="stock-container">
-							<p class="stock">DISPONIBLE</p>
-						</div>
 
-						<h3 class="product-name">Bonito</h3>
-						<p class="price">Precio: 24,50€/Kg</p>
-
-						<div class="dropdown" id="amount-dropdown-1">
-							<label for="amount-select-1" class="select-label">
-								<p class="amount-text">Selecciona una cantidad:</p>
-								<svg class="dropdown-arrow" fill="#000000" viewBox="0 0 32 32"
-									xmlns="http://www.w3.org/2000/svg">
-									<path
-										d="M11.125 16.313l7.688-7.688 3.594 3.719-11.094 11.063-11.313-11.313 3.5-3.531z" />
-								</svg>
-							</label>
-
-							<!-- Opciones predefinidas -->
-							<div class="dropdown-options">
-								<button type="button" class="dropdown-option" data-value="100">100g</button>
-								<button type="button" class="dropdown-option" data-value="250">250g</button>
-								<button type="button" class="dropdown-option" data-value="500">500g</button>
-								<button type="button" class="dropdown-option" data-value="1000">1kg</button>
-								<button type="button" class="dropdown-option" data-value="2000">2kg</button>
-								<button type="button" class="dropdown-option custom-trigger">Otra cantidad</button>
-
-								<!-- Input oculto que aparece al seleccionar "Otra cantidad" -->
-								<div class="custom-amount-container" style="display: none;">
-									<label for="custom-amount-1" class="sr-only">Cantidad personalizada</label>
-									<input type="number" id="custom-amount-1" name="custom-amount-1" value="250"
-										step="50" min="50" max="10000" />
-									<span>g</span>
+						<!-- FILA 1: DISPONIBLE + CORAZÓN -->
+						<div class="status-favorites-row">
+							<div class="stock-container">
+								<p class="stock">DISPONIBLE</p>
+								<div class="favorites-container-card">
+									<button class="btn-rrss btn-favorites" aria-label="Ver favoritos"
+										title="Mis favoritos">
+										<svg class="favorites-icon" viewBox="0 0 24 24" fill="currentColor"
+											xmlns="http://www.w3.org/2000/svg">
+											<path fill-rule="evenodd" clip-rule="evenodd"
+												d="M12 6.00019C10.2006 3.90317 7.19377 3.2551 4.93923 5.17534C2.68468 7.09558 2.36727 10.3061 4.13778 12.5772C5.60984 14.4654 10.0648 18.4479 11.5249 19.7369C11.6882 19.8811 11.7699 19.9532 11.8652 19.9815C11.9483 20.0062 12.0393 20.0062 12.1225 19.9815C12.2178 19.9532 12.2994 19.8811 12.4628 19.7369C13.9229 18.4479 18.3778 14.4654 19.8499 12.5772C21.6204 10.3061 21.3417 7.07538 19.0484 5.17534C16.7551 3.2753 13.7994 3.90317 12 6.00019Z"
+												stroke="#000000" stroke-width="1.656" stroke-linecap="round"
+												stroke-linejoin="round"></path>
+										</svg>
+									</button>
 								</div>
 							</div>
 
-							<!-- Select oculto para funcionalidad -->
-							<select id="amount-select-1" name="amount-select-1" style="display: none;">
-								<option value="250">250g</option>
-								<option value="100">100g</option>
-								<option value="500">500g</option>
-								<option value="1000">1kg</option>
-								<option value="2000">2kg</option>
-							</select>
 						</div>
-						<div class="buttons-card">
-							<button class="btn-rrss btn-favorites" id="favoritesBtn" aria-label="Ver favoritos"
-								title="Mis favoritos">
-								<svg class="favorites-icon" viewBox="0 0 24 24" fill="currentColor"
-									xmlns="http://www.w3.org/2000/svg">
-									<g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-									<g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
-									<g id="SVGRepo_iconCarrier">
-										<path fill-rule="evenodd" clip-rule="evenodd"
-											d="M12 6.00019C10.2006 3.90317 7.19377 3.2551 4.93923 5.17534C2.68468 7.09558 2.36727 10.3061 4.13778 12.5772C5.60984 14.4654 10.0648 18.4479 11.5249 19.7369C11.6882 19.8811 11.7699 19.9532 11.8652 19.9815C11.9483 20.0062 12.0393 20.0062 12.1225 19.9815C12.2178 19.9532 12.2994 19.8811 12.4628 19.7369C13.9229 18.4479 18.3778 14.4654 19.8499 12.5772C21.6204 10.3061 21.3417 7.07538 19.0484 5.17534C16.7551 3.2753 13.7994 3.90317 12 6.00019Z"
-											stroke="#000000" stroke-width="1.656" stroke-linecap="round"
-											stroke-linejoin="round"></path>
-									</g>
-								</svg>
-							</button>
-							<button type="button" class="view-details">VER DETALLES</button>
+
+						<!-- FILA 2: NOMBRE DEL PRODUCTO -->
+						<div class="product-info-section">
+							<h3 class="product-name">Bonito</h3>
 						</div>
-						<p class="total-price"></p>
-						<button type="button" class="add-to-cart">AÑADIR PRODUCTO</button>
+
+						<!-- FILA 3: PRECIO DEL PRODUCTO -->
+						<div class="product-price-section">
+							<p class="price">Precio: 24,50€/Kg</p>
+						</div>
+
+						<!-- FILA 4: SELECCIÓN DE CANTIDAD -->
+						<div class="quantity-section">
+							<div class="dropdown" id="amount-dropdown-1">
+								<label for="amount-select-1" class="select-label">
+									<p class="amount-text">Selecciona una cantidad:</p>
+									<svg class="dropdown-arrow" fill="#000000" viewBox="0 0 32 32"
+										xmlns="http://www.w3.org/2000/svg">
+										<path
+											d="M11.125 16.313l7.688-7.688 3.594 3.719-11.094 11.063-11.313-11.313 3.5-3.531z" />
+									</svg>
+								</label>
+
+								<!-- Opciones predefinidas -->
+								<div class="dropdown-options">
+									<button type="button" class="dropdown-option" data-value="100">100g</button>
+									<button type="button" class="dropdown-option" data-value="250">250g</button>
+									<button type="button" class="dropdown-option" data-value="500">500g</button>
+									<button type="button" class="dropdown-option" data-value="1000">1kg</button>
+									<button type="button" class="dropdown-option" data-value="2000">2kg</button>
+									<button type="button" class="dropdown-option custom-trigger">Otra cantidad</button>
+
+									<!-- Input oculto que aparece al seleccionar "Otra cantidad" -->
+									<div class="custom-amount-container" style="display: none;">
+										<label for="custom-amount-1" class="sr-only">Cantidad personalizada</label>
+										<input type="number" id="custom-amount-1" name="custom-amount-1" value="250"
+											step="50" min="50" max="10000" />
+										<span>g</span>
+									</div>
+								</div>
+
+								<!-- Select oculto para funcionalidad -->
+								<select id="amount-select-1" name="amount-select-1" style="display: none;">
+									<option value="250">250g</option>
+									<option value="100">100g</option>
+									<option value="500">500g</option>
+									<option value="1000">1kg</option>
+									<option value="2000">2kg</option>
+								</select>
+							</div>
+							<p class="total-price"></p>
+						</div>
+
+						<!-- FILA 5: BOTONES -->
+						<div class="buttons-section">
+							<div class="buttons-card">
+								<button type="button" class="view-details">VER DETALLES</button>
+								<button type="button" class="add-to-cart">AÑADIR PRODUCTO</button>
+							</div>
+						</div>
 					</div>
 				</div>
-
+				
 				<!-- PRODUCTO AGOTADO -->
 				<div class="product-card unavailable" data-product="producto-12" data-category="salazones">
 					<div class="product-badge agotado">AGOTADO</div>
 					<div class="product-content">
+						<!-- IMAGEN DEL PRODUCTO -->
 						<div class="product-image">
 							<img src="../assets/images/logoSalazones.png" alt="Foto del producto" />
 						</div>
-						<p class="no-stock">NO DISPONIBLE</p>
-						<h3 class="product-name">Mojama de Serón</h3>
-						<p class="price">Precio: 45,80€/Kg</p>
 
-						<div class="dropdown" id="amount-dropdown-12">
-							<label for="amount-select-12" class="select-label">
-								<p class="amount-text">Selecciona una cantidad:</p>
-								<svg class="dropdown-arrow" fill="#000000" viewBox="0 0 32 32"
-									xmlns="http://www.w3.org/2000/svg">
-									<path
-										d="M11.125 16.313l7.688-7.688 3.594 3.719-11.094 11.063-11.313-11.313 3.5-3.531z" />
-								</svg>
-							</label>
-
-							<!-- Opciones predefinidas -->
-							<div class="dropdown-options">
-								<button type="button" class="dropdown-option" data-value="100">100g</button>
-								<button type="button" class="dropdown-option" data-value="250">250g</button>
-								<button type="button" class="dropdown-option" data-value="500">500g</button>
-								<button type="button" class="dropdown-option" data-value="1000">1kg</button>
-								<button type="button" class="dropdown-option" data-value="2000">2kg</button>
-								<button type="button" class="dropdown-option custom-trigger">Otra cantidad</button>
-
-								<!-- Input oculto que aparece al seleccionar "Otra cantidad" -->
-								<div class="custom-amount-container" style="display: none;">
-									<label for="custom-amount-12" class="sr-only">Cantidad personalizada</label>
-									<input type="number" id="custom-amount-12" name="custom-amount-12" value="250"
-										step="50" min="50" max="10000" />
-									<span>g</span>
+						<!-- FILA 1: NO DISPONIBLE + CORAZÓN -->
+						<div class="status-favorites-row">
+							<div class="stock-container">
+								<p class="no-stock">NO DISPONIBLE</p>
+								<div class="favorites-container-card">
+									<button class="btn-rrss btn-favorites" aria-label="Ver favoritos"
+										title="Mis favoritos">
+										<svg class="favorites-icon" viewBox="0 0 24 24" fill="currentColor"
+											xmlns="http://www.w3.org/2000/svg">
+											<path fill-rule="evenodd" clip-rule="evenodd"
+												d="M12 6.00019C10.2006 3.90317 7.19377 3.2551 4.93923 5.17534C2.68468 7.09558 2.36727 10.3061 4.13778 12.5772C5.60984 14.4654 10.0648 18.4479 11.5249 19.7369C11.6882 19.8811 11.7699 19.9532 11.8652 19.9815C11.9483 20.0062 12.0393 20.0062 12.1225 19.9815C12.2178 19.9532 12.2994 19.8811 12.4628 19.7369C13.9229 18.4479 18.3778 14.4654 19.8499 12.5772C21.6204 10.3061 21.3417 7.07538 19.0484 5.17534C16.7551 3.2753 13.7994 3.90317 12 6.00019Z"
+												stroke="#000000" stroke-width="1.656" stroke-linecap="round"
+												stroke-linejoin="round"></path>
+										</svg>
+									</button>
 								</div>
 							</div>
 
-							<select id="amount-select-12" name="amount-select-12" style="display: none;">
-								<option value="250">250g</option>
-								<option value="100">100g</option>
-								<option value="500">500g</option>
-								<option value="1000">1kg</option>
-								<option value="2000">2kg</option>
-							</select>
 						</div>
-						<div class="buttons-card">
-							<button class="btn-rrss btn-favorites" id="favoritesBtn" aria-label="Ver favoritos"
-								title="Mis favoritos">
-								<svg class="favorites-icon" viewBox="0 0 24 24" fill="currentColor"
-									xmlns="http://www.w3.org/2000/svg">
-									<g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-									<g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
-									<g id="SVGRepo_iconCarrier">
-										<path fill-rule="evenodd" clip-rule="evenodd"
-											d="M12 6.00019C10.2006 3.90317 7.19377 3.2551 4.93923 5.17534C2.68468 7.09558 2.36727 10.3061 4.13778 12.5772C5.60984 14.4654 10.0648 18.4479 11.5249 19.7369C11.6882 19.8811 11.7699 19.9532 11.8652 19.9815C11.9483 20.0062 12.0393 20.0062 12.1225 19.9815C12.2178 19.9532 12.2994 19.8811 12.4628 19.7369C13.9229 18.4479 18.3778 14.4654 19.8499 12.5772C21.6204 10.3061 21.3417 7.07538 19.0484 5.17534C16.7551 3.2753 13.7994 3.90317 12 6.00019Z"
-											stroke="#000000" stroke-width="1.656" stroke-linecap="round"
-											stroke-linejoin="round"></path>
-									</g>
-								</svg>
-							</button>
-							<button type="button" class="view-details">VER DETALLES</button>
+
+						<!-- FILA 2: NOMBRE DEL PRODUCTO -->
+						<div class="product-info-section">
+							<h3 class="product-name">Mojama de Serón</h3>
 						</div>
-						<p class="total-price"></p>
-						<button class="add-to-cart">AÑADIR PRODUCTO</button>
+
+						<!-- FILA 3: PRECIO DEL PRODUCTO -->
+						<div class="product-price-section">
+							<p class="price">Precio: 45,80€/Kg</p>
+						</div>
+
+						<!-- FILA 4: SELECCIÓN DE CANTIDAD -->
+						<div class="quantity-section">
+							<div class="dropdown" id="amount-dropdown-12">
+								<label for="amount-select-12" class="select-label">
+									<p class="amount-text">Selecciona una cantidad:</p>
+									<svg class="dropdown-arrow" fill="#000000" viewBox="0 0 32 32"
+										xmlns="http://www.w3.org/2000/svg">
+										<path
+											d="M11.125 16.313l7.688-7.688 3.594 3.719-11.094 11.063-11.313-11.313 3.5-3.531z" />
+									</svg>
+								</label>
+
+								<!-- Opciones predefinidas -->
+								<div class="dropdown-options">
+									<button type="button" class="dropdown-option" data-value="100">100g</button>
+									<button type="button" class="dropdown-option" data-value="250">250g</button>
+									<button type="button" class="dropdown-option" data-value="500">500g</button>
+									<button type="button" class="dropdown-option" data-value="1000">1kg</button>
+									<button type="button" class="dropdown-option" data-value="2000">2kg</button>
+									<button type="button" class="dropdown-option custom-trigger">Otra cantidad</button>
+
+									<!-- Input oculto que aparece al seleccionar "Otra cantidad" -->
+									<div class="custom-amount-container" style="display: none;">
+										<label for="custom-amount-12" class="sr-only">Cantidad personalizada</label>
+										<input type="number" id="custom-amount-12" name="custom-amount-12" value="250"
+											step="50" min="50" max="10000" />
+										<span>g</span>
+									</div>
+								</div>
+
+								<select id="amount-select-12" name="amount-select-12" style="display: none;">
+									<option value="250">250g</option>
+									<option value="100">100g</option>
+									<option value="500">500g</option>
+									<option value="1000">1kg</option>
+									<option value="2000">2kg</option>
+								</select>
+							</div>
+							<p class="total-price"></p>
+						</div>
+
+						<!-- FILA 5: BOTONES -->
+						<div class="buttons-section">
+							<div class="buttons-card">
+								<button type="button" class="view-details">VER DETALLES</button>
+								<button class="add-to-cart">AÑADIR PRODUCTO</button>
+							</div>
+						</div>
 					</div>
 				</div>
 			</section>
