@@ -38,7 +38,8 @@ export function animateTitle() {
   }
 }
 
-// Evitar expansión por clic en dispositivos táctiles
+// Evitar expansión por clic en dispositivos táctiles,
+// pero permitir que los enlaces funcionen correctamente
 export function blockExpandButtonClickOnTouchDevices() {
   const isTouchDevice = window.matchMedia('(hover: none)').matches;
 
@@ -46,7 +47,7 @@ export function blockExpandButtonClickOnTouchDevices() {
     const buttons = document.querySelectorAll('.expand-button');
 
     buttons.forEach(button => {
-      // Eliminar cualquier clase que provoque expansión visual
+      // Eliminar cualquier clase o animación visual si la tuviera
       const text = button.querySelector('.text');
       if (text) {
         text.style.transform = 'none';
@@ -54,12 +55,15 @@ export function blockExpandButtonClickOnTouchDevices() {
         text.style.visibility = 'visible';
       }
 
-      // Bloquear la navegación completamente
-      button.addEventListener('click', (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        console.log('❌ Clic bloqueado en botón expansible (modo táctil)');
-      });
+      // ⚠️ Si el botón contiene un enlace (<a>), NO bloquear el click
+      const hasLink = button.querySelector('a');
+      if (!hasLink) {
+        button.addEventListener('click', (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          console.log('❌ Clic bloqueado en botón expansible (modo táctil, sin enlace)');
+        });
+      }
     });
   }
 }
