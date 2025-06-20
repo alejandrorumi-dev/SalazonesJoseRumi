@@ -3,26 +3,30 @@
 /* === ESTILOS: CANTIDAD === */
 
 .select-label {
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
-	font-weight: 500;
-	margin-bottom: 0.4rem;
-	cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: 500;
+  margin-bottom: 0.4rem;
+  cursor: pointer;
+}
+
+.select-label .amount-text {
+  font-size: 0.9rem;
 }
 
 /* === ESTILOS: OTRA CANTIDAD === */
 
 .custom-amount-container {
-	display: none;
-	align-items: center;
-	gap: 0.5rem;
-	margin-top: 0.5rem;
+  display: none;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
 }
 
 .custom-amount-container input {
-	width: 80px;
-	padding: 0.3rem;
+  width: 80px;
+  padding: 0.3rem;
 }
 
 /* === ESTILOS: TARJETAS === */
@@ -91,6 +95,45 @@
   font-size: 1.2rem;
   font-weight: bold;
   color: var(--color-product-available);
+}
+
+.buttons-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  gap: 1rem;
+}
+
+.buttons-card .favorites-icon {
+  transform: scale(2);
+  border-radius: 50%;
+  border: 1px solid black;
+  padding: 0.2rem;
+}
+
+.buttons-card .favorites-icon:hover {
+  transform: scale(2.3);
+}
+
+.buttons-card .view-details {
+  background-color: #008ec6;
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  width: 80%;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.view-details:hover {
+  background-color: #0176a4;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 
 .total-price {
