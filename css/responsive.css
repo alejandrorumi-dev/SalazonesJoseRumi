@@ -11,7 +11,3 @@
 
 /* === RESPONSIVE - MÓVILES === */
 @import url('../css/responsive/responsive-mobile.css');
-
-.expand-button:hover {
-	display: none;
-}
