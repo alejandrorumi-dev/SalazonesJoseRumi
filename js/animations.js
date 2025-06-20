@@ -47,21 +47,20 @@ export function blockExpandButtonClickOnTouchDevices() {
     const buttons = document.querySelectorAll('.expand-button');
 
     buttons.forEach(button => {
-      // Eliminar cualquier clase o animación visual si la tuviera
       const text = button.querySelector('.text');
       if (text) {
         text.style.transform = 'none';
         text.style.opacity = '1';
         text.style.visibility = 'visible';
+        text.style.width = 'auto'; // Añade esto para asegurar que el texto se vea si lo necesitas
       }
 
-      // ⚠️ Si el botón contiene un enlace (<a>), NO bloquear el click
-      const hasLink = button.querySelector('a');
-      if (!hasLink) {
+      // No bloqueamos si el botón es un enlace <a href="...">
+      if (!button.hasAttribute('href')) {
         button.addEventListener('click', (e) => {
           e.preventDefault();
           e.stopPropagation();
-          console.log('❌ Clic bloqueado en botón expansible (modo táctil, sin enlace)');
+          console.log('❌ Clic bloqueado (sin enlace)');
         });
       }
     });
