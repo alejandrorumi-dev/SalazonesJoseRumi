@@ -12,9 +12,29 @@
 /* === RESPONSIVE - MÓVILES === */
 @import url('../css/responsive/responsive-mobile.css');
 
-/* === BLOQUEO DE EXPANSIÓN EN DISPOSITIVOS TÁCTILES === */
 @media (hover: none) {
+	.expand-button {
+		width: 4.5rem !important;
+		border-radius: 50% !important;
+		justify-content: center !important;
+	}
+
+	.expand-button .text {
+		opacity: 0 !important;
+		width: 0 !important;
+		margin: 0 !important;
+		visibility: hidden !important;
+		transition: none !important;
+	}
+
 	.expand-button:hover {
-		display: none;
+		width: 4.5rem !important;
+		border-radius: 50% !important;
+	}
+
+	.about-us:hover,
+	.contact:hover,
+	.faq:hover {
+		width: 4.5rem !important;
 	}
 }
