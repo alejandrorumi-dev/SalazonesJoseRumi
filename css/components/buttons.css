@@ -97,6 +97,21 @@
 	transform: scale(1.5);
 }
 
+.btn-favorites {
+	border-radius: 50%;
+	background-color: #fff;
+	padding: 1rem;
+}
+
+.btn-favorites .favorites-icon {
+	color: transparent;
+}
+
+.btn-favorites .favorites-icon:hover {
+	color: var(--color-product-unavailable);
+	transform: scale(1.5);
+}
+
 .btn-cart {
 	position: relative;
 	border-radius: 50%;
@@ -105,8 +120,6 @@
 }
 
 .btn-cart .cart-icon {
-	align-items: center;
-	justify-content: center;
 	color: var(--color-bg-secundary);
 }
 
