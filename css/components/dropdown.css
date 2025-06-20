@@ -5,7 +5,7 @@
 .mobile-nav {
 	display: none;
 	position: absolute;
-	top: 8rem;
+	top: 6rem;
 	right: 5.5rem;
 	background-color: var(--color-bg-secundary);
 	width: 50%;
@@ -63,7 +63,7 @@
 }
 
 .rrss-nav a {
-	font-size: 0.5rem !important;
+	font-size: 1rem !important;
 }
 
 /* === MENÚ DESPLEGABLE - CATEGORÍAS | ORDENAR | TARJETAS === */
