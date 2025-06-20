@@ -1,13 +1,76 @@
-/* === RESPONSIVE === */
+/* === CORRECCIÓN PARA DISPOSITIVOS TÁCTILES === */
+@media (hover: none) {
 
-/* === RESPONSIVE - NO ESCRITORIO === */
-@import url('../css/responsive/responsive-non-desktop.css');
+	/* ✅ BOTONES EXPANSIBLES: Mantener estado expandido en táctiles */
+	.expand-button {
+		width: auto !important;
+		min-width: 4.5rem !important;
+		border-radius: 2rem !important;
+		justify-content: flex-start !important;
+		padding: 0 1.5rem !important;
+	}
 
-/* === RESPONSIVE - TABLET HORIZONTAL === */
-@import url('../css/responsive/responsive-tablet-horizontal.css');
+	.expand-button .text {
+		opacity: 1 !important;
+		width: auto !important;
+		margin-left: 0.5rem !important;
+		visibility: visible !important;
+		transition: none !important;
+	}
 
-/* === RESPONSIVE - TABLET VERTICAL === */
-@import url('../css/responsive/responsive-tablet-vertical.css');
+	/* ✅ Anchos específicos para cada botón */
+	.about-us {
+		width: 15rem !important;
+	}
 
-/* === RESPONSIVE - MÓVILES === */
-@import url('../css/responsive/responsive-mobile.css');
+	.contact {
+		width: 11rem !important;
+	}
+
+	.faq {
+		width: 18.5rem !important;
+	}
+
+	/* ✅ NO aplicar hover states en dispositivos táctiles */
+	.expand-button:hover {
+		width: auto !important;
+		border-radius: 2rem !important;
+	}
+
+	.about-us:hover,
+	.contact:hover,
+	.faq:hover {
+		width: auto !important;
+	}
+
+	/* ✅ Asegurar que los iconos mantengan su tamaño */
+	.expand-button svg {
+		width: 2.5rem !important;
+		height: 2.5rem !important;
+		flex-shrink: 0 !important;
+	}
+
+	/* ✅ Asegurar que el texto sea legible */
+	.expand-button .text {
+		color: var(--color-text-buttons) !important;
+		font-size: 1.3rem !important;
+		font-weight: 500 !important;
+	}
+}
+
+/* === ASEGURAR QUE LOS ENLACES FUNCIONEN === */
+@media (hover: none) {
+	.expand-button {
+		/* ✅ Asegurar que sea clickeable */
+		cursor: pointer !important;
+		pointer-events: auto !important;
+
+		/* ✅ Mejor feedback visual para táctil */
+		transition: background-color 0.2s ease !important;
+	}
+
+	.expand-button:active {
+		background-color: var(--color-accent-dark, #4a90e2) !important;
+		transform: scale(0.98) !important;
+	}
+}
