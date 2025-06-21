@@ -16,8 +16,6 @@
 
 .rrss-link:hover {
 	color: var(--color-accent) !important;
-	background-color: rgba(255, 255, 255, 0.1) !important;
-	transform: translateX(5px);
 }
 
 /* === ICONOS DE REDES SOCIALES EN EL DROPDOWN === */
@@ -37,22 +35,19 @@
 
 /* === TWITTER === */
 
-.rrss-link:nth-child(1):hover,
 .btn-rrss:nth-child(1):hover {
 	color: #1DA1F2 !important;
 }
 
 /* === INSTAGRAM === */
 
-.mobile-nav ul li>ul li:nth-child(2) .rrss-link:hover,
-.btn-rrss:nth-child(2):hover {
+.btn-rrss:nth-child(2):hoverr {
 	color: #E4405F !important;
 }
 
 /* === TIK TOK === */
 
-.mobile-nav ul li>ul li:nth-child(3) .rrss-link:hover,
-.btn-rrss:nth-child(3):hover {
+.btn-rrss:nth-child(3):hover{
 	color: var(--color-bg-secundary) !important;
 }
 
