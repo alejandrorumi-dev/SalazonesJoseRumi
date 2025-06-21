@@ -2,9 +2,36 @@
 
 /* === ESTILOS PARA PANTALLA CON UN MÁXIMO DE 922px === */
 
-@media (max-width: 922px) {
+@media (max-width: 934px) {
 	.btn {
 		font-size: 1.4rem;
+	}
+
+
+	.header-wrapper {
+		display: grid;
+		grid-template-columns: 1fr 3fr 1fr;
+		width: 90%;
+		padding: 0;
+		margin: 0 auto;
+	}
+
+	.header-wrapper img {
+		width: 170px;
+	}
+
+	.filters-row {
+		display: flex;
+		flex-direction: column;
+	}
+
+	.filters-container {
+		justify-content: space-between;
+		width: 100%;
+	}
+
+	.products-section-header h2 {
+		font-size: 2.5rem;
 	}
 }
 
@@ -14,6 +41,51 @@
 	.btn {
 		font-size: 1.3rem;
 	}
+
+	.header-wrapper {
+		display: flex;
+		flex-direction: column;
+		justify-content: space-between;
+		height: 10rem;
+		padding: 1rem;
+	}
+
+	.header-wrapper .logo-header {
+		display: none;
+	}
+
+	.header-icons {
+		width: 90%;
+	}
+
+	.order-header .hamburger-menu {
+		top: 12px;
+		height: 100%;
+	}
+
+	.order-header .mobile-nav.open {
+		height: 60vh;
+		width: 550px;
+		top: 150px;
+		right: 40px;
+		margin: 0 auto;
+		animation: fadeIn 0.3s ease;
+	}
+
+	.order-header .mobile-nav ul li a {
+		font-size: 2rem;
+		text-align: center;
+	}
+
+	.rrss-nav a {
+		font-size: 2rem !important;
+	}
+
+	.filters-container {
+		display: flex;
+		flex-direction: column;
+	}
+
 }
 
 /* === ESTILOS PARA PANTALLA CON UN MÁXIMO DE 846px === */
@@ -21,6 +93,11 @@
 @media (max-width: 846px) {
 	.btn {
 		font-size: 1.2rem;
+	}
+
+	.order-header .mobile-nav.open {
+		
+		right: 20px;
 	}
 
 	.site-footer {
@@ -35,7 +112,3 @@
 		font-size: 1.1rem;
 	}
 }
-
-/* ==================
-	HACER PEDIDOS 
-================== */
