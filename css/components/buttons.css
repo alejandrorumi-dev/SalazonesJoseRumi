@@ -58,7 +58,7 @@
 /* === ICONOS DE REDES SOCIALES === */
 
 .main-header .btn-rrss {
-	background-color: var(--color-btn-dark);
+	background-color: var(--color-accent);
 	width: 4.5rem;
 	height: 4.5rem;
 }
