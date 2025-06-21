@@ -32,12 +32,6 @@
 	width: 100%;
 }
 
-.main-header .hamburger-icon,
-.main-header .hamburger-icon::before,
-.main-header .hamburger-icon::after {
-	background-color: var(--color-btn-dark);
-}
-
 .hamburger-icon {
 	top: 50%;
 	transform: translateY(-50%);
