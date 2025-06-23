@@ -4,7 +4,7 @@
 ================================================================
 */
 
-@media (max-width: 1280px) {
+@media (min-width: 1025px) and (max-width: 1280px) {
 
 	/*Index*/
 	.main-buttons {
@@ -36,6 +36,7 @@
 	.banner-container {
 		margin: 3rem;
 	}
+	
 	/* === CARDS HORIZONTALES === */
 
 	/* Grid de cards cambia a una sola columna */
