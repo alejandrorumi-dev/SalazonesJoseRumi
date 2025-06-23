@@ -1,0 +1,57 @@
+/*
+================================================================
+4. MÓVIL GRANDE (≤ 600px)
+================================================================
+*/
+@media (max-width: 768px) {
+	.header-left,
+	.header-right {
+		display: none;
+	}
+
+	.hamburger-menu {
+		display: block;
+		position: relative;
+		left: 90%;
+	}
+
+	.mobile-nav {
+		right: 2rem;
+		width: 70%;
+		padding: 2rem;
+	}
+
+	.mobile-nav.open {
+		height: auto;
+	}
+
+	.mobile-nav ul li a {
+		font-size: 1.5rem;
+		text-align: center;
+	}
+
+	.main {
+		height: auto;
+		padding-bottom: 5rem;
+	}
+
+	.btn {
+		font-size: 1.2rem;
+	}
+
+	.main-title {
+		font-size: 2rem;
+	}
+
+	.welcome {
+		font-size: 1.5rem;
+	}
+
+	.phrase {
+		font-size: 1.2rem;
+	}
+
+	.site-footer {
+		font-size: 1rem;
+	}
+}
