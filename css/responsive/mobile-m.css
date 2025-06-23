@@ -1,5 +1,5 @@
 /* === MÓVILES MEDIANOS (421px – 600px) === */
-@media (min-width: 401px) and (max-width: 600px) {
+@media (max-width: 600px) {
 
 	.main {
 		padding-bottom: 5rem;
