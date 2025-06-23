@@ -7,8 +7,11 @@ import { animateTitle, blockExpandButtonClickOnTouchDevices } from '../js/animat
 // Importar el archivo de los filtros
 import { setupFilters, resetFilters } from '../js/filters.js';
 
-// Importar el archivo del carrusel
+// Importar el archivo del carrusel de recomendaciones
 import { setupCarousel } from '../js/carousel.js';
+
+// Importar el carrusel de banners promocionales
+import { setupBannerCarousel } from '../js/carouselBanners.js';
 
 // Importar el sistema de paginación
 import { initPagination } from '../js/pagination.js';
@@ -19,9 +22,6 @@ import { initSearchSystem } from '../js/search.js';
 // Importar el sistema de cantidades
 import { initQuantitySystem } from '../js/quantity.js';
 
-// Importar el sistema de carga
-import { initLoader } from '../js/loader.js';
-
 // Importar el sistema de ordenación
 import { initSortingSystem } from '../js/sorting.js';
 
@@ -29,13 +29,6 @@ import { initSortingSystem } from '../js/sorting.js';
 import { initCartModal } from '../js/cart.js';
 
 document.addEventListener('DOMContentLoaded', () => {
-  // ✅ CONFIGURACIÓN CORREGIDA: Solo mostrar loader en primera carga
-  const pageLoader = initLoader({
-    duration: 2000, // 2 segundos (reducido)
-    showOnFirstLoad: true, // ✅ Solo en primera carga
-    showOnNavigation: false // ✅ NO en navegación (esto causaba el problema)
-  });
-  console.log('🔄 Sistema de pantalla de carga activado (solo primera carga)');
 
   // Configurar menú hamburguesa
   setupHamburgerMenu();
@@ -80,6 +73,15 @@ document.addEventListener('DOMContentLoaded', () => {
     console.log('🎠 Carrusel de recomendaciones activado');
   }
 
+  // Configurar carrusel de banners promocionales
+  if (document.querySelector('.banners-promocionales')) {
+    const bannerCarousel = setupBannerCarousel();
+    if (bannerCarousel) {
+      console.log('🎠 Carrusel de banners promocionales activado');
+      window.bannerCarousel = bannerCarousel;
+    }
+  }
+
   // Configurar sistema de búsqueda
   if (document.querySelector('#search-products')) {
     const searchSystem = initSearchSystem();
@@ -115,8 +117,6 @@ document.addEventListener('DOMContentLoaded', () => {
     window.cartModal = cartModal;
   }
 
-  // Hacer disponible el pageLoader globalmente para debug (opcional)
-  window.pageLoader = pageLoader;
 });
 
 // Hacer disponible la función resetFilters globalmente si es necesario
