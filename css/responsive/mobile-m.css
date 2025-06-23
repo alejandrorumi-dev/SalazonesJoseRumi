@@ -1,0 +1,65 @@
+/* === MÓVILES MEDIANOS (421px – 600px) === */
+@media (max-width: 600px) {
+
+	.main {
+		padding-bottom: 5rem;
+	}
+
+	.header-left,
+	.header-right {
+		display: none;
+	}
+
+	.hamburger-menu {
+		display: block;
+		position: relative;
+		left: 90%;
+	}
+
+	/* === MENÚ DESPLEGABLE === */
+	.mobile-nav {
+		right: 1rem;
+		width: 70%;
+	}
+
+	.mobile-nav.open {
+		display: block;
+		height: auto;
+	}
+
+	.mobile-nav ul li a {
+		font-size: 1.3rem;
+		text-align: center;
+	}
+
+	/* === TEXTOS === */
+	.main-title {
+		font-size: 1.5rem;
+	}
+
+	.welcome {
+		font-size: 1.3rem;
+	}
+
+	.phrase {
+		font-size: 1.3rem;
+	}
+
+	/* === BOTONES === */
+	.btn {
+		font-size: 1.4rem;
+		padding: 0.8rem 1.5rem;
+	}
+
+	.main-buttons {
+		flex-direction: column;
+		align-items: center;
+		gap: 1.2rem;
+	}
+
+	/* === FOOTER === */
+	.site-footer {
+		font-size: 0.9rem;
+		padding: 1.5rem;
+	}
+}
