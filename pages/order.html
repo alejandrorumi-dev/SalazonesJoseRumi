@@ -4,7 +4,7 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Haz tu Pedido | Salazones José Rumí</title>
+	<title>HAZ TU PEDIDO | Salazones José Rumí</title>
 
 	<!--Estilos CSS-->
 	<link rel="stylesheet" href="../css/base.css" />
@@ -225,39 +225,57 @@
 	<section class="banners-promocionales">
 		<div class="banners-container">
 
-			<!-- Banner OFERTAS -->
-			<div class="banner-promocional">
-				<a href="../pages/offers.html" class="banner-link" aria-label="Ver todas las ofertas especiales">
-					<img src="../assets/banners/ofertasSalazones.png"
-						alt="Ofertas especiales - Descuentos en productos seleccionados" class="banner-image">
-					<div class="banner-overlay">
-						<span class="banner-text">Ver Ofertas</span>
-					</div>
-				</a>
-			</div>
+			<div class="banner-carousel-wrapper">
 
-			<!-- Banner PACKS ESPECIALES -->
-			<div class="banner-promocional">
-				<a href="../pages/packs.html" class="banner-link" aria-label="Descubrir packs especiales de productos">
-					<img src="../assets/banners/packsSalazones.png"
-						alt="Packs Especiales - Combos de productos con descuento" class="banner-image">
-					<div class="banner-overlay">
-						<span class="banner-text">Ver Packs</span>
-					</div>
-				</a>
-			</div>
+				<!-- Banner OFERTAS -->
+				<div class="banner-promocional">
+					<a href="../pages/offers.html" class="banner-link" aria-label="Ver todas las ofertas especiales">
+						<img src="../assets/banners/ofertasSalazones.png"
+							alt="Ofertas especiales - Descuentos en productos seleccionados" class="banner-image">
+						<div class="banner-overlay">
+							<span class="banner-text">Ver Ofertas</span>
+						</div>
+					</a>
+				</div>
 
-			<!-- Banner TOP VENTAS -->
-			<div class="banner-promocional">
-				<a href="../pages/top-sale.html" class="banner-link" aria-label="Productos más vendidos y populares">
-					<img src="../assets/banners/ventasSalazones.png"
-						alt="Top Ventas - Los productos más vendidos y populares" class="banner-image">
-					<div class="banner-overlay">
-						<span class="banner-text">Ver Top Ventas</span>
-					</div>
-				</a>
-			</div>
+				<!-- Banner PACKS ESPECIALES -->
+				<div class="banner-promocional">
+					<a href="../pages/packs.html" class="banner-link"
+						aria-label="Descubrir packs especiales de productos">
+						<img src="../assets/banners/packsSalazones.png"
+							alt="Packs Especiales - Combos de productos con descuento" class="banner-image">
+						<div class="banner-overlay">
+							<span class="banner-text">Ver Packs</span>
+						</div>
+					</a>
+				</div>
 
+				<!-- Banner TOP VENTAS -->
+				<div class="banner-promocional">
+					<a href="../pages/top-sale.html" class="banner-link"
+						aria-label="Productos más vendidos y populares">
+						<img src="../assets/banners/ventasSalazones.png"
+							alt="Top Ventas - Los productos más vendidos y populares" class="banner-image">
+						<div class="banner-overlay">
+							<span class="banner-text">Ver Top Ventas</span>
+						</div>
+					</a>
+				</div>
+
+				<!-- === CONTROLES DEL CARRUSEL (solo visible en tablet) === -->
+				<div class="banner-carousel-controls">
+					<button class="banner-control-btn banner-prev" type="button" aria-label="Banner anterior">◀</button>
+					<button class="banner-control-btn banner-next" type="button"
+						aria-label="Banner siguiente">▶</button>
+				</div>
+
+				<!-- === INDICADORES (solo visible en tablet) === -->
+				<div class="banner-indicators">
+					<button class="banner-indicator active" data-slide="0" aria-label="Banner 1"></button>
+					<button class="banner-indicator" data-slide="1" aria-label="Banner 2"></button>
+					<button class="banner-indicator" data-slide="2" aria-label="Banner 3"></button>
+				</div>
+			</div>
 		</div>
 	</section>
 
@@ -387,7 +405,7 @@
 					<!-- Dropdown de Ordenar -->
 					<div class="dropdown" id="sort-dropdown">
 						<label for="sort">
-							Ordenar
+							<span class="categories-name">Ordenar</span>
 							<svg class="dropdown-arrow" fill="#000000" viewBox="0 0 32 32" version="1.1"
 								xmlns="http://www.w3.org/2000/svg">
 								<g stroke-width="0"></g>
@@ -514,7 +532,7 @@
 						</div>
 					</div>
 				</div>
-				
+
 				<!-- PRODUCTO AGOTADO -->
 				<div class="product-card unavailable" data-product="producto-12" data-category="salazones">
 					<div class="product-badge agotado">AGOTADO</div>
