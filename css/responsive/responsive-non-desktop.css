@@ -32,6 +32,10 @@
 	}
 
 	/*Hacer Pedido*/
+	/*Sección banners*/
+	.banner-container {
+		margin: 3rem;
+	}
 	/* === CARDS HORIZONTALES === */
 
 	/* Grid de cards cambia a una sola columna */
