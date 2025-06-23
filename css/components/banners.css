@@ -311,8 +311,7 @@
 
 /* === ESTILOS DEL CARRUSEL PARA TABLET === */
 
-/* Controles ocultos por defecto */
-.banner-carousel-controls,
+/* Indicadores ocultos por defecto */
 .banner-indicators {
   display: none;
 }
