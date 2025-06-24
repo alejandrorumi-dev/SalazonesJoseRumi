@@ -1,4 +1,8 @@
-/* === MÓVILES MEDIANOS (421px – 600px) === */
+/*
+================================================================
+RESPONSIVE: ANCHO MÁXIMO - 600px
+================================================================
+*/
 @media (max-width: 600px) {
 
 	.main {
@@ -16,9 +20,10 @@
 		left: 90%;
 	}
 
+
 	/* === MENÚ DESPLEGABLE === */
 	.mobile-nav {
-		right: 1rem;
+		right: 2rem;
 		width: 70%;
 	}
 
@@ -57,9 +62,116 @@
 		gap: 1.2rem;
 	}
 
-	/* === FOOTER === */
-	.site-footer {
+	.banner-container .banner-content h1 {
+		font-size: 1.6rem;
+	}
+
+	.banner-container .banner-content p {
+		font-size: 0.8rem;
+	}
+
+	.feature-badge span {
 		font-size: 0.9rem;
+	}
+
+	.dropdown label .categories-name {
+		font-size: 1.2rem;
+	}
+
+	.product-content {
+		grid-template-columns: 130px 1fr;
+		
+	}
+
+	.product-image {
+		width: 130px;
+		height: 130px;
+	}
+
+	.quantity-section .dropdown-options {
+		height: 150px;
+	}
+
+	/* === FOOTER === */
+	.order-footer p {
+		font-size: 1rem;
 		padding: 1.5rem;
+	}
+}
+
+@media (max-width: 500px) {
+
+	.order-header .mobile-nav {
+		right: 3rem;
+		width: 80%;
+		padding: 1.5rem;
+	}
+
+	.order-header .mobile-nav {
+		top: 5rem;
+	}
+	
+	.mobile-nav ul li a {
+		font-size: 0.7rem !important;
+	}
+	
+	/* === PARA EL HEADER DE PEDIDOS === */
+	.order-header .header-wrapper {
+		padding: 0.5rem !important;
+	}
+	
+	.order-header .search-header {
+		width: 95% !important;
+	}
+	
+	.order-header .header-icons {
+		width: 95% !important;
+		padding: 0 0.5rem;
+	}
+	
+	/* === AJUSTES GENERALES === */
+	.main {
+		padding: 0 1rem;
+	}
+	
+	.banner-container .banner-content h1 {
+		font-size: 1.2rem;
+	}
+
+	.banner-container .banner-content p {
+		font-size: 0.6rem;
+	}
+
+	.features-container .feature-badge {
+		max-width: 40px !important;
+	}
+
+	.feature-badge span {
+		font-size: 0.6rem;
+	}
+
+	.recommendations-header h2 {
+		font-size: 1.2rem;
+	}
+
+	.product-content {
+		grid-template-columns: 100px 1fr;
+		gap: 1rem;
+		grid-template-areas:
+			"status status"
+			"image info"
+			"image price"
+			"quantity quantity"
+			"buttons buttons";
+	}
+
+	.product-image {
+		width: 100px;
+		height: 100px;
+	}
+
+	.quantity-section {
+		display: flex;
+		width: 100%;
 	}
 }
