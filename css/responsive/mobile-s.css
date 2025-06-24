@@ -18,6 +18,11 @@
 		display: none;
 	}
 
+	.order-header {
+		width: 100%;
+		margin: 0 auto;
+	}
+
 	.hamburger-menu {
 		display: block;
 		position: relative;
