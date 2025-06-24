@@ -1,7 +1,7 @@
 /* === RESPONSIVE === */
 
 /* === RESPONSIVE - NO ESCRITORIO === */
-@import url('../css/responsive/responsive-non-desktop.css');
+@import url('../css/responsive/non-desktop.css');
 
 /* === RESPONSIVE - TABLET HORIZONTAL === */
 @import url('../css/responsive/tablet.css');
