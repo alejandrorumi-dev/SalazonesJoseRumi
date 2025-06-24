@@ -1,6 +1,6 @@
 /*
 ================================================================
-3. TABLET (768px && 1024px )
+RESPONSIVE: ANCHO MÁXIMO - 1024px
 ================================================================
 */
 @media (max-width: 1024px) {
@@ -20,7 +20,8 @@
 	}
 
 	.mobile-nav {
-		right: 5rem;
+		top: 1rem;
+		right: 2rem;
 		width: 50%;
 	}
 
@@ -47,15 +48,36 @@
 		top: -4px;
 	}
 
-	.logo-header {
-		display: none;
+	.order-header .header-wrapper {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		height: auto;
+		max-width: 90%;
+		padding: 1rem;
 	}
 
-	.order-header .header-wrapper {
-		display: grid;
-		grid-template-columns: 2fr 1fr;
-		gap: 1rem;
-		align-items: center;
+	.order-header .logo-header {
+		height: auto;
+		width: 300px;
+	}
+
+	.search-header {
+		width: 100%;
+	}
+
+	.header-wrapper .search-container {
+		display: flex;
+		justify-content: space-between;
+		max-width: 80%;
+		margin-bottom: 2rem;
+	}
+
+
+	.header-wrapper .header-icons {
+		display: flex;
+		justify-content: space-between;
+		width: 100%;
 	}
 
 	/*=== MAIN === */
@@ -78,10 +100,6 @@
 	}
 
 	/*Hacer Pedido*/
-
-	.banner-container {
-		margin: 3rem;
-	}
 
 	/* === SECCIÓN DE BANNERS PROMOCIONALES === */
 
@@ -386,7 +404,7 @@
 		display: flex;
 		flex-direction: column;
 		gap: 0.5rem;
-		width: 120px;
+		width: 220px;
 	}
 
 	.select-label {
