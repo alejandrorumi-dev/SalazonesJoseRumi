@@ -17,10 +17,18 @@ RESPONSIVE: ANCHO MÁXIMO - 768px
 		left: 90%;
 	}
 
-	.mobile-nav {
+	.home .hamburger-icon {
+		transform: scale(0.8);
+	}
+
+	.home.mobile-nav {
 		right: 2rem;
-		width: 70%;
+		width: 50%;
 		padding: 2rem;
+	}
+
+	.order-header .mobile-nav {
+		top: 1rem;
 	}
 
 	.mobile-nav.open {
