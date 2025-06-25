@@ -27,7 +27,6 @@ RESPONSIVE: MÓVIL PEQUEÑO (≤ 420px) - CORRECCIÓN SIMPLE
 	.order-header .hamburger-menu {
 		display: block;
 		position: relative;
-		left: 80%;
 		z-index: 103;
 	}
 
