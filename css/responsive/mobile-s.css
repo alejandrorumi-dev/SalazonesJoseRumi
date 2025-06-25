@@ -24,7 +24,7 @@ RESPONSIVE: MÓVIL PEQUEÑO (≤ 420px) - CORRECCIÓN SIMPLE
 		margin: 0 auto;
 	}
 
-	.hamburger-menu {
+	.order-header .hamburger-menu {
 		display: block;
 		position: relative;
 		left: 80%;
@@ -42,7 +42,7 @@ RESPONSIVE: MÓVIL PEQUEÑO (≤ 420px) - CORRECCIÓN SIMPLE
 		z-index: 102;
 	}
 
-	.overlay {
+	.order-header .overlay {
 		z-index: 101;
 	}
 
