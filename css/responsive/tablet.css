@@ -25,6 +25,10 @@ RESPONSIVE: ANCHO MÁXIMO - 1024px
 		width: 50%;
 	}
 
+	.order-header .mobile-nav {
+		top: 18rem;
+	}
+
 	.mobile-nav.open {
 		height: auto;
 	}
