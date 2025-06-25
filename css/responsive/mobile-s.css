@@ -1,10 +1,11 @@
 /*
 ================================================================
-5. MÓVIL PEQUEÑO (≤ 420px)
+RESPONSIVE: MÓVIL PEQUEÑO (≤ 420px) - CORRECCIÓN SIMPLE
 ================================================================
 */
 @media (max-width: 420px) {
-	
+
+	/* === ELEMENTOS EXISTENTES === */
 	.home {
 		height: 100vh;
 	}
@@ -26,16 +27,31 @@
 	.hamburger-menu {
 		display: block;
 		position: relative;
-		left: 90%;
+		left: 80%;
+		z-index: 103;
 	}
 
 	.mobile-nav {
 		right: 0.5rem;
 		padding: 1rem;
+		width: 70%;
+	}
+
+	.order-header .mobile-nav {
+		width: 75%;
+		z-index: 102;
+	}
+
+	.overlay {
+		z-index: 101;
 	}
 
 	.mobile-nav ul li a {
 		font-size: 1rem;
+	}
+
+	.order-header .mobile-nav ul li a {
+		font-size: 1rem !important;
 	}
 
 	.btn {
@@ -52,6 +68,89 @@
 
 	.phrase {
 		font-size: 1rem;
+	}
+
+	.banner-container {
+		display: none;
+	}
+
+	.banners-promocionales {
+		margin: 0;
+	}
+
+	.recommendations-header {
+		display: flex;
+		flex-direction: column;
+		gap: 1.5rem;
+	}
+
+	.recommendations-section h2 {
+		font-size: 1.3rem;
+	}
+
+	.carousel-controls .carousel-btn {
+		width: 30px;
+		height: 30px;
+	}
+
+	.products-section-header h2 {
+		font-size: 1.3rem;
+	}
+
+	.categories-name {
+		font-size: 1rem !important;
+	}
+
+	/* === CORRECCIÓN SIMPLE DE PRODUCT CARDS === */
+	.product-cards {
+		padding: 0 1rem;
+	}
+
+	.product-card {
+		padding: 0.8rem;
+		margin-bottom: 1rem;
+	}
+
+	.product-content {
+		grid-template-columns: 100px 1fr;
+		gap: 1.5rem;
+		grid-template-areas:
+			"status status"
+			"image info"
+			"image price"
+			"quantity quantity"
+			"buttons buttons"
+	}
+
+	.product-image {
+		width: 100px;
+		height: 100px;
+	}
+
+	.stock-container .stock {
+		display: none;
+	}
+
+	.product-info-section h3 {
+		font-size: 1.3rem;
+	}
+
+	.product-card .dropdown .select-label {
+		justify-content: space-around !important;
+
+	}
+
+	.amount-text {
+		font-size: 0.7rem !important;
+	}
+
+	.buttons-section {
+		margin: 0 auto;
+	}
+
+	.buttons-card {
+		display: flex;
+		flex-direction: column;
 	}
 
 	.site-footer {
