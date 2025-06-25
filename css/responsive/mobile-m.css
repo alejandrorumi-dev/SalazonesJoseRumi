@@ -22,9 +22,13 @@ RESPONSIVE: ANCHO MÁXIMO - 600px
 
 
 	/* === MENÚ DESPLEGABLE === */
-	.mobile-nav {
-		right: 2rem;
-		width: 70%;
+	.home .mobile-nav {
+		right: 1rem;
+		width: 50%;
+	}
+
+	.home .hamburger-icon {
+		transform: scale(0.6);
 	}
 
 	.mobile-nav.open {
@@ -35,6 +39,10 @@ RESPONSIVE: ANCHO MÁXIMO - 600px
 	.mobile-nav ul li a {
 		font-size: 1.3rem;
 		text-align: center;
+	}
+
+	.order-header .mobile-nav a {
+		font-size: 0.8rem !important;
 	}
 
 	/* === TEXTOS === */
@@ -101,14 +109,20 @@ RESPONSIVE: ANCHO MÁXIMO - 600px
 
 @media (max-width: 500px) {
 
-	.order-header .mobile-nav {
-		right: 3rem;
-		width: 80%;
+	.mobile-nav {
+		top: 2rem;
+		right: 1rem;
+		width: 50%;
 		padding: 1.5rem;
 	}
 
+	.home .hamburger-icon {
+		transform: scale(0.5);
+	}
+
 	.order-header .mobile-nav {
-		top: 5rem;
+		top: 0.5rem;
+		right: 2rem;
 	}
 	
 	.mobile-nav ul li a {
